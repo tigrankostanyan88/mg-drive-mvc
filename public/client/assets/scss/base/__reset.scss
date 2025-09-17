@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all .4s ease-in-out;
+
+    &::after,
+    &::before {
+        transition: all .4s ease-in-out;
+    }
+}
+
+.tooltip,
+.tooltip * {
+  transition: none !important;
+  &::after, &::before {
+        transition: none !important;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    font-family: system-ui, Roboto, sans-serif;
+}
+
+
+ul {
+    padding: 0;
+
+    ol {
+        list-style: none;
+    }
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+input,
+textarea,
+button,
+select {
+    font: inherit;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+button {
+    cursor: pointer;
+}
+
+body {
+    font-family: 'Noto Sans Armenian', system-ui;
+    background: #fff;
+    font-weight: normal;
+}
+
+
+ul li {
+    list-style: none;
+}

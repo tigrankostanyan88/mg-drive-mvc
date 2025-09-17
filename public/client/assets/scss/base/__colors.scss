@@ -1,0 +1,21 @@
+:root {
+  --color-primary: #444cf7;
+  --color-secondary: #F9F7F3;
+  --color-accent: #2b58c0;
+  --color-dark: #2E2E2E;
+  --color-ligth: #fff;
+  --color-white: #FFFFFF;
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.bg-primary {
+  background: var(--color-primary) !important;
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--color-primary);
+  --bs-tooltip-color: #fff;
+}

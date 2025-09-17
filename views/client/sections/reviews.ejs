@@ -1,0 +1,133 @@
+<% 
+    let totalRating = 0;
+    reviews.forEach(review => {
+    totalRating += review.rating;
+    });
+    let averageRating = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
+%>
+  
+  <section class="user_reviews" id="reviews">
+      <div class="container">
+          <!-- header -->
+          <div class="row">
+              <div class="col-lg-12 mb-5 d-sm-flex justify-content-between align-items-center d-block">
+                  <h2 class="fw-bold scroll_animate mb-4 mb-sm-0">Կարծիքները </h2>
+                  <hr>
+              </div>
+          </div>
+          <!-- progress bars -->
+          <div class="row mb-5">
+              <div class="col-lg-2 mb-3 mb-lg-0 d-flex justify-content-center d-lg-block">
+                  <div class="number text-center">
+                      <h3 class="fw-bold text-center fs-1">
+                        <%= averageRating %> / 5
+                      </h3>
+                      <div class="stars">
+                        <% for(let i=0; i<Math.round(averageRating); i++) { %>⭐<% } %>
+                      </div>
+                      <p>
+                        <%= reviews.length >= 1000000 ? (reviews.length / 1000000).toFixed(1) + 'M' 
+                            : reviews.length >= 1000 ? (reviews.length / 1000).toFixed(1) + 'k' 
+                            : reviews.length %> Գնահատական
+                        </p>
+                  </div>
+              </div>
+              <div class="col-lg-10 mb-">
+                  <div class="progress-bars pt-1">
+                      <div class="progress-bar-item">
+                          <div class="progress">
+                              <div class="progress-bar progress-bar-animated" style="width: 95%"></div>
+                          </div>
+                          <div class="result">
+                              <span class="fw-bold">5.0 12k </span>
+                              <span class="text">Գնահատական</span>
+                          </div>
+                      </div>
+                      <div class="progress-bar-item">
+                          <div class="progress">
+                              <div class="progress-bar progress-bar-animated" style="width: 77%"></div>
+                          </div>
+                          <div class="result">
+                              <span class="fw-bold">4.0 12k </span>
+                              <span class="text">Գնահատական</span>
+                          </div>
+                      </div>
+                      <div class="progress-bar-item">
+                          <div class="progress">
+                              <div class="progress-bar progress-bar-animated" style="width: 87%"></div>
+                          </div>
+                          <div class="result">
+                              <span class="fw-bold">3.0 12k </span>
+                              <span class="text">Գնահատական</span>
+                          </div>
+                      </div>
+                      <div class="progress-bar-item">
+                          <div class="progress">
+                              <div class="progress-bar progress-bar-animated" style="width: 37%"></div>
+                          </div>
+                          <div class="result">
+                              <span class="fw-bold">2.0 12k </span>
+                              <span class="text">Գնահատական</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- info -->
+          <div class="row mb-5">
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4"><span class="fw-bold text-primary fs-5">4.8</span>
+                      Դասավանդման որակ</div>
+              </div>
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4"><span class="fw-bold text-primary fs-5">4.6</span>
+                      Մեքենաների վիճակ</div>
+              </div>
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4"><span class="fw-bold text-primary fs-5">4.7</span>
+                      Գործնական վարելու փորձ</div>
+              </div>
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4"><span class="fw-bold text-primary fs-5">4.5</span>
+                      Թեորիայի հասկանալիություն</div>
+              </div>
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4">
+                      <span class="fw-bold text-primary fs-5">4.4</span>
+                      Արժեք/որակ հարաբերակցություն
+                  </div>
+              </div>
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                  <div class="item rounded rounded-4 border p-4">
+                      <span class="fw-bold text-primary fs-5">4.6</span>
+                      Ընդհանուր գոհունակություն
+                  </div>
+              </div>
+          </div>
+          <!-- users -->
+          <div class="row">
+              <% reviews.forEach(review => { %>
+              <div class="col-12 mb-4">
+                  <div class="user_review shadow p-4 rounded-4">
+                      <div class="head mb-4 d-flex justify-content-between align-items-center">
+                          <div class="d-flex align-items-center gap-3">
+                              <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User Image"
+                                  class="rounded-circle" width="50" height="50">
+                              <h3 class="name fw-bold mb-0"><%- review.name %></h3>
+                              <span class="date text-muted">2 ամիս առաջ</span>
+                          </div>
+                          <div class="rating text-end">
+                              <span class="fw-bold"><%- review.rating.toFixed(1) %></span>
+                              <span class="d-none d-sm-inline">
+                                  <% for(let i=0; i<Math.round(review.rating); i++) { %>⭐<% } %>
+                              </span>
+                          </div>
+                      </div>
+                      <p class="descr mb-0">
+                          <%- review.comment.substring(0, 200) %><% if(review.comment.length > 200){ %>...<% } %></p>
+                  </div>
+              </div>
+              <% }); %>
+          </div>
+      </div>
+  </section>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head><%- include('../parts/head.ejs') %></head>
+    <body>
+        <div class="container-scroller">
+            <%- include('../parts/sidebar.ejs') %>
+            <div class="container-fluid page-body-wrapper">
+                <%- include('../parts/nav.ejs') %>
+                <!-- Main panel -->
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <!-- Main content -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="test" tabindex="-1" aria-hidden="false">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title fs-5 text-white">Ավելացնել նոր թեստ</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/api/v1/testS" method="post">
+                                            <div class="mb-3">
+                                                <input type="text" name="title" class="form-control text-white" id="title"
+                                                    placeholder="տեստի անունը">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Փակել</button>
+                                                <button type="submit" class="btn btn-primary">Ավելացնել</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex align-items-center justify-content-sm-between mb-4">
+                            <h4 class="card-title mb-1">Թեստեր</h4>
+                            <button type="button" class="mx-2 btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#test">Ավելացնել Թեստ </button>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Անուն </th>
+                                        <th> Ստեղծվել է </th>
+                                        <th> Թարմացել է </th>
+                                        <th> Հարցերի քանակը </th>
+                                        <th> Թեստի հարցերը </th>
+                                        <th> Ջնջել թեստը</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="test_row"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <%- include('../parts/footer.ejs') %>
+                </div>
+            </div>
+        </div>
+        <%- include('../parts/scripts.ejs') %>
+    </body>
+</html>

@@ -1,0 +1,82 @@
+ <div class="container">
+   <!-- logo -->
+   <div class="logo">
+     <a href="/">
+       <img src="./client/images/logo.png" alt="">
+     </a>
+   </div>
+   <!-- nav menu -->
+   <ul class="navbar">
+     <li>
+       <a href="#" class="active nav_link">
+         <i class="icon fa-solid fa-house"></i>
+         <span class="text">Գլխավոր</span>
+       </a>
+     </li>
+     <li>
+       <a href="#about" class="nav_link">
+         <i class="icon fa-solid fa-info-circle"></i>
+         <span class="text">Մեր Մասին</span>
+       </a>
+     </li>
+     <li>
+       <a href="./groups" class="nav_link">
+         <i class="icon fa-solid fa-users"></i>
+         <span class="text">Խմբեր</span>
+       </a>
+     </li>
+     <li>
+       <a href="./tests" class="nav_link">
+         <i class="icon fa-solid fa-file-alt"></i>
+         <span class="text">Թեստեր</span>
+       </a>
+     </li>
+     <li>
+       <a href="#reviews" class="nav_link">
+         <i class="icon fa-solid fa-star"></i>
+         <span class="text">Կարծիքներ</span>
+       </a>
+     </li>
+     <li>
+       <a href="#contact" class="nav_link">
+         <i class="icon fa-solid fa-envelope"></i>
+         <span class="text">Կապ</span>
+       </a>
+     </li>
+     <li class="close_menu">
+       <button class="close_menu">
+         <i class="fa-solid fa-xmark"></i>
+       </button>
+     </li>
+   </ul>
+
+   <!-- social media icons -->
+   <div class="user_actions d-flex gap-4 align-items-center">
+     <!-- facebook -->
+     <a href="https://facebook.com/yourpage" target="_blank" data-bs-toggle="tooltip"
+        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+        data-bs-title="Facebook">
+       <i class="fa-brands fa-facebook"></i>
+     </a>
+     <!-- instagram -->
+     <a href="https://instagram.com/yourpage" target="_blank" data-bs-toggle="tooltip"
+        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+        data-bs-title="Instagram">
+       <i class="fa-brands fa-instagram"></i>
+     </a>
+
+     <% if(user) { %>
+     <a href="/admin" class="login" data-bs-toggle="tooltip"
+        data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+        data-bs-title="<%- user.name %>">
+       <img class="nav-profile-img" src="https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png" alt="">
+     </a>
+     
+     <% } else { %>
+      <button type="button" class="btn text-white" data-bs-toggle="modal" data-bs-target="#signIn_signUp">Մուտք գործել</button>
+     <% } %>
+     <button class="menu open_menu">
+       <i class="fa-solid fa-bars-staggered"></i>
+     </button>
+   </div>
+ </div>

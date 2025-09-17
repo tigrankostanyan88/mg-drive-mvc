@@ -1,0 +1,7 @@
+.number-field {
+  display: flex;
+}
+
+.number-field input {
+  min-width: 60px
+}

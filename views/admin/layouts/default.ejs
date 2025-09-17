@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><%- include('../parts/head.ejs') %></head>
+<body>
+    <div class="container-scroller">
+        <%- include('../parts/sidebar.ejs') %>
+        <div class="container-fluid page-body-wrapper">
+            <%- include('../parts/nav.ejs') %>
+            <!-- Main panel -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <%- include('../sections/total_results.ejs') %>
+                    </div>
+                    <div class="row">
+                        <%- include('../sections/current_students.ejs') %>
+                    </div>
+                    <div class="row">
+                        <%- include('../parts/countries.ejs') %>
+                    </div>
+                </div>
+                <%- include('../parts/footer.ejs') %>
+            </div>
+        </div>
+    </div>
+    <%- include('../parts/scripts.ejs') %>
+</body>
+</html>

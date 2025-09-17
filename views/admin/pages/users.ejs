@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head><%- include('../parts/head.ejs') %></head>
+
+<body>
+    <div class="container-scroller">
+        <%- include('../parts/sidebar.ejs') %>
+        <div class="container-fluid page-body-wrapper">
+            <%- include('../parts/nav.ejs') %>
+            <!-- Main panel -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row ">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Order Status</h4>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th> Հաճախորդի անունը </th>
+                                                    <th> Համարը </th>
+                                                    <th> Վճարման եղանակ </th>
+                                                    <th> Գրանցման ամսաթիվը </th>
+                                                    <th> Կարգավիճակը </th>
+                                                    <th> Հեռացնել օգտվողին </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               <% users.forEach(tableUser => { %>
+                                                    <%- include('../parts/user_table_row.ejs', {tableUser}) %>
+                                                <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../parts/footer.ejs') %>
+            </div>
+        </div>
+    </div>
+    <%- include('../parts/scripts.ejs') %>
+</body>
+
+</html>

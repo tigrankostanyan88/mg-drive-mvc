@@ -1,0 +1,17 @@
+@mixin buttonStyle($paddingY: 12px, $paddingX: 35px) {
+    background-image: linear-gradient(to right, #444cf7 0%, #646cff 51%, #444cf7 100%);
+    @include shadow ();   
+    padding: $paddingY $paddingX;
+    background-size: 200% auto;
+    color: var(--light-background);
+    border-radius: 10px;
+    display: inline-block;
+    transition: all .3s ease-in-out;
+    width: max-content;
+    &:active { transform: scale(0.95); }
+    &:hover {
+        background-position: right center;
+        color: var(--light-background);
+        text-decoration: none;
+    }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- subject %></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.4s ease-in-out;
+            scrollbar-width: thin;
+            scrollbar-color: var(--highlight-color);
+        }
+
+        .emil_card {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .emil_card img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .title {
+            margin-bottom: 15px;
+            font-size: 25px;
+        }
+        ul {
+            padding: 0;
+        }
+        ul li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .card_body {
+            padding: 15px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 10px 30px;
+            background: blue;
+            color: #fff !important;
+            border-radius: 5px;
+            display: block;
+            width: max-content;
+            margin: 30px 0 0 0;
+        }
+
+        .btn:active {
+            transform: scale(0.9);
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>  
+    <div class="emil_card">
+        <img src="https://scontent.fevn15-1.fna.fbcdn.net/v/t39.30808-6/343004294_793663625511971_6967250300473449438_n.png?_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=T1w6y-7yNkMQ7kNvwFXwVbZ&_nc_oc=AdmMb9m1F7FFIT_3L3OUEkPutfAWLE4Uxm7pSVFicVXTfNZ0zDcHdyboVfqr5xyE6LY&_nc_zt=23&_nc_ht=scontent.fevn15-1.fna&_nc_gid=2GEhJi5nb0IL2pjiA4a1AQ&oh=00_AfM2UoCNrYw5uvnxcJNT1eGwYpc9GE0b1ZHAemNz8_uAEQ&oe=6860B552" alt="">
+        <div class="card_body">
+            <h3 class="title"><%- subject %></h3>
+            <ul>
+                <li> Անուն | <b><%- name %></b></li>
+                <li> Էլ․ փոստ | <b><%- email %></b></b></li>
+                <li> հեռախոս | <b><%- phone %></b></b></li>
+                <a href="tel:<%- phone %>" class="btn">Զանգահարել</a>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

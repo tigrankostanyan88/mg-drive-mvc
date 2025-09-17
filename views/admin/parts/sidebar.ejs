@@ -1,0 +1,129 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo text-white nav-link" href="/">MG DRIVE</a>
+    </div>
+    <ul class="nav">
+        <li class="nav-item profile">
+            <div class="profile-desc">
+                <div class="profile-pic">
+                    <div class="count-indicator">
+                        <img class="img-xs rounded-circle" src="https://cdn-icons-png.flaticon.com/512/5951/5951752.png" alt="">
+                        <span class="count bg-success"></span>
+                    </div>
+                    <div class="profile-name">
+                        <h5 class="mb-0 font-weight-normal"><%- user.name %></h5>
+                        <span><%- user.email %></span>
+                    </div>
+                </div>
+                <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+                <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
+                    aria-labelledby="profile-dropdown">
+                    <a href="#" class="dropdown-item preview-item">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon rounded-circle">
+                              <i class="mdi mdi-settings text-success"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content">
+                            <p class="preview-subject ellipsis mb-1 text-small">Կարգավորումներ</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="dropdown-item preview-item">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon bg-dark rounded-circle">
+                              <i class="mdi mdi-lock-reset text-danger"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content">
+                            <p class="preview-subject ellipsis mb-1 text-small">Փոխել գաղտնաբառը</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item nav-category">
+            <span class="nav-link">Նավիգացիա</span>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a class="nav-link" href="/admin">
+                <span class="menu-icon">
+                    <i class="mdi mdi-home"></i>
+                </span>
+                <span class="menu-title">Գլխավեր էջ</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="/admin/tests" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-file-document-outline"></i>
+                </span>
+                <span class="menu-title">Թեստեր</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="/admin/groups" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-account-group"></i>
+                </span>
+                <span class="menu-title">Խմբեր</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="/admin/users" class="nav-link">
+                <span class="menu-icon">
+                 <i class="fa-solid fa-users"></i>
+                </span>
+                <span class="menu-title">Օգտվողներ</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="/admin/students" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-account-group"></i>
+                </span>
+                <span class="menu-title">ՈՒսանողներ</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="/admin/question" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-file-document-outline"></i>
+                </span>
+                <span class="menu-title">Ավելացնել Հարցեր</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="#" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-image-multiple"></i>
+                </span>
+                <span class="menu-title">Պատկերասրահ</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="#" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-frequently-asked-questions"></i>
+                </span>
+                <span class="menu-title">Հաճախ Տրվող Հարցեր</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="#" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-comment-text-outline"></i>
+                </span>
+                <span class="menu-title">Մեկնաբանություններ</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items mb-3">
+            <a href="#" class="nav-link">
+                <span class="menu-icon">
+                    <i class="mdi mdi-account-edit"></i>
+                </span>
+                <span class="menu-title">Գրանցումներ</span>
+            </a>
+        </li>
+    </ul>
+</nav>

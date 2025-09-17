@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+    <head><%- include('../parts/head.ejs') %></head>
+    <body>
+        <div class="container-scroller">
+            <%- include('../parts/sidebar.ejs') %>
+            <div class="container-fluid page-body-wrapper">
+                <%- include('../parts/nav.ejs') %>
+                <!-- Main panel -->
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <!-- Main content -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="group" tabindex="-1" aria-labelledby="group">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title fs-5" id="group">Ավելացնել նոր Խումբ</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/api/v1/groups" method="post">
+                                            <div class="mb-3">
+                                                <input type="text" name="title" class="form-control mb-3 text-white" id="title"
+                                                    placeholder="տեստի անունը">
+                                                <textarea name="text" id="text" class="form-control text-white"
+                                                    placeholder="Ավելացնել տեքստ"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button> -->
+                                                <button type="submit" class="btn btn-primary">Ավելացնել</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                             <div class="col d-flex align-items-center justify-content-lg-between mb-3">
+                                <h4 class="card-title">Խմբեր</h4>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#group">Ավելացնել</button>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12 grid-margin stretch-card">
+                             <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Անուն </th>
+                                        <th> Ստեղծվել է </th>
+                                        <th> Թարմացել է </th>
+                                        <th> Հարցերի քանակը </th>
+                                        <th> Թեստի հարցերը </th>
+                                        <th> Ջնջել թեստը</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="group_row"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <%- include('../parts/footer.ejs') %>
+                </div>
+            </div>
+        </div>
+        <%- include('../parts/scripts.ejs') %>
+    </body>
+</html>
