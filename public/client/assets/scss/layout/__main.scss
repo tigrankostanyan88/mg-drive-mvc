@@ -123,55 +123,16 @@
     }
 }
 
-.choose {
-    .icon-wrap {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, rgba(13,110,253,.1), rgba(111,66,193,.1));
-        border: 1px solid rgba(0,0,0,.05);
-        transition: all 0.3s ease;
-      }
-      .service-card:hover .icon-wrap {
-        border-color: rgba(13,110,253,.3);
-        transform: scale(1.05);
-      }
-      .service-card {
-        overflow: hidden;
-      }
-      .service-card::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(13,110,253,.05), rgba(32,201,151,.05));
-        opacity: 0;
-        transition: opacity .3s ease;
-        border-radius: 1rem;
-        pointer-events: none;
-      }
-      .service-card:hover::after {
-        opacity: 1;
-      }
-    
-      /* Fade-in animation */
-      .animate-fade {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp .8s forwards;
-      }
-      .delay-1 { animation-delay: .2s; }
-      .delay-2 { animation-delay: .4s; }
-      .delay-3 { animation-delay: .6s; }
-    
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+.chooseus {
+    .icon {
+        width: 45px;
+        height: 45px;
+    }
 }
 
 .are_you_ready {
     position: relative;
+
     &::after {
         position: absolute;
         content: '';
@@ -183,6 +144,7 @@
         background: url('../../images/car-1.png') no-repeat center/cover;
         opacity: 0.1;
     }
+
     .image {
         img {
             max-width: 800px;
@@ -223,6 +185,7 @@
         font-size: 15px;
         @include buttonStyle(10px, 20px);
     }
+
     .number {
         max-width: 300px;
         height: 100%;
@@ -262,10 +225,12 @@
 
     .user_review {
         position: relative;
+
         .head {
             .name {
                 font-size: 19px;
             }
+
             img {
                 width: 50px;
                 height: 50px;
@@ -285,9 +250,11 @@
                 bottom: 15px;
                 right: 20px;
             }
+
             .head {
                 display: flex;
                 column-gap: 20px;
+
                 .name {
                     font-size: 15px;
                 }
@@ -298,91 +265,102 @@
     }
 }
 
-.gallery {
-    .gallery_img {
-        position: relative;
-        overflow: hidden;
-        border-radius: 15px;
-        overflow: hidden;
-        @include shadow();
-        height: 300px;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: all .3s ease-in;
-        }
-
-        &:hover img {
-            transform: scale(1.1);
-        }
+#gallery {
+    .header {
+        max-width: 750px;
     }
 
-    @media(max-width: 576px) {
-        .gallery_item {
+    .card {
+        img {
             height: 250px;
+            object-fit: cover;
+        }
+
+        .img-content {
+            bottom: -50%;
+            opacity: 0;
+            background: linear-gradient(0,rgb(2, 23, 54) 0%, transparent 100%);
+        }
+
+        &:hover {
+            img {
+                transform: scale(1.05);
+            }
+            .img-content {
+                bottom: 0;
+                opacity: 1;
+            }
+        }
+    }
+    .results {
+        .card .icon {
+            width: 45px;
+            height: 45px;
         }
     }
 }
 
 .team {
-    .text-gradient {
-        background: linear-gradient(90deg, #0d6efd, #6610f2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      
-      .team-card {
-        max-width: 350px;
-        width: 100%;
-        transition: transform 0.4s, box-shadow 0.4s, opacity 0.6s;
-        transform: translateY(20px);
-      }
-      
-      .team-card.show {
-        opacity: 1;
-        transform: translateY(0);
-        transition: transform 0.6s, opacity 0.6s;
-      }
-      
-      .team-card:hover {
-        transform: translateY(-10px) scale(1.05);
-        box-shadow: 0 20px 30px rgba(0,0,0,0.25);
-      }
-      img {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        display: block;
-        margin: 0 auto;
-        object-fit: cover;
-      }
+
+    .card {
+        overflow: hidden;
+        .card-content {
+            padding: 20px 15px;
+            bottom: -50%;
+            opacity: 0;
+            background: linear-gradient(0,rgb(2, 23, 54) 10%, transparent 100%);;
+        }
+        &:hover {
+            .card-content {
+                bottom: 0;
+                opacity: 1;
+            }
+            img {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .card.show {}
 }
 
 .faq {
     .faq-card {
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(13, 110, 253, 0.2);
-      transition: border 0.3s;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(13, 110, 253, 0.2);
+        transition: border 0.3s;
     }
+
     .faq-card:hover {
-      border-color: rgba(13, 110, 253, 0.4);
+        border-color: rgba(13, 110, 253, 0.4);
     }
+
     .btn-gradient {
-      background: linear-gradient(to right, #0d6efd, #6610f2);
-      color: white;
-      transition: transform 0.3s, box-shadow 0.3s;
+        background: linear-gradient(to right, #0d6efd, #6610f2);
+        color: white;
+        transition: transform 0.3s, box-shadow 0.3s;
     }
+
     .btn-gradient:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(13,110,253,0.5);
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(13, 110, 253, 0.5);
     }
 }
 
 #contact {
     form {
         height: max-content;
+    }
+
+    .card {
+        border-top: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
+    }
+
+    .icon {
+        width: 50px;
+        height: 50px;
     }
 }
 

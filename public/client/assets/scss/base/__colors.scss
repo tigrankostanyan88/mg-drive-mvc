@@ -5,14 +5,18 @@
   --color-dark: #2E2E2E;
   --color-ligth: #fff;
   --color-white: #FFFFFF;
+  --bacground-gradient: linear-gradient(to right, #0d6efd, #6610f2)
 }
 
 .text-primary {
   color: var(--color-primary) !important;
 }
+.text-gradient {
+  color: var(--color-primary) !important;
+}
 
-.bg-primary {
-  background: var(--color-primary) !important;
+.bg-gradient {
+  background: var(--bacground-gradient) !important;
 }
 
 .custom-tooltip {

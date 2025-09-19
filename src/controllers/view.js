@@ -30,14 +30,13 @@ module.exports = {
         })
     },
     getGroups: async (req, res) => {
-      
         const group = await Group.findAll();
 
         res.render('client/pages/groups', {
             title: `Խմբեր`,
             nav_active: 'groups',
             page: req.url,
-            group
+            // group
         })
     },
     getGroup: async (req, res) => {

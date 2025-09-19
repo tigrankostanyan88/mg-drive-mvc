@@ -13,10 +13,7 @@ const connectLivereload = require("connect-livereload");
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "views")); 
 
-
-dotenv.config({
-    path: './.env'
-});
+dotenv.config({ path: './.env' });
 
 const Server = require('./src/utils/server');
 const Api = require("./src/utils/api");
@@ -30,15 +27,9 @@ const AppError = require('./src/utils/Error');
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(fileUpload({
-    limits: {
-        fileSize: 2 * 1024 * 1024
-    }
-}));
+app.use(fileUpload({ limits: { fileSize: 2 * 1024 * 1024 }}));
 app.use(compression());
 app.use(cookieParser());
 

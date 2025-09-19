@@ -1,6 +1,9 @@
 footer {
+    padding: 50px 0;
     background: #111;
-    padding: 10px 0;
+    color: #fff;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     p, a {
         color: var(--color-ligth);
     }

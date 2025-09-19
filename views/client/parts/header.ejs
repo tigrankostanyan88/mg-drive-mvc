@@ -9,12 +9,49 @@
                 թե՛ սկսնակների, թե՛ փորձառու վարորդների համար։ Միացի՛ր մեզ ու ստացիր վարորդական իրավունք առանց
                 ավելորդ սթրեսի!</p>
 
-            <a href="#about" class="btn">Ավելի մեր մասին</a>
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3 text-dark text-md-danger">
+                        <div class="d-flex align-items-center gap-3 bg-dark bg-opacity-50 text-white p-2 rounded-3">
+                        <div class="align-items-center rounded bg-primary bg-opacity-10 px-3 py-2 benefit-icon">
+                            <i class="fa-solid fa-trophy text-primary fs-5"></i>
+                        </div>
+                        <span class="fw-medium">Բարձր հաջողության տոկոս</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3 text-dark">
+                        <div class="d-flex align-items-center gap-3 bg-dark bg-opacity-50 text-white p-2 rounded-3">
+                            <div class="rounded bg-warning bg-opacity-10 px-3 py-2 benefit-icon">
+                                <i class="fa-solid fa-chalkboard-teacher text-warning fs-5"></i>
+                            </div>
+                            <span class="fw-medium">Պրոֆեսիոնալ ուսուցիչներ</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3 text-dark">
+                        <div class="d-flex align-items-center gap-3 bg-dark bg-opacity-50 text-white p-2 rounded-3">
+                        <div class="align-items-center justify-content-center rounded bg-info bg-opacity-10 px-3 py-2 benefit-icon">
+                            <i class="fa-solid fa-clock text-info fs-5"></i>
+                        </div>
+                        <span class="fw-medium">Ճկուն ժամանակացույց</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emoji-button-container btn-emoji-explode-container">
+                    <a href="#about" class="emoji-button fancy-button btn-fancy-shine">Ավելի մեր մասին</a>
+                    <div class="emoji-animations">
+                    <span class="emoji">🚗</span>
+                    <span class="emoji">⚠️</span>
+                    <span class="emoji">🚘</span>
+                    </div>
+                </div>
+
         </div>
     </div>
     <div class="col">
         <div class="register_form">
-            <h2 class="title">Գրանցվել</h2>
+            <h2 class="title">Գրանցվել դասընթացին</h2>
             <form action="/api/v1/registration" method="post">
                 <div class="input_field">
                     <span class="">Անուն *</span>
@@ -32,17 +69,12 @@
                     <span class="">Հեռախոսահամար *</span>
                     <input type="tel" class="phone" name="phone" required>
                 </div>
-
-                <div class="type mb-4">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                <div class="input_field">
+                    <span class="">Տարիքը *</span>
+                    <input type="number" class="age" name="age" required>
                 </div>
 
-                <button type="submit">Գրանցվել</button>
+                <button type="submit" class="fancy-button btn-fancy-shine btn-shadow d-block"><i class="animation"></i>Գրանցվել<i class="animation"></i></>
             </form>
         </div>
     </div>

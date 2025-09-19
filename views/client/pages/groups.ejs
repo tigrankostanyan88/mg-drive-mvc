@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> <%- include('../parts/head.ejs') %> </head>
+<body>
+    <nav id="nav">
+        <%- include('../parts/nav.ejs') %>
+    </nav>
+    <!-- Header -->
+    <main>
+        <section class="question_page tests_page">
+            <div class="container">
+                <select name="selected_test" id="select_questions">
+                    <option value="all">Ընտրեք Խումբը</option>
+                </select>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <%- include('../parts/footer.ejs') %>
+    </footer>
+    <!-- Scripts -->
+    <%- include('../parts/scripts.ejs') %>
+</body>
+
+</html>
