@@ -32,7 +32,9 @@ module.exports = {
     getTests: async (req, res) => {
         try {
             const testsRaw = await Test.findAll({
-                include: 'questions'
+                include: [
+                    { association: 'questions', include: [ { association: 'files' } ] }
+                ]
             });
 
             const tests = testsRaw.map(test => test.get({ plain: true }));
@@ -56,12 +58,14 @@ module.exports = {
     getTest: async (req, res, next) => {
         try {
             const test = await Test.findByPk(req.params.id, {
-                include: 'questions',
+                 include: [
+                    { association: 'questions', include: [ { association: 'files' } ] }
+                ],
+                
                 where: { row_type: 'test' }
             });
 
             if (!test) return next(new AppError('Test not found!', 404));
-
             res.status(201).json({
                 status: 'success',
                 time: `${Date.now() - req.time} - ms`,

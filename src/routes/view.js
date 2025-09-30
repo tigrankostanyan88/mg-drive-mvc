@@ -11,6 +11,11 @@ router.get('/', ctrls.view.getHome);
 router.get('/tests', ctrls.view.getTests);
 router.get('/groups', ctrls.view.getGroups);
 
+
+router.get('/profile', ctrls.view.getProfile);
+router.get('/profile/options', ctrls.view.getProfileOptions);
+router.get('/profile/history', ctrls.view.getProfileHistory);
+
 // router.get('/test/:id', ctrls.view.getTestDetails);
 // router.get('/group/:id', ctrls.view.getGroup);
 // router.get('/groups/', ctrls.view.getGroups);

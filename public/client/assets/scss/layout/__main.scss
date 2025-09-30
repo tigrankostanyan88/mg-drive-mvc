@@ -279,19 +279,21 @@
         .img-content {
             bottom: -50%;
             opacity: 0;
-            background: linear-gradient(0,rgb(2, 23, 54) 0%, transparent 100%);
+            background: linear-gradient(0, rgb(2, 23, 54) 0%, transparent 100%);
         }
 
         &:hover {
             img {
                 transform: scale(1.05);
             }
+
             .img-content {
                 bottom: 0;
                 opacity: 1;
             }
         }
     }
+
     .results {
         .card .icon {
             width: 45px;
@@ -304,17 +306,21 @@
 
     .card {
         overflow: hidden;
+
         .card-content {
             padding: 20px 15px;
             bottom: -50%;
             opacity: 0;
-            background: linear-gradient(0,rgb(2, 23, 54) 10%, transparent 100%);;
+            background: linear-gradient(0, rgb(2, 23, 54) 10%, transparent 100%);
+            ;
         }
+
         &:hover {
             .card-content {
                 bottom: 0;
                 opacity: 1;
             }
+
             img {
                 transform: scale(1.05);
             }
@@ -365,6 +371,8 @@
 }
 
 .question_page {
+    min-height: 500px;
+
     .container {
         .result {
             width: max-content;
@@ -379,6 +387,16 @@
             border-radius: 15px;
             background: var(--color-light);
             @include shadow();
+            position: relative;
+
+            .badge {
+                background: var(--color-primary);
+                position: absolute;
+                padding: 5px 15px;
+                font-size: 19px;
+                top: 0;
+                left: 0;
+            }
 
             .question_image {
                 width: 100%;
@@ -656,6 +674,66 @@
 
         @media(max-width: 768px) {
             grid-template-columns: repeat(1, 1fr);
+        }
+    }
+}
+
+.user-profile {
+    .profile-img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: grid;
+        place-content: center;
+    }
+
+    .history {
+        max-height: 500px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    textarea {
+        max-height: 200px;
+    }
+
+    .rating {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        >input {
+            display: none;
+        }
+
+        >label {
+            position: relative;
+            width: 28px;
+            font-size: 35px;
+            color: var(--color-primary);
+            cursor: pointer;
+
+            &::before {
+                content: "\2605"; // ★
+                position: absolute;
+                opacity: 0;
+            }
+        }
+
+        >label:hover::before,
+        >label:hover~label::before {
+            opacity: 1 !important;
+        }
+
+        >input:checked~label::before {
+            opacity: 1;
+        }
+
+        &:hover>input:checked~label::before {
+            opacity: 0.4;
         }
     }
 }

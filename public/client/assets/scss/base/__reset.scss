@@ -10,6 +10,27 @@
     }
 }
 
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bacground-gradient);
+  border-radius: 10px;
+  border: 2px solid #e6e6e6; /* thumb-ը "ներսում" լինի */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+
 .tooltip,
 .tooltip * {
   transition: none !important;

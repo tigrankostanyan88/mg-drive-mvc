@@ -13,10 +13,9 @@ module.exports = {
 
         res.render('client/index', {
             title: 'Գլխավոր',
-            // page: req.url,
             users,
-            reviews
-            // nav_active: 'home'
+            reviews,
+            nav_active: 'home'
         })
     },
     getTests: async (req, res) => {
@@ -24,23 +23,19 @@ module.exports = {
 
         res.render('client/pages/test', {
             title: 'Թեստեր',
-            nav_active: 'test',
+            nav_active: 'tests',
             page: req.url,
             test
         })
     },
     getGroups: async (req, res) => {
-        const group = await Group.findAll();
-
         res.render('client/pages/groups', {
             title: `Խմբեր`,
             nav_active: 'groups',
             page: req.url,
-            // group
         })
     },
     getGroup: async (req, res) => {
-      
         const group = await Group.findOne({
             where: { id: req.params.id }
         });
@@ -50,6 +45,26 @@ module.exports = {
             nav_active: 'groups',
             page: req.url,
             group
+        })
+    },
+    getProfile: async (req, res) => {
+
+        res.render('client/pages/user-profile', {
+            nav_active: 'profile',
+            page: req.url,
+        })
+    },
+    getProfileHistory: async (req, res) => {
+
+        res.render('client/parts/profile-history', {
+            nav_active: 'history',
+            page: req.url,
+        })
+    },
+    getProfileOptions: async (req, res) => {
+        res.render('client/parts/profile-options', {
+            nav_active: 'options',
+            page: req.url,
         })
     },
     getTestDetails: async (req, res) => {

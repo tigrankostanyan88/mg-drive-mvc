@@ -9,25 +9,47 @@ class Questions {
         this.resultBox.id = 'resultBox';
         this.init();
     }
+
     generateAnswer(option, i, qIndex) {
         return `
             <li class="question_answer" data-question="${qIndex}" data-index="${i}">
               <span class="count">0${i + 1}</span> ${option}
             </li>`;
     }
+
     renderQuestionCard(item, index) {
         let answersHTML = '';
-        let options = this.isValidJSON(item.options);
-        
+        let options = this.parseOptions(item.options);
+
         options.forEach((option, i) => {
             answersHTML += this.generateAnswer(option, i, index);
         });
 
+        let i = index + 1;
+        let image = {
+            img: ''
+        };
+        console.log(item.files)
+
+        if (item.files) {
+            let foundImage = item.files.find(file => file.name_used === 'question_img');
+            if (foundImage) {
+                image = {
+                    img: `/client/images/questions/large/${foundImage.name}.${foundImage.ext}`
+                };
+            } else {
+                image = {
+                    img: `/client/images/404.jpg`
+                };
+            }
+        }
+
         return `
             <div class="questionCard">
+              <div class="badge">${i < 10 ? "0" + i : i}</div>
               <div class="image" id="lightgallery">
-                <a href="https://caradas.com/wp-content/uploads/2024/09/AdobeStock_224332680-scaled.jpeg" class="gallery_item scroll_animate">
-                    <canvas class="question_image"></canvas>
+                <a href="${image.img}" class="gallery_item scroll_animate">
+                    <img src="${image.img}" />
                 </a>
               </div>
               <div class="card_body">
@@ -36,50 +58,31 @@ class Questions {
               </div>
             </div>`;
     }
-    isValidJSON(obj) {
+
+    parseOptions(options) {
         try {
-            JSON.stringify(obj);
-            return JSON.parse(obj);
+            if (typeof options === "string") {
+                return JSON.parse(options);
+            }
+            return options;
         } catch (e) {
-            return obj;
+            console.warn("Invalid options JSON:", options);
+            return [];
         }
     }
+
     renderQuestions() {
+        this.container.innerHTML = ""; // reset before rendering
         this.object.forEach((item, index) => {
             this.container.innerHTML += this.renderQuestionCard(item, index);
         });
 
         if (this.container) this.container.appendChild(this.resultBox);
     }
-    invisibleImage() {
-        const canvas = document.querySelectorAll(".question_image");
-        canvas.forEach(el => {
-            const ctx = el.getContext("2d");
 
-            const img = new Image();
-            img.src = "https://caradas.com/wp-content/uploads/2024/09/AdobeStock_224332680-scaled.jpeg";
-
-            img.onload = function () {
-                ctx.drawImage(img, 0, 0, el.width, el.height);
-
-                // Ջրանիշ ավելացնելու օրինակ
-                ctx.font = "24px roboto";
-                ctx.fillStyle = "rgba(10, 10, 10, 0.9)";
-                ctx.fillText("© MSpace", 20, el.height - 20);
-            };
-
-            // blur when the page loses focus
-            window.addEventListener("blur", () => {
-                el.style.filter = "blur(3px)";
-            });
-
-            window.addEventListener("focus", () => {
-                el.style.filter = "none";
-            });
-        })
-    }
     handleClicks() {
         const allAnswers = document.querySelectorAll('.question_answer');
+
         allAnswers.forEach(answer => {
             answer.addEventListener('click', () => {
                 const qIndex = parseInt(answer.dataset.question);
@@ -106,59 +109,72 @@ class Questions {
                 this.answeredQuestions.add(qIndex);
                 if (selected === correct) this.score++;
 
-                if (this.answeredQuestions.size == this.object.length) {
-                    this.resultBox.innerHTML = `<div class="result"><i class=" fa-solid fa-circle-check" style="font-size: 20px; color: #00DE3B"></i> Դու պատասխանել ես ${this.object.length}-ից <strong>${this.score}</strong> ճիշտ հարցի։</div>`;
+                if (this.answeredQuestions.size === this.object.length) {
+                    this.resultBox.innerHTML = `
+                        <div class="result">
+                          <i class="fa-solid fa-circle-check" style="font-size: 20px; color: #00DE3B"></i> 
+                          Դու պատասխանել ես ${this.object.length}-ից <strong>${this.score}</strong> ճիշտ հարցի։
+                        </div>`;
                 }
             });
         });
     }
+
     init() {
+        if (!this.container) return;
         this.renderQuestions();
         this.handleClicks();
-        this.invisibleImage();
     }
 }
 
-let testsRow = document.querySelector('.tests_page');
-let groupRow = document.querySelector('.group_page');
+// ==========================
+const selectQuestionTest = document.querySelector('#select_tests');
+const selectQuestionGroup = document.querySelector('#select_groups');
 
+// Լցնում ենք tests
+(async function () {
+    if (selectQuestionTest) {
+        const tests = await doAxios(`/api/v1/tests`);
+        tests.data.tests.forEach(test => {
+            selectQuestionTest.innerHTML += `<option value="${test.id}">${test.slug}</option>`;
+        });
+    }
 
-const selectQuestion = document.querySelector('#select_questions');
-const testMap = {};
-async function render(api) {
-    return await axios.get(api);
-} 
+    if (selectQuestionGroup) {
+        const groups = await doAxios(`/api/v1/groups`);
+        groups.data.groups.forEach(group => {
+            selectQuestionGroup.innerHTML += `<option value="${group.id}">${group.slug}</option>`;
+        });
+    }
+})();
 
-// new Questions(tests, '.tests_page .container');
-if(selectQuestion) {
+// event handler
+async function handleSelectChange(e) {
+    const selectedValue = e.target.value;
+    const selectedName = e.target.name;
 
-    axios.get('/api/v1/tests').then(response => {
-    response.data.tests.forEach(item => {
-        const option = document.createElement('option');
-        option.innerHTML = item.slug;
-        option.dataset.key = crypto.randomUUID();
-        selectQuestion.appendChild(option);
-        testMap[item.slug] = item.id;
-    });
-})
-.catch(error => {
-    console.error('Սխալ:', error);
-});
-
-    selectQuestion.addEventListener('change', async (e) => {
-        const selectedSlug = e.target.value; // օրինակ՝ "test-1"
-        const selectedId = testMap[selectedSlug]; // օրինակ՝ "64383fa9a445..."
-        try {
-            const response = await render(`/api/v1/tests/${selectedId}`);
-            const questions = response.data.test.questions;
-    
-            if (questions.length > 0) {
-                new Questions(questions, '.tests_page .container');
-            }
-        } catch (error) {
-            console.log(error.message);
-            console.log(error);
+    if (selectedName === 'selected_test') {
+        if (selectedValue === '*') {
+            new Questions([], '.tests_page .question_card');
+            return;
         }
-    });
+        const test = await doAxios(`/api/v1/tests/${selectedValue}`);
+        new Questions(test.data.test.questions, '.tests_page .question_card');
+    } else if (selectedName === 'selected_groups') {
+
+        if (selectedValue === '*') {
+            new Questions([], '.groups_page .question_card');
+            return;
+        }
+        const group = await doAxios(`/api/v1/groups/${selectedValue}`);
+        new Questions(group.data.group.questions, '.groups_page .question_card');
+    }
 }
 
+// Event listeners
+if (selectQuestionTest) {
+    selectQuestionTest.addEventListener('change', handleSelectChange);
+}
+if (selectQuestionGroup) {
+    selectQuestionGroup.addEventListener('change', handleSelectChange);
+}

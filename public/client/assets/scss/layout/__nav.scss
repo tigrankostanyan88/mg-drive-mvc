@@ -67,6 +67,13 @@ nav {
                      transform: translateX(-50%) translateY(5px);
                 }
             }
+            &.active {
+               transform: translateY(0px);
+                &::after {
+                    opacity: 0.9;
+                     transform: translateX(-50%) translateY(0);
+                }
+            }
 
             .text {
                 display: block;

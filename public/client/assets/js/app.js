@@ -149,7 +149,7 @@ inputField();
 
 
 Array.from(document.querySelectorAll('form')).forEach(form => {
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async(e) => {
     e.preventDefault();
 
     if (!validateBootstrap(form)) {

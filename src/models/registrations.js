@@ -11,7 +11,7 @@ module.exports = (con, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        lastName: {
+        lastname: {
             type: DataTypes.STRING,
             allowNull: false
         },

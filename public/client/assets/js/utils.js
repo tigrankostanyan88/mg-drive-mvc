@@ -61,7 +61,6 @@
     });
 })();
 
-
 // Bootstrap input falidation
 function validateBootstrap(form) {
   'use strict';
@@ -81,21 +80,40 @@ function validateBootstrap(form) {
   return isValid;
 }
 
-async function doAxios(url, method = "GET", data = null) {
+async function doAxios(url, method = 'GET', data = {}) {
     try {
-        const config = {
+        const response = await axios({
+            url,
             method,
-            url
+            data,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        return {
+            success: true,
+            status: response.status,
+            data: response.data,
+            error: false,
+            message: response.data?.message || 'Հաջող է'
         };
-
-        if (method.toUpperCase() === "GET") config.params = data;
-        else config.data = data;
-
-        const response = await axios(config);
-        return response.data;
     } catch (error) {
-        // console.error("Error in Axios request:", error);
-        throw error;
+        if (error.response) {
+            return {
+                success: false,
+                status: error.response.status,
+                data: null,
+                error: true,
+                message: error.response.data?.message || 'Սերվերից սխալ է ստացվել'
+            };
+        }
+
+        return {
+            success: false,
+            status: null,
+            data: null,
+            error: true,
+            message: error.message || 'Ցանցի կամ անհայտ սխալ'
+        };
     }
 }
 
@@ -127,6 +145,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// setup Navigation Links
+function setupNavLinks() {
+    // This will find all navigation links
+    const links = document.querySelectorAll('a[data-section]');
 
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+        e.preventDefault(); // don't let it do a default redirect
+
+        const sectionId = link.getAttribute('data-section');
+
+        // If we are already on the main page
+        if (window.location.pathname === '/' || window.location.pathname === '/') {
+            const section = document.querySelector(`#${sectionId}`);
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // Otherwise redirect to the home page with anchor
+            window.location.href = `/${sectionId ? '#' + sectionId : ''}`;
+        }
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupNavLinks);
 const accordionCollapseElementList = document.querySelectorAll('#headingThree .collapse')
 const accordionCollapseList = [...accordionCollapseElementList].map(accordionCollapseEl => new bootstrap.Collapse(accordionCollapseEl))

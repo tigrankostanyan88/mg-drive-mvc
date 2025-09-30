@@ -32,6 +32,5 @@ module.exports = (con, DataTypes) => {
             allowNull: false
         }
     });
-
     return Question;
 }

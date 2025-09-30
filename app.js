@@ -36,6 +36,8 @@ app.use(cookieParser());
 // Middleware
 app.use(connectLivereload());
 
+
+
 // ejs settings 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -46,7 +48,6 @@ liveReloadServer.server.once("connection", () => {
     liveReloadServer.refresh("/admin");
   }, 100);
 });
-
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 

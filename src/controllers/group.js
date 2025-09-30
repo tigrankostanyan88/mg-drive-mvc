@@ -27,8 +27,11 @@ module.exports = {
     getGroup: async (req, res) => {
         try {
             const group = await Group.findByPk(req.params.id, { 
-                include: 'questions', where: { row_type: 'group'}
+                include: [
+                    { association: 'questions', include: [ { association: 'files' } ] }
+                ], where: { row_type: 'group'}
             });
+
 
             res.status(201).json({
                 time: (Date.now() - req.time) + " ms",
@@ -44,7 +47,9 @@ module.exports = {
     getGroups: async (req, res) => {
         try {
             const groupsRow = await Group.findAll({
-                include: 'questions',
+               include: [
+                    { association: 'questions', include: [ { association: 'files' } ] }
+                ]
             });
 
             const groups = groupsRow.map(group => group.get({ plain: true }));

@@ -1,93 +1,82 @@
- <div class="container">
-   <!-- logo -->
-   <div class="logo">
-     <a href="/">
-       <img src="./client/images/logo.png" alt="">
-     </a>
-   </div>
-   <!-- nav menu -->
-   <ul class="navbar">
-     <li>
-       <a href="#" class="active nav_link">
-         <i class="icon fa-solid fa-house"></i>
-         <span class="text">Գլխավոր</span>
-       </a>
-     </li>
-     <li>
-       <a href="#about" class="nav_link">
-         <i class="icon fa-solid fa-info-circle"></i>
-         <span class="text">Մեր Մասին</span>
-       </a>
-     </li>
-     <li>
-       <a href="./groups" class="nav_link">
-         <i class="icon fa-solid fa-users"></i>
-         <span class="text">Խմբեր</span>
-       </a>
-     </li>
-     <li>
-       <a href="./tests" class="nav_link">
-         <i class="icon fa-solid fa-file-alt"></i>
-         <span class="text">Թեստեր</span>
-       </a>
-     </li>
-     <li>
-       <a href="#reviews" class="nav_link">
-         <i class="icon fa-solid fa-star"></i>
-         <span class="text">Կարծիքներ</span>
-       </a>
-     </li>
-     <li>
-       <a href="#contact" class="nav_link">
-         <i class="icon fa-solid fa-envelope"></i>
-         <span class="text">Կապ</span>
-       </a>
-     </li>
-     <li class="close_menu">
-       <button class="close_menu">
-         <i class="fa-solid fa-xmark"></i>
-       </button>
-     </li>
-   </ul>
+<%
+  const nav_active_home = nav_active == 'home' ? 'active' : ''
+  const nav_active_group = nav_active == 'groups' ? 'active' : ''
+  const nav_active_test = nav_active == 'tests' ? 'active' : ''
+%>
 
-   <!-- social media icons -->
-   <div class="user_actions d-flex gap-3 align-items-center">
-     <!-- From Uiverse.io by vinodjangid07 --> 
-    <a href="https://facebook.com/yourpage" class="Btn social-icon">
-      <span class="svgContainer">
-        <i class="fa-brands fa-facebook text-white"></i>
-      </span>
-      <span class="BG"></span>
+
+<div class="container">
+  <!-- logo -->
+  <div class="logo">
+    <a href="/">
+      <img src="./client/images/logo.png" alt="">
     </a>
-    <!-- instagram -->
-    <a href="https://facebook.com/yourpage"  target="_blank" class="Btn social-icon" data-bs-toggle="tooltip"
-       data-bs-custom-class="custom-tooltip" data-bs-placement="bottom" data-bs-title="Instagram">
-      <span class="svgContainer">
-       <i class="fa-brands fa-instagram text-white"></i>
-      </span>
-      <span class="BG"></span>
+  </div>
+  <!-- nav menu -->
+  <ul class="navbar">
+    <li>
+      <a href="/" class="<%= nav_active_home %> nav_link">
+        <i class="icon fa-solid fa-house"></i>
+        <span class="text">Գլխավոր</span>
+      </a>
+    </li>
+    <li>
+      <a href="#about" class="nav_link" data-section="about">
+        <i class="icon fa-solid fa-info-circle"></i>
+        <span class="text">Մեր Մասին</span>
+      </a>
+    </li>
+    <li>
+      <a href="/groups" class="nav_link <%= nav_active_group %>">
+        <i class="icon fa-solid fa-users"></i>
+        <span class="text">Խմբեր</span>
+      </a>
+    </li>
+    <li>
+      <a href="/tests" class="nav_link <%= nav_active_test %>">
+        <i class="icon fa-solid fa-file-alt"></i>
+        <span class="text">Թեստեր</span>
+      </a>
+    </li>
+    <li>
+      <a href="#reviews" class="nav_link" data-section="reviews">
+        <i class="icon fa-solid fa-star"></i>
+        <span class="text">Կարծիքներ</span>
+      </a>
+    </li>
+    <li>
+      <a href="#contact" class="nav_link" data-section="contact">
+        <i class="icon fa-solid fa-envelope"></i>
+        <span class="text">Կապ</span>
+      </a>
+    </li>
+    <li class="close_menu">
+      <button class="close_menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </li>
+  </ul>
+
+  <!-- social media icons -->
+  <div class="user_actions d-flex gap-3 align-items-center">
+    <!-- facebook -->
+    <a href="#" target="_blank" class="Btn fw-bold" data-bs-toggle="tooltip">(+374)-98-39-40-33</a>
+
+    <% if (user) { %>
+    <a href="<%= user.role === 'admin' ? '/admin' : '/profile' %>" class="login" data-bs-toggle="tooltip"
+      data-bs-custom-class="custom-tooltip" data-bs-placement="bottom" data-bs-title="<%- user.name %>">
+      <img class="nav-profile-img"
+        src="https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png"
+        alt="<%- user.name %>">
     </a>
+    <% } else { %>
+    <button class="btn text-white rounded-pill" data-bs-target="#signIn_signUp" data-bs-toggle="modal">
+      Մուտք գործել
+    </button>
+    <% } %>
 
-     <% if(user) { %>
-     <a href="/admin" class="login" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip"
-       data-bs-placement="bottom" data-bs-title="<%- user.name %>">
-       <img class="nav-profile-img"
-         src="https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png" alt="">
-     </a>
-
-     <% } else { %>
-     <button type="button" class="Btn login-btn" data-bs-target="#signIn_signUp" data-bs-toggle="modal">
-       <div class="sign">
-          <svg viewBox="0 0 512 512">
-            <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
-            </path>
-          </svg>
-        </div>
-       <div class="text">Մուտք</div>
-     </button>
-     <% } %>
-     <button class="menu open_menu">
-       <i class="fa-solid fa-bars-staggered"></i>
-     </button>
-   </div>
- </div>
+    <button class="menu open_menu">
+      <i class="fa-solid fa-bars-staggered"></i>
+    </button>
+  </div>
+</div>

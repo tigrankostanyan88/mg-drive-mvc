@@ -2,7 +2,8 @@ module.exports = function server(app) {
     const DB = require('../models');
 
     DB.con
-        .sync({ alter: true })
+    // { alter: true }
+        .sync()
         .then((res) => {
             const port = process.env.POST || 3000;
 
