@@ -167,6 +167,7 @@ Array.from(document.querySelectorAll('form')).forEach(form => {
 
     try {
       let dataToSend = formData;
+
       if (METHOD !== 'patch' && METHOD !== 'post') {
         dataToSend = Object.fromEntries(formData.entries());
       }

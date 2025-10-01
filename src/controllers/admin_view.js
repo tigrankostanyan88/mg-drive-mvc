@@ -6,7 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const helpers = require('../utils/helpers');
 
-const {Test, Group, Question, File, User, } = DB.models;
+const {Test, Group, Question, File, User, Registration } = DB.models;
 const { Op } = DB.Sequelize;
 
 // async function attachQuestions(items) {
@@ -28,7 +28,6 @@ async function getAdminData() {
 
   return { tests, users, groups, questions};
 }
-
 
 module.exports = {
     getAdmin: async (req, res) => {
@@ -131,7 +130,7 @@ module.exports = {
 
             const users = await User.findAll({
                 where: {
-                    role: { [Op.notIn]: ['admin'] }
+                    role: { [Op.notIn]: ['admin', 'student'] }
                 },
                 include: 'files'
             });
@@ -147,13 +146,37 @@ module.exports = {
             res.status(500).send('Սխալ տեղի ունեցավ');
         }
     },
+    getRegistration: async (req, res) => {
+        try {
+
+            const { Op } = require('sequelize');
+
+            const registedUser = await Registration.findAll();
+
+            res.render('admin/pages/registration', {
+                title: 'Գրանցված Օգտատերեր',
+                nav_active: "students",
+                registedUser: registedUser,
+                helpers
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Սխալ տեղի ունեցավ');
+        }
+    },
     getGroups: async (req, res) => {
-        const group = await Group.findAll();
         res.render('admin/pages/groups', {
             title: `Խմբեր`,
             nav_active: 'group',
             page: req.url,
-            group
+        })
+    },
+    getReviews: async (req, res) => {
+        const group = await Group.findAll();
+        res.render('admin/pages/reviews', {
+            title: `Մեկնաբանություններ`,
+            nav_active: 'group',
+            page: req.url,
         })
     },
     getGroup: async (req, res) => {

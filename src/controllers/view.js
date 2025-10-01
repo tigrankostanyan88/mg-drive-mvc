@@ -48,21 +48,25 @@ module.exports = {
         })
     },
     getProfile: async (req, res) => {
-
         res.render('client/pages/user-profile', {
             nav_active: 'profile',
             page: req.url,
         })
     },
+    getInfoDetails: async (req, res) => {
+        res.render('client/pages/profile-info', {
+            nav_active: 'info',
+            page: req.url,
+        })
+    },
     getProfileHistory: async (req, res) => {
-
-        res.render('client/parts/profile-history', {
+        res.render('client/pages/profile-history', {
             nav_active: 'history',
             page: req.url,
         })
     },
     getProfileOptions: async (req, res) => {
-        res.render('client/parts/profile-options', {
+        res.render('client/pages/profile-options', {
             nav_active: 'options',
             page: req.url,
         })

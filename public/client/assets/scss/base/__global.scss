@@ -6,13 +6,6 @@
     margin: auto;
 }
 
-.nav-profile-img {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
 section {
     margin-bottom: 100px;
     padding: 50px 0;  
@@ -39,4 +32,15 @@ section {
 
 .container {
     overflow: hidden;
+}
+
+.input_field {
+    position: relative;
+    .password-show {
+        position: absolute;
+        top: 58%;
+        right: 50px;
+        z-index: 1;
+        background: transparent !important;
+    }
 }

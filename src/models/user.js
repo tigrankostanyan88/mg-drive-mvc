@@ -18,12 +18,40 @@ module.exports = (con, DataTypes) => {
             allowNull: false,
             defaultValue: ""
         },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        age: {    
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         role: {
             type: DataTypes.ENUM, 
-            values: ['user', 'team-member', 'student', 'admin'],
+            values: ['user', 'team-member', 'student', 'teacher', 'admin'],
             defaultValue: 'user'
         },
-        lesson_count: {
+        experience: { 
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        biography: {                   
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        specialization: {             
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        certificates: {                  
+            type: DataTypes.STRING,  
+            allowNull: true
+        },
+        education: {                     
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        number_of_students: {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0
@@ -79,9 +107,8 @@ module.exports = (con, DataTypes) => {
                     if (query.where === undefined) {
                         query.where = {}
                     }
-                    // if not defined
+                    // only not deleted users
                     if (query.where.deleted === undefined) {
-                        // only not deleted users
                         query.where.deleted = false;
                     }
                 }
@@ -92,11 +119,8 @@ module.exports = (con, DataTypes) => {
     User.prototype.changedPasswordAfter = function(JWTTimestamp) {
         if (this.passwordChangedAt) {
             const changedTimestamp = Math.floor(this.passwordChangedAt.getTime() / 1000);
-    
-            // console.log(changedTimestamp, JWTTimestamp);
             return JWTTimestamp < changedTimestamp;
         }
-    
         return false;
     }
 
@@ -106,14 +130,10 @@ module.exports = (con, DataTypes) => {
 
     User.prototype.createPasswordResetToken = function() {
         const resetToken = crypto.randomBytes(32).toString('hex');
-      
         this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-      
-        console.log({ resetToken }, this.passwordResetToken);
-      
-        this.passwordResetExpires = Date.now() + (10 * 2 * 1000); // 10min
-      
+        this.passwordResetExpires = Date.now() + (10 * 60 * 1000); // 10 min
         return resetToken;
     };
+
     return User;
 }

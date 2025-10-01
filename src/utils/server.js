@@ -3,7 +3,7 @@ module.exports = function server(app) {
 
     DB.con
     // { alter: true }
-        .sync()
+        .sync({ alter: true })
         .then((res) => {
             const port = process.env.POST || 3000;
 

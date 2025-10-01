@@ -1,29 +1,3 @@
-(function accordion() {
-    const accordions = document.querySelectorAll('.my-accordion');
-
-    accordions.forEach(item => {
-        const button = item.querySelector('button');
-        const descr = item.querySelector('.descr');
-        const icon = item.querySelector('.icon');
-
-        item.addEventListener('click', () => {
-            const isOpen = descr.style.height !== '0px';
-
-            accordions.forEach(acc => {
-                acc.querySelector('.descr').style.height = '0px';
-                acc.querySelector('button').classList.remove('active');
-                acc.querySelector('.icon').innerHTML = '<i class="fa-solid fa-plus"></i>';
-            });
-
-            if (!isOpen) {
-                descr.style.height = descr.scrollHeight + 'px';
-                button.classList.add('active');
-                icon.innerHTML = '<i class="fa-solid fa-minus"></i>';
-            }
-        });
-    });
-})();
-
 (function scrollAnimation() {
     // Callback function for the IntersectionObserver
     function callback(entries, observer) {
@@ -63,21 +37,21 @@
 
 // Bootstrap input falidation
 function validateBootstrap(form) {
-  'use strict';
-  let isValid = true;
+    'use strict';
+    let isValid = true;
 
-  form.querySelectorAll('input, textarea').forEach(input => {
-    input.value = input.value.trim();
-    if (!input.checkValidity()) isValid = false;
-  });
+    form.querySelectorAll('input, textarea').forEach(input => {
+        input.value = input.value.trim();
+        if (!input.checkValidity()) isValid = false;
+    });
 
-  // Bootstrap validation
-  if (!form.checkValidity()) {
-    isValid = false;
-  }
+    // Bootstrap validation
+    if (!form.checkValidity()) {
+        isValid = false;
+    }
 
-  form.classList.add('was-validated');
-  return isValid;
+    form.classList.add('was-validated');
+    return isValid;
 }
 
 async function doAxios(url, method = 'GET', data = {}) {
@@ -86,7 +60,9 @@ async function doAxios(url, method = 'GET', data = {}) {
             url,
             method,
             data,
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         });
 
         return {
@@ -94,7 +70,7 @@ async function doAxios(url, method = 'GET', data = {}) {
             status: response.status,
             data: response.data,
             error: false,
-            message: response.data?.message || 'Հաջող է'
+            message: response.data ?.message || 'Հաջող է'
         };
     } catch (error) {
         if (error.response) {
@@ -137,7 +113,6 @@ function setFormLoading(form, isLoading = true) {
     btn.disabled = isLoading;
 }
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     tooltipTriggerList.forEach(function (tooltipTriggerEl) {
@@ -149,25 +124,106 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupNavLinks() {
     // This will find all navigation links
     const links = document.querySelectorAll('a[data-section]');
-
     links.forEach(link => {
         link.addEventListener('click', (e) => {
-        e.preventDefault(); // don't let it do a default redirect
+            e.preventDefault(); // don't let it do a default redirect
 
-        const sectionId = link.getAttribute('data-section');
-
-        // If we are already on the main page
-        if (window.location.pathname === '/' || window.location.pathname === '/') {
-            const section = document.querySelector(`#${sectionId}`);
-            if (section) section.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            // Otherwise redirect to the home page with anchor
-            window.location.href = `/${sectionId ? '#' + sectionId : ''}`;
-        }
+            const sectionId = link.getAttribute('data-section');
+            // If we are already on the main page
+            if (window.location.pathname === '/' || window.location.pathname === '/') {
+                const section = document.querySelector(`#${sectionId}`);
+                if (section) section.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            } else {
+                // Otherwise redirect to the home page with anchor
+                window.location.href = `/${sectionId ? '#' + sectionId : ''}`;
+            }
         });
     });
 }
 
-document.addEventListener('DOMContentLoaded', setupNavLinks);
+// Password show, hide
+function exposePass() {
+    var x = document.getElementById("xPassword");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
+
+function capLock(e) {
+    kc = e.keyCode ? e.keyCode : e.which;
+    sk = e.shiftKey ? e.shiftKey : ((kc == 16) ? true : false);
+    if (((kc >= 65 && kc <= 90) && !sk) || ((kc >= 97 && kc <= 122) && sk))
+        document.getElementById('capsOn').style.visibility = 'visible';
+    else
+        document.getElementById('capsOn').style.visibility = 'hidden';
+}
+
+
+function initPasswordToggle() {
+    let passwordFields = document.querySelectorAll('.input_field');
+
+    passwordFields.forEach(field => {
+        // գտնում ենք password input-ը
+        let passwordInput = field.querySelector('input[type="password"]');
+
+        if (passwordInput) {
+            // ստեղծում ենք կոճակը
+            let button = document.createElement('button');
+            button.type = "button";
+            button.classList.add('password-show');
+            button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+
+            // click event
+            button.addEventListener('click', function () {
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    button.innerHTML = `<i class="fa-solid fa-eye"></i>`;
+                } else {
+                    passwordInput.type = "password";
+                    button.innerHTML = `<i class="fa-solid fa-eye-slash"></i>`;
+                }
+            });
+            field.appendChild(button);
+        }
+    });
+}
+
+
+function changeProfileImage() {
+    let fileInput = document.querySelector("input[type=file]");
+    fileInput.addEventListener("change", async function(e) {   
+    let file = this.files[0];
+    
+    if (file) {
+        // Preview image
+        let preview = document.querySelector(".profile-img");
+        let pSmImage = document.querySelector(".profime-sm-image");
+        preview.src = URL.createObjectURL(file);
+        pSmImage.src = URL.createObjectURL(file);
+
+        let formData = new FormData();
+        formData.append("user_img", file);
+
+        try {
+        const response = await doAxios('/api/v1/user/updateme', 'patch', formData);
+        if(response.status === 400) {
+            preview.src  = './client/images/no-image-profile.jpg'
+            pSmImage.src = './client/images/no-image-profile.jpg'
+        }
+        } catch (err) {
+        console.error("Upload failed:", err);
+        }
+    }
+    });
+}
+
+changeProfileImage();
+initPasswordToggle();
+setupNavLinks();
+
 const accordionCollapseElementList = document.querySelectorAll('#headingThree .collapse')
 const accordionCollapseList = [...accordionCollapseElementList].map(accordionCollapseEl => new bootstrap.Collapse(accordionCollapseEl))

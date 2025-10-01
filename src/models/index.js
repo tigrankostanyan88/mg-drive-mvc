@@ -13,8 +13,10 @@ DB.models = {
   File: require('./file')(connect, Sequelize.DataTypes),
 }
 
+// User → Files
 DB.models.User.hasMany(DB.models.File, {
   foreignKey: 'row_id',
+  sourceKey: 'id', 
   as: 'files',
   constraints: false,
   scope: {
@@ -22,10 +24,11 @@ DB.models.User.hasMany(DB.models.File, {
   }
 });
 
-
+// File → User
 DB.models.File.belongsTo(DB.models.User, {
   foreignKey: 'row_id',
-  as: 'files',
+  targetKey: 'id', 
+  as: 'user',
   constraints: false,
   scope: {
     name_used: 'user_img'

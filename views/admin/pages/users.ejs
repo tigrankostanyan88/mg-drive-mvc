@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
-
 <head><%- include('../parts/head.ejs') %></head>
-
 <body>
     <div class="container-scroller">
         <%- include('../parts/sidebar.ejs') %>
@@ -20,9 +18,9 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th> Հաճախորդի անունը </th>
-                                                    <th> Համարը </th>
-                                                    <th> Վճարման եղանակ </th>
+                                                    <th> Անունը </th>
+                                                    <th> Հեռախոսահամար </th>
+                                                    <th> Էլ․ հասցե </th>
                                                     <th> Գրանցման ամսաթիվը </th>
                                                     <th> Կարգավիճակը </th>
                                                     <th> Հեռացնել օգտվողին </th>
@@ -30,7 +28,9 @@
                                             </thead>
                                             <tbody>
                                                <% users.forEach(tableUser => { %>
-                                                    <%- include('../parts/user_table_row.ejs', {tableUser}) %>
+                                                    <% if(tableUser.role !== 'admin') { %>
+                                                        <%- include('../parts/table_row.ejs', {tableUser}) %>
+                                                    <% } %>
                                                 <% }); %>
                                             </tbody>
                                         </table>

@@ -13,24 +13,27 @@
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Order Status</h4>
+                                    <h4 class="card-title">Գրանցված օգտատերեր</h4>
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th> Անունը </th>
-                                                    <th> Հեռախոսահամար </th>
+                                                    <th> Ազգանունը </th>
                                                     <th> Էլ․ հասցե </th>
+                                                    <th> Հեռախոսահամար </th>
                                                     <th> Գրանցման ամսաթիվը </th>
-                                                    <th> Կարգավիճակը </th>
-                                                    <th> Հեռացնել օգտվողին </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                               <% students.forEach(tableUser => { %>
-                                                    <% if(tableUser.role !== 'admin') { %>
-                                                        <%- include('../parts/table_row.ejs', {tableUser}) %>
-                                                    <% } %>
+                                               <% registedUser.forEach(user => { %>
+                                                     <tr>
+                                                        <td><span class="pl-2"><%- user.name %></span></td>
+                                                        <td><span class="pl-2"><%- user.lastname %></span></td>
+                                                        <td><span class="pl-2"><%- user.email %></span></td>
+                                                        <td><span class="pl-2"><%- user.phone %></span></td>
+                                                        <td><span class="pl-2"><%- helpers.getDate(user.createdAt) %></span></td>
+                                                     </tr>
                                                 <% }); %>
                                             </tbody>
                                         </table>

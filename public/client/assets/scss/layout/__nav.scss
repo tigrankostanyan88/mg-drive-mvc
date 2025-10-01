@@ -8,14 +8,22 @@ nav {
         z-index: 1;
     }
 
+    .profime-sm-image {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
     .logo {
         img {
             width: 130px;
         }
+
         &:hover {
-           img {
-             @include filterImage();
-           }
+            img {
+                @include filterImage();
+            }
         }
     }
 
@@ -48,6 +56,7 @@ nav {
             color: inherit;
             display: block;
             position: relative;
+
             &::after {
                 content: '';
                 position: absolute;
@@ -60,18 +69,22 @@ nav {
                 z-index: -1;
                 opacity: 0;
             }
+
             &:hover {
                 transform: translateY(-5px);
+
                 &::after {
                     opacity: 0.9;
-                     transform: translateX(-50%) translateY(5px);
+                    transform: translateX(-50%) translateY(5px);
                 }
             }
+
             &.active {
-               transform: translateY(0px);
+                transform: translateY(0px);
+
                 &::after {
                     opacity: 0.9;
-                     transform: translateX(-50%) translateY(0);
+                    transform: translateX(-50%) translateY(0);
                 }
             }
 
@@ -90,6 +103,7 @@ nav {
         display: flex;
         column-gap: 15px;
         font-size: 19px;
+
         .btn {
             @include buttonStyle(10px, 20px);
         }
@@ -112,6 +126,7 @@ nav {
                 display: block;
             }
         }
+
         .navbar {
             max-width: 300px;
             width: 100%;
@@ -124,6 +139,7 @@ nav {
             background: #fff;
             flex-direction: column;
             justify-content: space-around;
+
             .close_menu {
                 display: block;
             }
@@ -166,6 +182,7 @@ nav {
             .close_menu {
                 display: none;
             }
+
             max-width: 500px;
             width: 100%;
             position: fixed;

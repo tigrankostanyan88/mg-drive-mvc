@@ -37,7 +37,6 @@ app.use(cookieParser());
 app.use(connectLivereload());
 
 
-
 // ejs settings 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));

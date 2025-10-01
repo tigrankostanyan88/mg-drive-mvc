@@ -5,3 +5,7 @@
 .number-field input {
   min-width: 60px
 }
+
+img {
+  object-fit: cover;
+}

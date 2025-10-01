@@ -81,7 +81,7 @@ module.exports = {
     logOut: catchAsync(async (req, res, next) => {
         // Set cookie expiry to 2 seconds from now
         res.cookie('jwt', 'loggedout', {
-            expires: new Date(Date.now() + 2 * 1000), // 2 վայրկյանից կգա լրացված
+            expires: new Date(Date.now() + 500),
             httpOnly: true
         });
 
@@ -162,7 +162,7 @@ module.exports = {
                 const decoded = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
 
                 // 2) Check if user still exists
-                const currentUser = await User.findByPk(decoded.id);
+                const currentUser = await User.findByPk(decoded.id, {include: "files"});
                 if (!currentUser) {
                     return next();
                 }
@@ -185,7 +185,6 @@ module.exports = {
     protect: catchAsync(async (req, res, next) => {
         res.locals.user = undefined;
 
-
         let token;
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
@@ -195,20 +194,23 @@ module.exports = {
         // console.log(token);
 
         if (!token) {
+            res.redirect('/')
             return next(new AppError('You are not logged in! Please log in to get access.', 401));
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // 3) Check if user still exists
-        const currentUser = await User.findByPk(decoded.id);
+        const currentUser = await User.findByPk(decoded.id, { include: "files" });
 
         if (!currentUser) {
+            res.redirect('/')
             return next(new AppError('The user belonging to this token does no longer exist.', 401));
         }
 
         // 4) Check if user changed password after the token was issued
         if (currentUser.changedPasswordAfter(decoded.iat)) {
+            res.redirect('/')
             return next(new AppError('User recently changed password! Please log in again.', 401));
         }
 
@@ -222,6 +224,7 @@ module.exports = {
     protectUser: (req, res, next) => {
         // Check if user is already logged in by checking res.locals object
         if (res.locals.user) {
+            res.redirect('/')
             // If user is already logged in, throw an AppError with status 403 (Forbidden)
             return next(new AppError('You are already logged in!', 403));
         }

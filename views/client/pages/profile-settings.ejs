@@ -1,0 +1,69 @@
+<div class="card rounded rounded-4 mb-4">
+    <div class="card-body">
+        <form action="/api/v1/user/updateme" method="patch">
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Անուն</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    <input type="text" name="name" class="form-control" value="<%- user.name %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Էլ․ փոստ</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    <input type="email" name="email" class="form-control" value="<%- user.email %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Հեռախոս</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    <input type="text" name="phone" class="form-control" value="<%- user.phone %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Հասցե</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    <input type="text" name="address" class="form-control" value="<%- user.address %>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9 text-secondary">
+                    <button type="submit" class="btn btn-primary px-4 text-white">Պահպանել</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card rounded rounded-4 p-3">
+    <div class="comment-box text-center">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="fw-bold text-start">Թողնել մեկնաբանություն</h4>
+            <div class="rating text-start">
+                <input type="radio" name="rating" value="5" id="5">
+                <label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4">
+                <label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3">
+                <label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2">
+                <label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1">
+                <label for="1">☆</label>
+            </div>
+        </div>
+
+        <textarea class="form-control border-0 mb-3" placeholder="Գրեք Ձեր մեկնաբանությունը այստեղ․․․"
+            rows="4"></textarea>
+
+        <button class="btn btn-success text-white d-flex align-items-center gap-2">Ուղարկել</button>
+    </div>
+</div>

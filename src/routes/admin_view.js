@@ -21,6 +21,8 @@ router.get('/test/:id', ctrls.admin_view.getTest);
 router.get('/group/:id', ctrls.admin_view.getGroup);
 router.get('/question', ctrls.admin_view.getQuestion);
 router.get('/students', ctrls.admin_view.getStudents);
+router.get('/registration', ctrls.admin_view.getRegistration);
+router.get('/reviews', ctrls.admin_view.getReviews);
 router.get('/users', ctrls.admin_view.getUsers);
 
 module.exports = router;

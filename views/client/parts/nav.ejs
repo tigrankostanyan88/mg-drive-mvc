@@ -9,7 +9,7 @@
   <!-- logo -->
   <div class="logo">
     <a href="/">
-      <img src="./client/images/logo.png" alt="">
+      <img src="../client/images/logo.png" alt="">
     </a>
   </div>
   <!-- nav menu -->
@@ -62,12 +62,22 @@
     <!-- facebook -->
     <a href="#" target="_blank" class="Btn fw-bold" data-bs-toggle="tooltip">(+374)-98-39-40-33</a>
 
-    <% if (user) { %>
-    <a href="<%= user.role === 'admin' ? '/admin' : '/profile' %>" class="login" data-bs-toggle="tooltip"
+      <% if (user) { %>
+        <%
+          let image = { img: "../client/images/no-image-profile.jpg" };
+
+          if (user.files) {
+            let foundImage = user.files.find(file => file.name_used === "user_img");
+            
+            if (foundImage) {
+              image.img = `../client/images/users/large/${foundImage.name}.${foundImage.ext}`;
+            }
+          }
+        %>
+
+    <a href="/profile" class="login" data-bs-toggle="tooltip"
       data-bs-custom-class="custom-tooltip" data-bs-placement="bottom" data-bs-title="<%- user.name %>">
-      <img class="nav-profile-img"
-        src="https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png"
-        alt="<%- user.name %>">
+      <img src="<%- image.img %>" class="profime-sm-image" alt="<%- user.name %>">
     </a>
     <% } else { %>
     <button class="btn text-white rounded-pill" data-bs-target="#signIn_signUp" data-bs-toggle="modal">

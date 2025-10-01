@@ -1,4 +1,5 @@
 // Module exports an error handler for HTTP requests
+const { redis } = require('googleapis/build/src/apis/redis');
 const AppError = require('../utils/Error');
 
 const handleCastErrorDB = err => {
@@ -75,7 +76,8 @@ const sendErrorProd = (err, req, res) => {
         // 2) Send generic message
         return res.status(500).json({
             status: 'error',
-            message: 'Ինչ-որ բան շատ սխալ ստացվեց: .'
+            message: 'Ինչ-որ բան շատ սխալ ստացվեց: .',
+            redirect: '/' 
         });
     }
 
