@@ -6,12 +6,12 @@ const cookieParser = require('cookie-parser');
 const compression = require("compression");
 const fileUpload = require("express-fileupload");
 const rateLimit = require("express-rate-limit");
-const livereload = require("livereload");
+// const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 
 // live reload server
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, "views")); 
+// const liveReloadServer = livereload.createServer();
+// liveReloadServer.watch(path.join(__dirname, "views")); 
 
 dotenv.config({ path: './.env' });
 
@@ -34,7 +34,7 @@ app.use(compression());
 app.use(cookieParser());
 
 // Middleware
-app.use(connectLivereload());
+// app.use(connectLivereload());
 
 
 // ejs settings 
@@ -42,11 +42,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Reload event
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/admin");
-  }, 100);
-});
+// liveReloadServer.server.once("connection", () => {
+//   setTimeout(() => {
+//     liveReloadServer.refresh("/admin");
+//   }, 100);
+// });
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
@@ -56,7 +56,7 @@ const limiter = rateLimit({
     message: "Too many requests from this IP, please try again in an hour!",
 });
  
-// app.use('/api', limiter);
+app.use('/api', limiter);
 
 app.use((req, res, next) => {
     req.time = Date.now();

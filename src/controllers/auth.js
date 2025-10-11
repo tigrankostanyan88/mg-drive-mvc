@@ -85,7 +85,7 @@ module.exports = {
             httpOnly: true
         });
 
-        // Return success response
+        // Return success responsenpm
         res.status(200).json({
             status: 'success',
             message: 'Օգտատերը դուրս է եկել հաշվից',
