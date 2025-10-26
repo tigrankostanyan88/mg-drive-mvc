@@ -38,7 +38,6 @@ const createSendToken = (user, statusCode, req, res, target = false) => {
     // Attach JWT token to response as cookie
     res.cookie('jwt', token, cookieOptions);
 
-
     // Attach JWT token to response local variable
     res.locals.token = token;
 
