@@ -153,7 +153,7 @@ Array.from(document.querySelectorAll('form')).forEach(form => {
     e.preventDefault();
 
     if (!validateBootstrap(form)) {
-      handlerNotify("Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը", 'warning', '#ff9900');
+      showNotification("Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը", 'warning', '#ff9900');
       return;
     }
 
@@ -175,13 +175,13 @@ Array.from(document.querySelectorAll('form')).forEach(form => {
       const response = await doAxios(URL, METHOD, dataToSend);
 
       if (response.error || response.status >= 400) {
-        handlerNotify(response.message || 'Խնդրում ենք կրկին փորձել', 'error', '#ff9900');
+        showNotification(response.message || 'Խնդրում ենք կրկին փորձել', 'error');
       } else {
-        handlerNotify('Հաջող մուտք', 'success', "#1aff00");
+        showNotification('Հաջող մուտք', 'success', "#1aff00");
         setTimeout(() => window.location.reload(), 1000);
       }
     } catch (error) {
-      handlerNotify(error.response.data.message || 'Ցանցի սխալ', 'warning', "#CC484C");
+      showNotification(error.response.data.message || 'Ցանցի սխալ', 'warning', 3000);
     } finally {
       setFormLoading(form, false);
       button.disabled = false;

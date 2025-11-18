@@ -195,30 +195,32 @@ function initPasswordToggle() {
 
 function changeProfileImage() {
     let fileInput = document.querySelector("input[type=file]");
-    fileInput.addEventListener("change", async function(e) {   
-    let file = this.files[0];
+    if(fileInput) {
+        fileInput.addEventListener("change", async function(e) {   
+        let file = this.files[0];
+        
+        if (file) {
+            // Preview image
+            let preview = document.querySelector(".profile-img");
+            let pSmImage = document.querySelector(".profime-sm-image");
+            preview.src = URL.createObjectURL(file);
+            pSmImage.src = URL.createObjectURL(file);
     
-    if (file) {
-        // Preview image
-        let preview = document.querySelector(".profile-img");
-        let pSmImage = document.querySelector(".profime-sm-image");
-        preview.src = URL.createObjectURL(file);
-        pSmImage.src = URL.createObjectURL(file);
-
-        let formData = new FormData();
-        formData.append("user_img", file);
-
-        try {
-        const response = await doAxios('/api/v1/user/updateme', 'patch', formData);
-        if(response.status === 400) {
-            preview.src  = './client/images/no-image-profile.jpg'
-            pSmImage.src = './client/images/no-image-profile.jpg'
+            let formData = new FormData();
+            formData.append("user_img", file);
+    
+            try {
+            const response = await doAxios('/api/v1/user/updateme', 'patch', formData);
+            if(response.status === 400) {
+                preview.src  = './client/images/no-image-profile.jpg'
+                pSmImage.src = './client/images/no-image-profile.jpg'
+            }
+            } catch (err) {
+            console.error("Upload failed:", err);
+            }
         }
-        } catch (err) {
-        console.error("Upload failed:", err);
-        }
+        });
     }
-    });
 }
 
 changeProfileImage();

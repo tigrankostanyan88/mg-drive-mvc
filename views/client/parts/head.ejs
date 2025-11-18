@@ -1,46 +1,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Title-->
-<title>Ավտոդպրոց Արթիկում - Վարորդական Դասընթացներ, Թեստեր և Հրահանգիչներ</title>
+<!-- Title & Description passed from controller -->
+<title><%= title %></title>
+<meta name="description" content="<%= description %>">
 
-<!-- Meta Description  -->
-<meta name="description"
-    content="Լավագույն ավտոդպրոցը Երևանում: Վարորդական դասընթացներ սկսնակների համար, որակյալ ուսուցում, A և B կարգերի վարորդական իրավունք ստանալու հնարավորություն։">
+<!-- Canonical -->
+<link rel="canonical" href="<%= canonical %>">
 
-<!-- Keywords -->
-<meta name="keywords"
-    content="ավտոդպրոց, վարորդական դասընթացներ, վարորդական իրավունք, ավտոդպրոց Երևան, վարորդական թեստեր, մեքենա վարել սովորել">
-
-<!-- Author -->
-<meta name="author" content="Ավտոդպրոց Արթիկ">
-
-<!-- Open Graph (Facebook, WhatsApp ) -->
-<meta property="og:title" content="Ավտոդպրոց Արթիկում - Վարորդական Դասընթացներ">
-<meta property="og:description" content="Սովորեք վարել մեքենա մեր ավտոդպրոցում: Որակյալ վարորդական դասընթացներ, փորձառու հրահանգիչներ, տեսական և գործնական ուսուցում։">
-<meta property="og:image" content="https://yourwebsite.com/images/avtodprots.jpg">
-<meta property="og:url" content="https://yourwebsite.com">
+<!-- Open Graph -->
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= description %>">
+<meta property="og:url" content="<%= canonical %>">
+<meta property="og:image" content="<%= og_image %>">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="hy_AM">
 
-<!-- Twitter Card (Twitter-ի համար) -->
+<!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Ավտոդպրոց Արթիկում - Վարորդական Դասընթացներ">
-<meta name="twitter:description" content="Սկսեք ձեր վարորդական դասընթացները մեր փորձառու հրահանգիչների հետ:">
-<meta name="twitter:image" content="https://yourwebsite.com/images/avtodprots.jpg">
+<meta name="twitter:title" content="<%= title %>">
+<meta name="twitter:description" content="<%= description %>">
+<meta name="twitter:image" content="<%= og_image %>">
 
-
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"> -->
+<!-- Styles -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-<!-- Canonical (URL) -->
-<link rel="canonical" href="https://mg-drive.com">
-
-<link rel="stylesheet" href="/client/assets/vendors/css/lightgallery.min.css">
 <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.4.3/dist/css/coreui.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/client/assets/vendors/css/lightgallery.min.css">
+<link rel="stylesheet" href="/client/dist/css/main.css">
 
 <!-- Page icon -->
 <link rel="icon" href="/client/images/page_icon.png">
-<!-- Main css -->
-<link rel="stylesheet" href="/client/dist/css/main.css">

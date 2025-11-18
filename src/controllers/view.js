@@ -3,6 +3,22 @@ const DB = require('../models');
 
 const { Test, Group, User, Review } =  DB.models;
 
+// SEO Defaults 
+const SEO_DEFAULT = {
+    title: 'Ավտոդպրոց Արթիկում - Վարորդական Դասընթացներ',
+    description: 'Սկսեք վարորդական տարրալույսը ինչպես պատշաճ է՝ պրոֆեսիոնալ տեսական և գործնական դասերով',
+    og_image: '/client/images/share-logo.jpg'
+};
+
+// Helper to build SEO data
+const buildSEO = (req, overrides = {}) => ({
+    title: overrides.title || SEO_DEFAULT.title,
+    description: overrides.description || SEO_DEFAULT.description,
+    canonical: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+    og_image: `${req.protocol}://${req.get('host')}${overrides.og_image || SEO_DEFAULT.og_image}`
+});
+
+
 module.exports = {
     getHome: async (req, res) => {
         const users = await User.findAll({ include: 'files' },
@@ -12,7 +28,7 @@ module.exports = {
         const reviews = await Review.findAll();
 
         res.render('client/index', {
-            title: 'Գլխավոր',
+            ...buildSEO(req),
             users,
             reviews,
             nav_active: 'home'
@@ -22,7 +38,9 @@ module.exports = {
         const test = await Test.findAll();
 
         res.render('client/pages/test', {
-            title: 'Թեստեր',
+            ...buildSEO(req, {
+                title: 'Թեստեր - Ավտոդպրոց Արթիկ'
+            }),
             nav_active: 'tests',
             page: req.url,
             test
@@ -30,7 +48,9 @@ module.exports = {
     },
     getGroups: async (req, res) => {
         res.render('client/pages/groups', {
-            title: `Խմբեր`,
+            ...buildSEO(req, {
+              title: 'Խմբեր - Ավտոդպրոց Արթիկ'
+            }),
             nav_active: 'groups',
             page: req.url,
         })
@@ -72,20 +92,36 @@ module.exports = {
         })
     },
     getTestDetails: async (req, res) => {
-        // const test = await Test.findByPk(req.params.id, {
-        //     include: 'questions'
-        // });
         const test = await Test.findOne({
             include: 'questions',
             where: { id: req.params.id }
         });
 
         res.render('client/pages/test_details', {
-            title: 'Թեստ',
+            ...buildSEO(req, { title: `Թեստ - ${test?.title}` }),
             nav_active: 'test',
             page: req.url,
             test
         })
+    },
+    generateSitemap: async (req, res) => {
+        console.log('edd')
+       try {
+            const links = [
+                { url: '/', changefreq: 'weekly', priority: 1 },
+                { url: '/tests', changefreq: 'weekly', priority: 0.9 },
+                { url: '/groups', changefreq: 'monthly', priority: 0.7 },
+            ];
+
+            const stream = new SitemapStream({ hostname: `${req.protocol}://${req.get('host')}` });
+            const xml = await streamToPromise(Readable.from(links).pipe(stream)).then(data => data.toString());
+
+            res.header('Content-Type', 'application/xml');
+            res.send(xml);
+        } catch (err) {
+            console.error(err);
+            res.status(500).end();
+        }
     },
     getLogin: async (req, res) => {
         res.render('client/pages/login', {
