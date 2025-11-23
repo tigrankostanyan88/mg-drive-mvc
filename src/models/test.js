@@ -1,28 +1,46 @@
-const slugify = require('slugify');
-
+// models/Test.js
 module.exports = (con, DataTypes) => {
     const Test = con.define('tests', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
+            autoIncrement: true
         },
+
         title: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        slug: DataTypes.STRING
+
+        number: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            index: true
+        },
+
+        slug: DataTypes.STRING,
     }, {
         timestamps: true,
+        indexes: [
+            { fields: ['number'] },
+            { fields: ['slug'] }
+        ]
     });
 
     Test.beforeCreate((test) => {
-        test.slug = test.title.trim().replace(/\s+/g, '-')
+        const match = test.title.match(/\d+/);
+        test.number = match ? parseInt(match[0]) : 0;
+        test.title = test.title.replace(/\d+/g, '').trim();
+        test.slug = test.title.toLowerCase().replace(/\s+/g, '-');
     });
+
     Test.beforeUpdate((test) => {
-        test.slug = test.title.trim().replace(/\s+/g, '-')
+        const match = test.title.match(/\d+/);
+        test.number = match ? parseInt(match[0]) : 0;
+        test.title = test.title.replace(/\d+/g, '').trim();
+        test.slug = test.title.toLowerCase().replace(/\s+/g, '-');
     });
 
     return Test;
-}
+};

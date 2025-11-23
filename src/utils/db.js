@@ -9,6 +9,12 @@ const dbConfig = {
     host: dbHost,
     dialect: 'mysql',
     logging: false,
+    pool: {
+        max: 100,
+        min: 10,
+        acquire: 20000,
+        idle: 5000
+    },
     define: {
         timestamp: true,
         createdAt: true,

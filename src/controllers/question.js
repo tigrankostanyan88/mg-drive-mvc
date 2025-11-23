@@ -1,5 +1,10 @@
 const DB = require('../models');
-const { Question, File } = DB.models;
+const {
+    Question,
+    File,
+    Test,
+    Group
+} = DB.models;
 const AppError = require('./../utils/appError');
 const Files = require("./File");
 
@@ -7,6 +12,10 @@ module.exports = {
     addQuestion: async (req, res, next) => {
         try {
             const questionData = req.body;
+
+            if (req.body.row_id === '') {
+                return next(new AppError("Պարտադիր ընտրեք <b>թեստ</b> կամ <b>խումբ</b>, որի մեջ հարցը եք ավելացնում։",403));
+            }
 
             const question = await Question.create(questionData);
 
@@ -49,13 +58,52 @@ module.exports = {
             });
         }
     },
+    getQuestions: async (req, res) => {
+        try {
+            const questions = await Question.findAll({
+                attributes: ["id", "question", "row_id", "table_name", "options", "correctAnswerIndex"],
+            });
+
+            // Preload tests + groups
+            const tests = await Test.findAll({
+                attributes: ["id", "title", "number"]
+            });
+            const groups = await Group.findAll({
+                attributes: ["id", "title", "number"]
+            });
+
+            // Convert to dictionary for fast lookup
+            const testMap = Object.fromEntries(tests.map(t => [t.id, t]));
+            const groupMap = Object.fromEntries(groups.map(g => [g.id, g]));
+
+
+            // Attach polymorphic relations
+            questions.forEach(q => {
+                if (q.table_name === "tests") {
+                    q.dataValues.test = testMap[q.row_id] || null;
+                }
+                if (q.table_name === "groups") {
+                    q.dataValues.group = groupMap[q.row_id] || null;
+                }
+            });
+            res.status(200).json({
+                status: 'success',
+                time: `${Date.now() - req.time}ms`,
+                questions
+            });
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Internal server error!'
+            });
+        }
+    },
     getQuestion: async (req, res) => {
         try {
-            // const questions = await Question.findByPk({ where: { row_id: req.params.id } });
             res.status(201).json({
                 status: 'success',
                 time: `${Date.now() - req.time} - ms`,
-                // questions
             })
 
         } catch (e) {
@@ -103,16 +151,25 @@ module.exports = {
         }
     },
     deleteQuestion: async (req, res) => {
-        const question = await Question.findOne({ where: { id: req.params.id} });
-        const file = await File.findOne({ where: { row_id: question.id } });
+        const question = await Question.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        const file = await File.findOne({
+            where: {
+                row_id: question.id
+            }
+        });
 
         if (!question) return next(new AppError('Question not found.'));
 
         else await question.destroy();
-        if(file) await file.destroy();
+        if (file) await file.destroy();
 
-        res.status(200).json({
-            message: 'Product deleted successfully!'
+        res.status(203).json({
+            message: 'Հաջողությամբ ջնջվեց!',
+            redirect: '/admin/questions'
         });
     }
 }

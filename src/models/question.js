@@ -10,7 +10,7 @@ module.exports = (con, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        row_type: {
+        table_name: {
             type: DataTypes.TEXT,
             allowNull: false
         },
@@ -23,7 +23,7 @@ module.exports = (con, DataTypes) => {
             allowNull: false
         },
         options: {
-            type: DataTypes.JSON,
+            type: DataTypes.JSON(),
             allowNull: true
         },
         date: {

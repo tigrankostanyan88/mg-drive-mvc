@@ -1,69 +1,160 @@
 <!doctype html>
 <html lang="en">
-    <head><%- include('../parts/head.ejs') %></head>
-    <body>
-        <div class="container-scroller">
-            <%- include('../parts/sidebar.ejs') %>
-            <div class="container-fluid page-body-wrapper">
-                <%- include('../parts/nav.ejs') %>
-                <!-- Main panel -->
-                <div class="main-panel">
-                    <div class="content-wrapper">
-                        <!-- Main content -->
-                        <!-- Modal -->
-                        <div class="modal fade" id="group" tabindex="-1" aria-labelledby="group">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h2 class="modal-title fs-5" id="group">Ավելացնել նոր Խումբ</h2>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="/api/v1/groups" method="post">
-                                            <div class="mb-3">
-                                                <input type="text" name="title" class="form-control mb-3 text-white" id="title"
-                                                    placeholder="տեստի անունը">
-                                                <textarea name="text" id="text" class="form-control text-white"
-                                                    placeholder="Ավելացնել տեքստ"></textarea>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button> -->
-                                                <button type="submit" class="btn btn-primary">Ավելացնել</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                             <div class="col d-flex align-items-center justify-content-lg-between mb-3">
-                                <h4 class="card-title">Խմբեր</h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#group">Ավելացնել</button>
-                            </div>
-                        </div>
+<head><%- include('../parts/head.ejs') %></head>
+<body>
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+    
+    <!-- Sidebar -->
+    <%- include('../parts/sidebar.ejs') %>
+   <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                        <li class="breadcrumb-item active">Խմբեր</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">Խմբերի կառավարում</h1>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">
+                <i class="bi bi-plus-circle me-2"></i>Ավելացնել նոր խումբ
+            </button>
+        </div>
 
-
-                        <div class="col-md-12 grid-margin stretch-card">
-                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th> Անուն </th>
-                                        <th> Ստեղծվել է </th>
-                                        <th> Թարմացել է </th>
-                                        <th> Հարցերի քանակը </th>
-                                        <th> Թեստի հարցերը </th>
-                                        <th> Ջնջել թեստը</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="group_row"></tbody>
-                            </table>
-                        </div>
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="icon primary">
+                        <i class="bi bi-collection"></i>
                     </div>
-                    <%- include('../parts/footer.ejs') %>
+                    <div class="label">Ընդհանուր խմբեր</div>
+                    <div class="number" id="totalGroupsCount">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="icon success">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="label">Ակտիվ խմբեր</div>
+                    <div class="number" id="activeGroupsCount">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="icon info">
+                        <i class="bi bi-flag"></i>
+                    </div>
+                    <div class="label">Ավարտված խմբեր</div>
+                    <div class="number" id="completedGroupsCount">0</div>
                 </div>
             </div>
         </div>
-        <%- include('../parts/scripts.ejs') %>
-    </body>
+
+        <!-- Filters -->
+        <div class="filter-row">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Փնտրել խումբ…">
+                </div>
+            </div>
+        </div>
+
+        <!-- Groups Table -->
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="groupsTable">
+                        <thead>
+                            <tr>
+                                <th>Խմբի անվանում</th>
+                                <th>Ինստրուկտոր</th>
+                                <th>Ուսանողների քանակ</th>
+                                <th>Սկիզբ</th>
+                                <th>Ավարտ</th>
+                                <th>Կարգավիճակ</th>
+                                <th>Գործողություններ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white">
+                <div class="status-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot bg-success"></span>
+                        <span>Ակտիվ</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot bg-primary"></span>
+                        <span>Ընթանում է</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot bg-secondary"></span>
+                        <span>Ավարտված</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Group Modal -->
+    <div class="modal fade" id="addGroupModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ավելացնել նոր խումբ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Խմբի անուն</label>
+                            <input type="text" class="form-control" placeholder="Մուտքագրեք խմբի անունը">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ինստրուկտոր</label>
+                            <input type="text" class="form-control" placeholder="Մուտքագրեք ինստրուկտորի անունը">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Սկզբի ամսաթիվ</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ավարտի ամսաթիվ</label>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Մաքս. ուսանողների քանակը</label>
+                            <input type="number" class="form-control" placeholder="20">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Կարգավիճակ</label>
+                            <select class="form-select">
+                                <option>Պլանավորվում է</option>
+                                <option>Ակտիվ</option>
+                                <option>Ավարտված</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                    <button type="button" class="btn btn-primary">Պահպանել խումբը</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <%- include('../parts/scripts.ejs') %>
+</body>
 </html>

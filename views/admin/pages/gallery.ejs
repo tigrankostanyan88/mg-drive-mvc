@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+
+<head><%- include('../parts/head.ejs') %></head>
+
+<body>
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../parts/sidebar.ejs') %>
+    <!-- Main Content -->
+    <main class="main-content">
+        <section id="images">
+            <div class="page-header">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                            <li class="breadcrumb-item active">Նկարների կառավարում</li>
+                        </ol>
+                    </nav>
+                    <h1 class="page-title">Նկարների կառավարում</h1>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadImageModal">
+                    <i class="bi bi-upload me-2"></i>Վերբեռնել նոր նկար
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-row">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <select class="form-select">
+                            <option>Տեսակ</option>
+                            <option>Մեքենաներ</option>
+                            <option>Դասասենյակներ</option>
+                            <option>Ինստրուկտորներ</option>
+                            <option>Այլ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Փնտրել նկար…">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Grid -->
+            <div class="image-grid">
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop"
+                            alt="Մեքենա 1"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Մեքենա 1</div>
+                                <div class="overlay-meta">Մեքենաներ</div>
+                                <div class="overlay-meta">2024-01-15</div>
+                                <span class="badge bg-success overlay-badge">Ակտիվ</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop"
+                            alt="Դասասենյակ A"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Դասասենյակ A</div>
+                                <div class="overlay-meta">Դասասենյակներ</div>
+                                <div class="overlay-meta">2024-01-14</div>
+                                <span class="badge bg-success overlay-badge">Ակտիվ</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop"
+                            alt="Ինստրուկտորի լուսանկար"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ինստրուկտորի լուսանկար</div>
+                                <div class="overlay-meta">Ինստրուկտորներ</div>
+                                <div class="overlay-meta">2024-01-13</div>
+                                <span class="badge bg-secondary overlay-badge">Թաքնված</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop"
+                            alt="Մեքենա 2"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Մեքենա 2</div>
+                                <div class="overlay-meta">Մեքենաներ</div>
+                                <div class="overlay-meta">2024-01-12</div>
+                                <span class="badge bg-success overlay-badge">Ակտիվ</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop"
+                            alt="Դասասենյակ B"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Դասասենյակ B</div>
+                                <div class="overlay-meta">Դասասենյակներ</div>
+                                <div class="overlay-meta">2024-01-11</div>
+                                <span class="badge bg-success overlay-badge">Ակտիվ</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop"
+                            alt="Լոգո"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="display: none;">
+                            <i class="bi bi-image" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Լոգո</div>
+                                <div class="overlay-meta">Այլ</div>
+                                <div class="overlay-meta">2024-01-10</div>
+                                <span class="badge bg-success overlay-badge">Ակտիվ</span>
+                            </div>
+                            <div class="overlay-actions">
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil me-1"></i>Խմբագրել
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Ջնջել
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Upload Image Modal -->
+    <div class="modal fade" id="uploadImageModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Վերբեռնել նոր նկար</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Ընտրել ֆայլը</label>
+                            <input type="file" class="form-control" accept="image/*">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Վերնագիր</label>
+                            <input type="text" class="form-control" placeholder="Մուտքագրեք վերնագիրը">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Նկարագրություն</label>
+                            <textarea class="form-control" rows="3" placeholder="Մուտքագրեք նկարագրությունը"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Կատեգորիա</label>
+                            <select class="form-select">
+                                <option>Մեքենաներ</option>
+                                <option>Դասասենյակներ</option>
+                                <option>Ինստրուկտորներ</option>
+                                <option>Այլ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="showOnSite" checked>
+                                <label class="form-check-label" for="showOnSite">
+                                    Ցուցադրել կայքում
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                    <button type="button" class="btn btn-primary">Վերբեռնել</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../parts/scripts.ejs') %>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<% if(filename) { %>
+  <%- filename %>
+  <div class="img-cropper-container mb-3">
+      <input type="file" id="croppedFileInput" name="<%- filename %>" class="form-control" accept="image/*" hidden>
+      
+      <button type="button" class="btn btn-primary selectImageBtn" id="selectImageBtn">
+          Ընտրեք նկարը
+      </button>
+      
+      <div class="mt-2">
+          <div class="img-preview-area" id="externalPreview">
+            <span class="text-secondary">ավեացրած նկարը չկա</span>
+          </div>
+      </div>
+  </div>
+<% } %>
+
+<div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabels" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cropModalLabel">Պատկերի կտրում</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="img-container">
+          <img id="imageToCrop" src="" alt="...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+        <button type="button" class="btn btn-primary" id="cropButton">Կտրել</button>
+      </div>
+    </div>
+  </div>
+</div>

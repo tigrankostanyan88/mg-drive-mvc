@@ -6,9 +6,9 @@ const Sequelize = DB.Sequelize;
 DB.models = {
   User: require('./user')(connect, Sequelize.DataTypes),
   Test: require('./test')(connect, Sequelize.DataTypes),
-  Group: require('./groups')(connect, Sequelize.DataTypes),
+  Group: require('./Group')(connect, Sequelize.DataTypes),
   Question: require('./question')(connect, Sequelize.DataTypes),
-  Registration: require('./registrations')(connect, Sequelize.DataTypes),
+  RegisterCourse: require('./RegisterCourse')(connect, Sequelize.DataTypes),
   Review: require('./review')(connect, Sequelize.DataTypes),
   File: require('./file')(connect, Sequelize.DataTypes),
 }
@@ -34,8 +34,6 @@ DB.models.File.belongsTo(DB.models.User, {
     name_used: 'user_img'
   }
 });
-
-
 
 DB.models.Test.hasMany(DB.models.Question, {
   foreignKey: 'row_id',
@@ -67,7 +65,6 @@ DB.models.Question.belongsTo(DB.models.Group, {
   constraints: false
 });
 
-
 DB.models.Question.hasMany(DB.models.File, {
   foreignKey: 'row_id',
   as: 'files',
@@ -78,6 +75,5 @@ DB.models.File.belongsTo(DB.models.Question, {
   as: 'question',
   constraints: false
 });
-
 
 module.exports = DB;

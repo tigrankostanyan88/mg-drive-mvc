@@ -1,28 +1,109 @@
 <!doctype html>
 <html lang="en">
+
 <head><%- include('../parts/head.ejs') %></head>
+
 <body>
-    <div class="container-scroller">
-        <%- include('../parts/sidebar.ejs') %>
-        <div class="container-fluid page-body-wrapper">
-            <%- include('../parts/nav.ejs') %>
-            <!-- Main panel -->
-            <div class="main-panel">
-                <div class="content-wrapper">
-                    <div class="row">
-                        <%- include('../sections/total_results.ejs') %>
-                    </div>
-                    <div class="row">
-                        <%- include('../sections/current_students.ejs') %>
-                    </div>
-                    <div class="row">
-                        <%- include('../parts/countries.ejs') %>
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+
+    <!-- Sidebar -->
+    <%- include('../parts/sidebar.ejs') %>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard">
+            <div class="page-header">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active">Վահանակ</li>
+                        </ol>
+                    </nav>
+                    <h1 class="page-title">Վահանակ</h1>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="icon primary">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="label">Ընդհանուր ուսանողներ</div>
+                        <div class="number"><%- getStudents.length %></div>
+                        <div class="trend">+12% նախորդ ամսվից</div>
                     </div>
                 </div>
-                <%- include('../parts/footer.ejs') %>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="icon success">
+                            <i class="bi bi-collection"></i>
+                        </div>
+                        <div class="label">Ակտիվ խմբեր</div>
+                        <div class="number"><%- getGroups.length %></div>
+                        <div class="trend">+3 նոր խմբեր</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="icon warning">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div class="label">Ընդհանուր թեստեր</div>
+                        <div class="number"><%- getTests.length %></div>
+                        <div class="trend">+8 այս ամիս</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stat-card">
+                        <div class="icon info">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div class="label">Այսօրվա այցելություններ</div>
+                        <div class="number">342</div>
+                        <div class="trend">+5% երեկվանից</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+            <!-- Analytics Charts -->
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Ուսանողների ակտիվություն</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">Chart placeholder</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Թեստերի հաջողության տոկոս</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">Chart placeholder</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Կայքի այցելություններ ըստ սարքի</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-placeholder">Chart placeholder</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
     <%- include('../parts/scripts.ejs') %>
 </body>
+
 </html>

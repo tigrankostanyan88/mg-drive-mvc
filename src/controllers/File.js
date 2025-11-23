@@ -112,8 +112,8 @@ module.exports = class File {
     }
 
     async _deleteImageFiles(fileData) {
-        const imageSizes = ["small", "large"]; // Modify this to match your image sizes
-        const baseFilePath = "./public/client/images"; // Modify this to match your image storage path
+        const imageSizes = ["small", "large"];
+        const baseFilePath = "./public/images"; 
 
         try {
             for (const size of imageSizes) {
@@ -353,7 +353,7 @@ module.exports = class File {
 
         // 2) Paths
         const pathSize = size ? `/${size}` : "";
-        const pathStart = `./public/client/images/${this.table.table_name}${pathSize}`;
+        const pathStart = `./public/images/${this.table.table_name}${pathSize}`;
         const pathFile = `${this.table.name}.${this.table.ext}`;
         const fullPath = `${pathStart}/${pathFile}`;
 
@@ -414,11 +414,11 @@ module.exports = class File {
 
     async _saveFile() {
         // 1) Ճանապարհների ձևավորում
-        let pathStart = `./public/client/files`;
+        let pathStart = `./public/files`;
         const pathFile = `${this.table.name}${this.table.ext}`;
 
         if (this.table.name_used === "summernote") {
-            pathStart = `./public/client/files/summernote`;
+            pathStart = `./public/files/summernote`;
         }
 
         // 2) Checking for the existence of the folder
@@ -448,7 +448,7 @@ module.exports = class File {
     _addWatermark(image) {
         if (image.options.width >= 600 && image.options.height >= 600) {
             // watermark_xl.png (161x161)
-            let pathWatermrk = "./public/client/images/watermark_xl.png",
+            let pathWatermrk = "./public/images/watermark_xl.png",
                 offsetX = image.options.width - 161 - 15,
                 offsetY = image.options.height - 161 - 15;
             // add watermark

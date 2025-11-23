@@ -13,16 +13,14 @@ router.use(ctrls.auth.protect);
 router.use(ctrls.auth.restrictTo('admin'));
 
 // Admin routes
-router.get('/', ctrls.admin_view.getAdmin);
+router.get('/', ctrls.admin_view.getDashboard);
 router.get('/tests', ctrls.admin_view.getTests);
-router.get('/test/:id', ctrls.admin_view.getTest);
 router.get('/groups', ctrls.admin_view.getGroups);
-router.get('/test/:id', ctrls.admin_view.getTest);
-router.get('/group/:id', ctrls.admin_view.getGroup);
-router.get('/question', ctrls.admin_view.getQuestion);
-router.get('/students', ctrls.admin_view.getStudents);
-router.get('/registration', ctrls.admin_view.getRegistration);
-router.get('/reviews', ctrls.admin_view.getReviews);
+router.get('/questions', ctrls.admin_view.getQuestions);
+router.get('/gallery', ctrls.admin_view.getGallery);
 router.get('/users', ctrls.admin_view.getUsers);
+router.get('/analytics', ctrls.admin_view.getAnalytics);
+router.get('/faqs', ctrls.admin_view.getFaqs);
+router.get('/contacts', ctrls.admin_view.getContacts);
 
 module.exports = router;

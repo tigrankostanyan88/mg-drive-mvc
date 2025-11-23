@@ -69,13 +69,13 @@ module.exports = (con, DataTypes) => {
                 if (file.type.startsWith('images')) {
                     // 1) Check path
                     // procedural
-                    pathStart = `./public/client/images/${file.table_name}`;
+                    pathStart = `./public/images/${file.table_name}`;
                     // gallery
                     if (file.name_used == 'gallery')
-                    pathStart = `/client/images/${file.table_name}/gallery`;
+                    pathStart = `/images/${file.table_name}/gallery`;
                     // summernote
                     if (file.name_used == 'summernote')
-                    pathStart = `/client/files/summernote`;
+                    pathStart = `/files/summernote`;
 
                     // 2) Remove
                     // no large & small

@@ -4,6 +4,7 @@ const router = require('express').Router();
 const ctrls = require('../controllers')
 
 router.route('/')
+    .get(ctrls.question.getQuestions)
     .post(ctrls.question.addQuestion)
 router.route('/:id')
     .patch(ctrls.question.updateQuestion)

@@ -1,149 +1,189 @@
 const DB = require('../models');
+const redis = require('../utils/redisClient');
 const AppError = require('../utils/appError');
+const helpers = require('../utils/helpers');
 
-const {
-    Test,
-    Question,
-    File
-} = DB.models;
+const { Test, Question, File } = DB.models;
 
-function extractNumber(str) {
-    const match = str.match(/\d+/);
-    return match ? parseInt(match[0]) : 0;
-}
+// ---------------------- GET ALL TESTS ----------------------
+exports.getTests = async (req, res) => {
+    try {
+        const limit = 20;
+        const page = Number(req.query.page || 1);
+        const offset = (page - 1) * limit;
 
-module.exports = {
-    addTest: async (req, res) => {
-        try {
-            const test = await Test.create(req.body);
+        const cacheKey = `tests:page=${page}:limit=${limit}`;
 
-            res.status(201).json({
-                time: (Date.now() - req.time) + " ms",
-                status: 'success',
-                test
-            })
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({
-                message: 'Interval server error!'
-            })
-        }
-    },
-    getTests: async (req, res) => {
-        try {
-            const testsRaw = await Test.findAll({
-                include: [
-                    { association: 'questions', include: [ { association: 'files' } ] }
-                ]
-            });
-
-            const tests = testsRaw.map(test => test.get({ plain: true }));
-            tests.sort((a, b) => extractNumber(a.title) - extractNumber(b.title));
-
-            res.status(200).json({
-                status: 'success',
+        // --- CHECK CACHE ---
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+            return res.status(200).json({
+                status: "success",
+                fromCache: true,
                 time: `${Date.now() - req.time} ms`,
-                tests,
-            });
-
-        } catch (e) {
-            console.error('Error fetching tests:', e);
-            res.status(500).json({
-                message: 'Internal server error!',
-                error: e.message
+                tests: JSON.parse(cached)
             });
         }
 
-    },
-    getTest: async (req, res, next) => {
-        try {
-            const test = await Test.findByPk(req.params.id, {
-                 include: [
-                    { association: 'questions', include: [ { association: 'files' } ] }
-                ],
-                
-                where: { row_type: 'test' }
-            });
+        // --- DB QUERY ---
+        const testsRaw = await Test.findAll({
+            limit,
+            offset,
+            order: [["number", "ASC"]],
+            attributes: ["id", "title", "number", "number", "updatedAt"],
 
-            if (!test) return next(new AppError('Test not found!', 404));
-            res.status(201).json({
-                status: 'success',
-                time: `${Date.now() - req.time} - ms`,
-                test
-            });
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({
-                message: 'Interval server error!'
-            })
-        }
-    },
-    updateTest: async (req, res) => {
-        try {
-            const test = await Test.findByPk(req.params.id);
-
-            if (!test) return next(new AppError('Category not found.', 404));
-
-            for (key in req.body) test[key] = req.body[key];
-            await test.save();
-
-            res.status(200).json({
-                status: 'success',
-                time: (Date.now() - req.time) + " ms",
-                test
-            })
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({
-                message: 'Interval server error!'
-            })
-        }
-    },
-    deleteTest: async (req, res) => {
-        try {
-            // 1. We bring all the questions under this Test
-            const questions = await Question.findAll({
-                where: { row_id: req.params.id, row_type: 'test' }
-            });
-
-            // 2. If there are any questions
-            if (questions.length > 0) {
-                const questionIds = questions.map(q => q.id);
-
-                // 3. Delete all files whose row_id is one of the question ids.
-                const files = await File.findAll({ where: { row_id: questionIds } });
-
-                for (const file of files) {
-                    await file.destroy();
+            include: [
+                {
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "question"],
+                    separate: true,
+                    order: [["id", "ASC"]],
+                    limit: 10,
+                    include: [
+                        {
+                            model: File,
+                            as: "files",
+                            attributes: ["id"],
+                            separate: true,
+                            limit: 5
+                        }
+                    ]
                 }
+            ]
+        });
 
-                // 4. We are deleting all questions.
-                await Question.destroy({
-                    where: { id: questionIds }
-                });
-            }
+        const tests = testsRaw.map(t => t.get({ plain: true }));
 
-            // 5. Deleting test
-            const deleted = await Test.destroy({
-                where: {
-                    id: req.params.id
-                }
-            });
+        // --- CACHE SAVE ---
+        await redis.set(cacheKey, JSON.stringify(tests), { EX: 20 });
 
-            if (deleted === 0) {
-                return res.status(404).json({
-                    message: 'Test not found'
-                });
-            }
+        res.status(200).json({
+            status: "success",
+            fromCache: false,
+            helpers,
+            time: `${Date.now() - req.time} ms`,
+            tests
+        });
 
-            res.status(204).json({
-                message: 'Deleted successfully!'
-            });
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({
-                message: 'Internal server error!'
-            });
-        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error!" });
     }
-}
+};
+
+// ---------------------- GET ONE TEST ----------------------
+exports.getTest = async (req, res, next) => {
+    try {
+        const test = await Test.findByPk(req.params.id, {
+            attributes: ["id", "title", "number", "slug"],
+            include: [
+                {
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "title", "question"],
+                    include: [{
+                        model: File,
+                        as: "files",
+                        attributes: ["id", "path"]
+                    }]
+                }
+            ]
+        });
+
+        if (!test) return next(new AppError("Test not found!", 404));
+
+        res.status(200).json({
+            status: "success",
+            time: `${Date.now() - req.time} ms`,
+            test
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error!" });
+    }
+};
+
+// ---------------------- CREATE TEST ----------------------
+exports.addTest = async (req, res) => {
+    try {
+        const test = await Test.create(req.body);
+
+        // Clear cache because tests changed
+        await redis.flushAll();
+
+        res.status(201).json({
+            status: "success",
+            time: `${Date.now() - req.time} ms`,
+            test
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error!" });
+    }
+};
+
+// ---------------------- UPDATE TEST ----------------------
+exports.updateTest = async (req, res, next) => {
+    try {
+        const test = await Test.findByPk(req.params.id);
+
+        if (!test) return next(new AppError("Test not found!", 404));
+
+        await test.update(req.body);
+
+        await redis.flushAll();
+
+        res.status(200).json({
+            status: "success",
+            time: `${Date.now() - req.time} ms`,
+            test
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error!" });
+    }
+};
+
+// ---------------------- DELETE TEST ----------------------
+exports.deleteTest = async (req, res) => {
+    const t = await DB.con.transaction();
+
+    try {
+        const questions = await Question.findAll({
+            where: { row_id: req.params.id, row_type: "test" },
+            transaction: t
+        });
+
+        if (questions.length > 0) {
+            const ids = questions.map(q => q.id);
+
+            await File.destroy({ where: { row_id: ids }, transaction: t });
+            await Question.destroy({ where: { id: ids }, transaction: t });
+        }
+
+        const deleted = await Test.destroy({
+            where: { id: req.params.id },
+            transaction: t
+        });
+
+        if (!deleted) {
+            await t.rollback();
+            return res.status(404).json({ message: "Test not found" });
+        }
+
+        await t.commit();
+
+        await redis.flushAll(); // Clear cache
+
+        res.status(204).json({ message: "Deleted successfully!" });
+
+    } catch (err) {
+        console.error(err);
+        await t.rollback();
+        res.status(500).json({ message: "Internal server error!" });
+    }
+};

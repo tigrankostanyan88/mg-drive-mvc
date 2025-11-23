@@ -136,7 +136,7 @@ const selectQuestionGroup = document.querySelector('#select_groups');
     if (selectQuestionTest) {
         const tests = await doAxios(`/api/v1/tests`);
         tests.data.tests.forEach(test => {
-            selectQuestionTest.innerHTML += `<option value="${test.id}">${test.slug}</option>`;
+            selectQuestionTest.innerHTML += `<option value="${test.id}">${test.title}-${test.number}</option>`;
         });
     }
 
@@ -159,7 +159,8 @@ async function handleSelectChange(e) {
             return;
         }
         const test = await doAxios(`/api/v1/tests/${selectedValue}`);
-        new Questions(test.data.test.questions, '.tests_page .question_card');
+        console.log(test)
+        new Questions(test.data.tests.questions, '.tests_page .question_card');
     } else if (selectedName === 'selected_groups') {
 
         if (selectedValue === '*') {

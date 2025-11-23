@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head><%- include('../parts/head.ejs') %></head>
+<body>
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+    
+    <!-- Sidebar -->
+    <%- include('../parts/sidebar.ejs') %>
+    <!-- Main Content -->
+    <main class="main-content">
+        <section id="faq">
+        <div class="page-header">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                        <li class="breadcrumb-item active">Հաճախ տրվող հարցեր</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">Հաճախ տրվող հարցեր</h1>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFaqModal">
+                <i class="bi bi-plus-circle me-2"></i>Ավելացնել նոր հարց
+            </button>
+        </div>
+
+        <!-- FAQ List -->
+        <div id="faqList" class="faq-list">
+            <!-- FAQ items will be rendered here -->
+        </div>
+        </section>
+    </main>
+
+    <!-- Add FAQ Modal -->
+    <div class="modal fade" id="addFaqModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ավելացնել նոր հարց</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="faqForm">
+                        <div class="mb-3">
+                            <label class="form-label">Հարց</label>
+                            <input type="text" class="form-control" id="faqQuestion" placeholder="Մուտքագրեք հարցը" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Պատասխան</label>
+                            <textarea class="form-control" id="faqAnswer" rows="5" placeholder="Մուտքագրեք պատասխանը" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                    <button type="button" class="btn btn-primary" id="saveFaqBtn">Պահպանել</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit FAQ Modal -->
+    <div class="modal fade" id="editFaqModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Խմբագրել հարց</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editFaqForm">
+                        <input type="hidden" id="editFaqId">
+                        <div class="mb-3">
+                            <label class="form-label">Հարց</label>
+                            <input type="text" class="form-control" id="editFaqQuestion" placeholder="Մուտքագրեք հարցը" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Պատասխան</label>
+                            <textarea class="form-control" id="editFaqAnswer" rows="5" placeholder="Մուտքագրեք պատասխանը" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                    <button type="button" class="btn btn-primary" id="updateFaqBtn">Թարմացնել</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../parts/scripts.ejs') %>
+</body>
+</html>

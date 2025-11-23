@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="hy">
+<head>
+    <%- include('../parts/head.ejs') %>
+</head>
+<body>
+
+<%- include('../parts/navbar.ejs') %>
+<%- include('../parts/sidebar.ejs') %>
+<%- include('../parts/alert') %>
+
+<main class="main-content">
+    <section id="questions">
+
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin">Վահանակ</a></li>
+                        <li class="breadcrumb-item active">Հարցեր</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">Հարցերի կառավարում</h1>
+            </div>
+
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#questionModal"
+                    data-mode="add">
+                <i class="bi bi-plus-circle me-2"></i>Ավելացնել նոր հարց
+            </button>
+        </div>
+
+        <div class="filter-row my-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Ընտրել թեստ</label>
+                    <select class="form-select validate" id="filterTest">
+                        <option value="">Բոլոր թեստերը</option>
+                        <% tests.forEach(t => { %>
+                            <option value="<%= t.id %>"><%= t.title %>-<%= t.number %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Ընտրել խումբ</label>
+                    <select class="form-select validate" id="filterGroup">
+                        <option value="">Բոլոր խմբերը</option>
+                        <% groups.forEach(g => { %>
+                            <option value="<%= g.id %>"><%= g.title %>-<%= g.number %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Փնտրել</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Փնտրել հարց…">
+                </div>
+            </div>
+        </div>
+
+        <div class="row pagination-container" id="questionsList">
+            <% questions.forEach(q => { %>
+                <% 
+                    const img = q.files?.find(f => f.table_name === "questions");
+                    const correctIndex = Number(q.correctAnswerIndex);
+                %>
+
+                <div class="col-xl-4 col-lg-6 col-sm-12 mb-4 question-col-card"
+                    data-id="<%= q.id %>"
+                    data-table="<%= q.table_name %>"
+                    data-rowid="<%= q.row_id %>"
+                    data-question="<%- q.question %>">
+
+                    <div class="question-card">
+
+                        <div class="question-image">
+                            <% if (img) { %>
+                                <img src="/images/questions/large/<%= img.name %>.<%= img.ext %>"
+                                     alt="Question"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="question-image-placeholder" style="display:none;">
+                                    <i class="bi bi-image"></i>
+                                    <span>Նկար</span>
+                                </div>
+                            <% } else { %>
+                                <div class="question-image-placeholder">
+                                    <i class="bi bi-image"></i>
+                                    <span>Նկար չկա</span>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="question-body">
+                            <div class="question-title"><%- q.question %></div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <% if (q.test) { %>
+                                    <span class="badge bg-primary"><%= q.test.title %>-<%= q.test.number %></span>
+                                <% } %>
+                                <% if (q.group) { %>
+                                    <span class="badge bg-info text-dark"><%= q.group.title %>-<%= q.group.number %></span>
+                                <% } %>
+                            </div>
+
+                            <% if (q.options?.length) { %>
+                                <div class="question-answers mb-3">
+                                    <div class="small text-muted mb-2">Պատասխաններ: <%- q.table_name %></div>
+                                    <% q.options.forEach((opt, idx) => { %>
+                                        <div class="answer-item <%= (idx + 1 === correctIndex) ? 'correct' : '' %>">
+                                            <span><%- opt %></span>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+
+                            <div class="mt-3 d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-outline-primary btn-edit"
+                                    class="btn btn-sm btn-outline-primary btn-edit"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#questionModal"
+                                    data-mode="edit"
+                                    data-id="<%= q.id %>"
+                                    data-question="<%- q.question %>"
+                                    data-options='<%- JSON.stringify(q.options) %>'
+                                    data-correct="<%= q.correctAnswerIndex %>"
+                                    data-table="<%= q.table_name %>"
+                                    data-row="<%= q.row_id %>">
+                                    Խմբագրել
+                                </button>
+
+                                <form action="/api/v1/question/<%= q.id %>" method="post">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash me-1"></i>Ջնջել
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <div id="questionsPag"
+             class="pagination-container d-flex justify-content-center"
+             data-current-page="1"
+             data-items-per-page="6"
+             data-total-items="<%= questions.length %>">
+        </div>
+
+    </section>
+</main>
+
+
+<!-- UNIVERSAL ADD/EDIT MODAL -->
+<div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="questionModalTitle">Ավելացնել հարց</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="questionForm"
+                  enctype="multipart/form-data"
+                  method="post"
+                  action="/api/v1/question"
+                  class="needs-validation"
+                  novalidate>
+
+                <input type="hidden" name="table_name" id="table_name" value="tests">
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Թեստ</label>
+                            <select class="form-select" id="modalFilterTest" name="row_id">
+                                <option value="">Ընտրել թեստ</option>
+                                <% tests.forEach(t => { %>
+                                    <option value="<%= t.id %>"><%= t.title %>-<%= t.number %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Խումբ</label>
+                            <select class="form-select" id="modalFilterGroup">
+                                <option value="">Ընտրել խումբ</option>
+                                <% groups.forEach(g => { %>
+                                    <option value="<%= g.id %>"><%= g.title %>-<%= g.number %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold">Ավելացնել նկար հարցի համար</label>
+                        <%- include('../parts/cropImg', {filename: 'question_img'}) %>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Հարցի տեքստը</label>
+
+                        <div class="form_editor editor-container">
+                            <div id="editor-container">
+                                <textarea name="question" id="delivery-textarea" class="validate" hidden></textarea>
+                                <div class="editor-area text-dark validate"
+                                     contenteditable="true"
+                                     id="delivery-text"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label mb-0">Պատասխաններ</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="addAnswerBtn">
+                                <i class="bi bi-plus-circle me-1"></i>Ավելացնել պատասխան
+                            </button>
+                        </div>
+                        <div id="answersContainer"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                    <button type="submit" class="btn btn-primary" id="questionModalSubmitBtn">ՈՒղարկել</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<%- include('../parts/scripts.ejs') %>
+
+</body>
+</html>

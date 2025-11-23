@@ -1,6 +1,5 @@
 // Module exports an error handler for HTTP requests
-const { redis } = require('googleapis/build/src/apis/redis');
-const AppError = require('../utils/Error');
+const AppError = require('../utils/appError');
 
 const handleCastErrorDB = err => {
     const message = `Invalid ${err.path}: ${err.value}.`;
@@ -51,15 +50,16 @@ const sendErrorDev = (err, req, res) => {
         //     msg: err.message,
         //     nav_active: 'error',
         // });
+        res.redirect('/')
 
-        setTimeout(() => {
-            res.redirect('/');
-        }, 2000);
+        // setTimeout(() => {
+        //     res.redirect('/');
+        // }, 2000);
     }
 }
 
 // This function sends error responses to the client during production. It checks if the request is coming from an API or a rendered website and responds accordingly with the appropriate status code and message.
-const sendErrorProd = (err, req, res) => {
+const sendErrorProd = (err, req, res, next) => {
     // A) API
     if (req.originalUrl.startsWith('/api')) {
         // A) Operational, trusted error: send message to client
@@ -74,30 +74,29 @@ const sendErrorProd = (err, req, res) => {
         // 1) Log error
         console.error('ERROR 💥', err);
         // 2) Send generic message
-        return res.status(500).json({
-            status: 'error',
-            message: 'Ինչ-որ բան շատ սխալ ստացվեց: .',
-            redirect: '/' 
-        });
+        new AppError('Something went wrong!', 500)
     }
 
     // B) RENDERED WEBSITE
     // A) Operational, trusted error: send message to client
     if (err.isOperational) {
         console.log(err);
+        if(process.env.NODE_ENV = "development") {
+        }
+        // return new AppError('Something went wrong!', err.statusCode)
         return res.status(err.statusCode).render('error', {
-            title: 'Ինչ որ բան այնպես չգնաց!',
+            title: 'Что-то пошло не так!',
             msg: err.message,
             nav_active: 'error',
         });
     }
     // B) Programming or other unknown error: don't leak error details
     // 1) Log error
-    console.error('ERROR 💥', err);
     // 2) Send generic message
+    // return new AppError('Something went wrong!', 403)
     return res.status(err.statusCode).render('error', {
-        title: 'Ինչ որ բան այնպես չգնաց!',
-        msg: 'Խնդրում եմ փորձեք մի փոքր ուշ.',
+        title: 'Что-то пошло не так!',
+        msg: 'Пожалуйста, попробуйте еще раз позже.',
         nav_active: 'error',
     });
 };
@@ -105,8 +104,6 @@ const sendErrorProd = (err, req, res) => {
 
 // This function handles errors that occur during processing
 module.exports = (err, req, res, next) => {
-    // console.log(err.stack);
-
     // Set default values for status code and error status
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
@@ -117,9 +114,7 @@ module.exports = (err, req, res, next) => {
         sendErrorDev(err, req, res);
     } else if (process.env.NODE_ENV === 'production') {
         // If not, create a copy of the error object 
-        let error = {
-            ...err
-        };
+        let error = {...err};
         error.message = err.message;
 
         // Check for CastError - invalid ID format

@@ -6,13 +6,13 @@ const cookieParser = require('cookie-parser');
 const compression = require("compression");
 const fileUpload = require("express-fileupload");
 const rateLimit = require("express-rate-limit");
-// const livereload = require("livereload");
+const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
+require("./src/utils/redisClient");
 
 // live reload server
-// const liveReloadServer = livereload.createServer();
-// liveReloadServer.watch(path.join(__dirname, "views")); 
-
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, "views")); 
 dotenv.config({ path: './.env' });
 
 const Server = require('./src/utils/server');
@@ -29,12 +29,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(fileUpload({ limits: { fileSize: 2 * 1024 * 1024 }}));
+app.use(fileUpload({ limits: { fileSize: 10 * 1024 * 1024 }}));
 app.use(compression());
 app.use(cookieParser());
 
 // Middleware
-// app.use(connectLivereload());
+app.use(connectLivereload());
 
 
 // ejs settings 
@@ -42,11 +42,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Reload event
-// liveReloadServer.server.once("connection", () => {
-//   setTimeout(() => {
-//     liveReloadServer.refresh("/admin");
-//   }, 100);
-// });
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/admin");
+  }, 100);
+});
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
@@ -71,13 +71,12 @@ app.use((err, req, res, next) => {
     });
     next();
 });
-
 // // API
 Api(app);
 
 // All 404 Errors
 app.all('*', (req, res, next) => {
-    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+    // next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 // // All errors
