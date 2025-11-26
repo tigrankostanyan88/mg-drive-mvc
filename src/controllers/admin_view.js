@@ -129,7 +129,7 @@ exports.getGroups = async (req, res) => {
         const questionCount = groups.reduce((sum, g) => sum + g.questions.length, 0);
         const avgGroupQuestions = groupCount > 0 ? (questionCount / groupCount).toFixed(1) : 0;
 
-
+        
         res.render("admin/pages/groups", {
             title: "Խմբեր",
             nav_active: "groups",

@@ -40,10 +40,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn.addEventListener("click", () => {
             const data = JSON.parse(btn.dataset.json);
 
+             let dataTitle = data.title;
+            if(dataTitle) dataTitle = dataTitle.replace(/-/g, '');
+            
+
+            
             // form.action dynamic
             form.action = `/api/v1/tests/${data.id}`;
             const field = form.querySelector(`[name="title"]`);
-            if (field) field.value = `${data.title}-${data.number}`;
+            if (field) field.value = `${dataTitle} ${data.number}`;
         });
     });
 });

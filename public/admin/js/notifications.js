@@ -17,7 +17,7 @@ class NotificationManager {
     show(message, type = 'info', duration = 3000) {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.style.zIndex = '9999'; // Highest z-index to ensure notifications are always on top
+        notification.style.zIndex = '9999';
         notification.innerHTML = `
             <div class="notification-content">
                 <span class="notification-message">${message}</span>

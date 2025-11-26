@@ -155,7 +155,7 @@ exports.deleteGroup = async (req, res) => {
 
     try {
         const questions = await Question.findAll({
-            where: { row_id: req.params.id, row_type: "group" },
+            where: { row_id: req.params.id, table_name: "groups" },
             transaction: t
         });
 

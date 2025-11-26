@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputs = form.querySelectorAll('input, select.validate');
         let hasEmptyField = false;
         let notified = false;
-        console.log(inputs)
 
         inputs.forEach(input => {
             if (input.type === 'file' && input.value === '') return;
@@ -243,6 +242,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputs = form.querySelectorAll('input, textarea');
 
         if (!validateForm(form)) return;
+
+        button.disabled = true;
+        setFormLoading(form, true);
 
         // Prepare data object
         const dataToSend = {};
@@ -271,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirm = new Confirm();
         if (METHOD === 'delete') {
             const yes = await confirm.open({
-                title: "Ջնջե՞լ հարցը",
+                title: "Վստահ ե՞ք, որ ցանկանում եք ջնջել",
                 message: "Այս գործողությունը հետ չես բերի։<br><b>Շարունակե՞լ</b>",
                 okText: "Ջնջել",
                 cancelText: "Չեղարկել",
@@ -317,17 +319,6 @@ document.addEventListener('DOMContentLoaded', function () {
             setFormLoading(form, false);
             button.disabled = false;
         }   
-    }
-    function formatDate(iso) {
-        const d = new Date(iso);
-
-        return (
-            d.getFullYear() + "-" +
-            String(d.getMonth() + 1).padStart(2, "0") + "-" +
-            String(d.getDate()).padStart(2, "0") + " " +
-            String(d.getHours()).padStart(2, "0") + ":" +
-            String(d.getMinutes()).padStart(2, "0")
-        );
     }
     Array.from(document.querySelectorAll('form')).forEach(form => {
         // submit event

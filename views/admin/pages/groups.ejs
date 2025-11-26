@@ -7,159 +7,182 @@
     
     <!-- Sidebar -->
     <%- include('../parts/sidebar.ejs') %>
+    <%- include('../parts/alert') %>
+    <%- include('../parts/confirm') %>
+
    <!-- Main Content -->
     <main class="main-content">
-        <div class="page-header">
-            <div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
-                        <li class="breadcrumb-item active">Խմբեր</li>
-                    </ol>
-                </nav>
-                <h1 class="page-title">Խմբերի կառավարում</h1>
+        <section id="groups">
+            <div class="page-header">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                            <li class="breadcrumb-item active">Խմբեր</li>
+                        </ol>
+                    </nav>
+                    <h1 class="page-title">Խմբերի կառավարում</h1>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">
+                    <i class="bi bi-plus-circle me-2"></i>Ավելացնել նոր խումբ
+                </button>
             </div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">
-                <i class="bi bi-plus-circle me-2"></i>Ավելացնել նոր խումբ
-            </button>
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="icon primary">
-                        <i class="bi bi-collection"></i>
+    
+            <!-- Summary Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="icon primary">
+                            <i class="bi bi-collection"></i>
+                        </div>
+                        <div class="label">Ընդհանուր խմբեր</div>
+                        <div class="number" id="totalGroupsCount"><%- groups ? groups.length : 0 %></div>
                     </div>
-                    <div class="label">Ընդհանուր խմբեր</div>
-                    <div class="number" id="totalGroupsCount"><%- groups ? groups.length : 0 %></div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="icon success">
-                        <i class="bi bi-check-circle"></i>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="icon success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="label">խմբերի բոլոր հարցերը</div>
+                        <div class="number" id="activeGroupsCount"><%- groupQuestions ? groupQuestions.length : 0 %></div>
                     </div>
-                    <div class="label">խմբերի բոլոր հարցերը</div>
-                    <div class="number" id="activeGroupsCount"><%- groupQuestions ? groupQuestions.length : 0 %></div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="icon info">
-                        <i class="bi bi-flag"></i>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="icon info">
+                            <i class="bi bi-flag"></i>
+                        </div>
+                        <div class="label">Միջին հարցերի քանակ</div>
+                        <div class="number" id="completedGroupsCount"><%- avgGroupQuestions ? avgGroupQuestions : 0 %></div>
                     </div>
-                    <div class="label">Միջին հարցերի քանակ</div>
-                    <div class="number" id="completedGroupsCount"><%- avgGroupQuestions ? avgGroupQuestions : 0 %></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="filter-row">
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Փնտրել խումբ…">
+    
+            <!-- Filters -->
+            <div class="filter-row">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Փնտրել խումբ…">
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Groups Table -->
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0" id="groupsTable">
-                        <thead>
-                            <tr>
-                                <th>Խմբի անվանում</th>
-                                <th>Ինստրուկտոր</th>
-                                <th>Սկիզբ</th>
-                                <th>Ավարտ</th>
-                                <th class="d-flex justify-content-end">Գործողություններ</th>
-                            </tr>
-                        </thead>
-                            <!-- content -->
-                            <tbody class="pagination-container">
-                                <% groups.forEach(g => { %>
-                                    <tr class="group-row">
-                                        <td><%- g.id %></td>
-                                        <td><%- g.title %>-<%-g.number %></td>
-                                        <td><%- helpers.getDate(g.createdAt) %></td>
-                                        <td><%- helpers.getDate(g.updatedAt) %></td>
-                                        <td class="d-flex justify-content-end">
-                                            <div class="action-icons">
-                                                <button 
-                                                    type="button" 
-                                                    class="btn btn-outline-warning edit-btn" 
-                                                    title="Խմբագրել"
-                                                    data-bs-toggle="modal"
-                                                    data-json='<%- JSON.stringify(g) %>'
-                                                    data-bs-target="#editTestModal"
-                                                >
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                                <form action="/api/v1/groups/<%- g.id %>" method="delete">
-                                                    <button type="submit" class="btn btn-outline-danger">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                    </table>
+            <% if(groups) { %>
+            <!-- Groups Table -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="groupsTable">
+                            <thead>
+                                <tr>
+                                    <th># ID</th>
+                                    <th>Խմբի անվանում</th>
+                                    <th>Հարցերի քանակ</th>
+                                    <th>Ավելացվել է</th>
+                                    <th>Թարմացվել է</th>
+                                    <th class="d-flex justify-content-end">Գործողություններ</th>
+                                </tr>
+                            </thead>
+                                <!-- content -->
+                                <tbody class="pagination-container">
+                                    <% groups.forEach(g => { %>
+                                        <tr class="group-row">
+                                            <td><%- g.id %></td>
+                                            <td><%- g.title %>-<%-g.number %></td>
+                                            <td><%- g.questions.length ? g.questions.length : 0 %></td>
+                                            <td><%- helpers.getDate(g.createdAt) %></td>
+                                            <td><%- helpers.getDate(g.updatedAt) %></td>
+                                            <td class="d-flex justify-content-end">
+                                                <div class="action-icons">
+                                                    <button 
+                                                        type="button" 
+                                                        class="btn btn-outline-warning edit-btn" 
+                                                        data-bs-toggle="modal"
+                                                        data-json='<%- JSON.stringify(g) %>'
+                                                        data-bs-target="#editGroupModal"
+                                                    >
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                    <form action="/api/v1/groups/<%- g.id %>" method="delete">
+                                                        <button type="submit" class="btn btn-outline-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                 <!-- Pagination -->
+                <div class="card-footer bg-white">
+                    <div id="groupPage"
+                        class="pagination-container d-flex justify-content-center"
+                        data-current-page="1"
+                        data-items-per-page="4"
+                        data-total-items="<%= groups.length %>">
+                    </div>
                 </div>
             </div>
-        </div>
+            <% } else { %>
+                <div class="d-flex justify-content-center align-items-center p-5">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    Ոչ մի թեստ չի գտնվել
+                </div>
+            <% } %>
+        </section>
     </main>
 
-    <!-- Add Group Modal -->
+    <!-- Add Test Modal -->
     <div class="modal fade" id="addGroupModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ավելացնել նոր խումբ</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
+                <form action="/api/v1/groups" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ավելացնել նոր խումբ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Խմբի անուն</label>
-                            <input type="text" class="form-control" placeholder="Մուտքագրեք խմբի անունը">
+                            <input type="text" name="title" class="form-control" placeholder="Մուտքագրեք Խմբի անունը">
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button>
+                        <button type="submit" class="btn btn-primary">Ավելացնել</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editGroupModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm" method="PATCH">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Խմբագրել թեստը</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Ինստրուկտոր</label>
-                            <input type="text" class="form-control" placeholder="Մուտքագրեք ինստրուկտորի անունը">
+                            <label class="form-label">Վերնագիր</label>
+                            <input type="text" name="title" class="form-control" required>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Սկզբի ամսաթիվ</label>
-                                <input type="date" class="form-control">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Ավարտի ամսաթիվ</label>
-                                <input type="date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Մաքս. ուսանողների քանակը</label>
-                            <input type="number" class="form-control" placeholder="20">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Կարգավիճակ</label>
-                            <select class="form-select">
-                                <option>Պլանավորվում է</option>
-                                <option>Ակտիվ</option>
-                                <option>Ավարտված</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
-                    <button type="button" class="btn btn-primary">Պահպանել խումբը</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Փակել
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            Պահպանել
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
