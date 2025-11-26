@@ -39,6 +39,7 @@ export default class PaginationManager {
     }
 
     render() {
+        if(!this.container) return;
         this.container.innerHTML = "";
         const totalPages = this.totalPages;
 

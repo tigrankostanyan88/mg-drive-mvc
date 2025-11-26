@@ -5,7 +5,7 @@ const helpers = require('../utils/helpers');
 
 const { Test, Question, File } = DB.models;
 
-// ---------------------- GET ALL TESTS ----------------------
+// ------- GET ALL TESTS -------
 exports.getTests = async (req, res) => {
     try {
         const limit = 20;
@@ -72,7 +72,7 @@ exports.getTests = async (req, res) => {
     }
 };
 
-// ---------------------- GET ONE TEST ----------------------
+// ------- GET ONE TEST -------
 exports.getTest = async (req, res, next) => {
     try {
         const test = await Test.findByPk(req.params.id, {
@@ -105,7 +105,7 @@ exports.getTest = async (req, res, next) => {
     }
 };
 
-// ---------------------- CREATE TEST ----------------------
+// ------- CREATE TEST -------
 exports.addTest = async (req, res) => {
     try {
         const test = await Test.create(req.body);
@@ -125,7 +125,7 @@ exports.addTest = async (req, res) => {
     }
 };
 
-// ---------------------- UPDATE TEST ----------------------
+// ------- UPDATE TEST -------
 exports.updateTest = async (req, res, next) => {
     try {
         const test = await Test.findByPk(req.params.id);
@@ -133,7 +133,6 @@ exports.updateTest = async (req, res, next) => {
         if (!test) return next(new AppError("Test not found!", 404));
 
         await test.update(req.body);
-
         await redis.flushAll();
 
         res.status(200).json({
@@ -148,13 +147,13 @@ exports.updateTest = async (req, res, next) => {
     }
 };
 
-// ---------------------- DELETE TEST ----------------------
+// ------- DELETE TEST -------
 exports.deleteTest = async (req, res) => {
     const t = await DB.con.transaction();
 
     try {
         const questions = await Question.findAll({
-            where: { row_id: req.params.id, row_type: "test" },
+            where: { row_id: req.params.id, table_name: "tests" },
             transaction: t
         });
 
@@ -176,9 +175,7 @@ exports.deleteTest = async (req, res) => {
         }
 
         await t.commit();
-
         await redis.flushAll(); // Clear cache
-
         res.status(204).json({ message: "Deleted successfully!" });
 
     } catch (err) {

@@ -40,7 +40,7 @@ DB.models.Test.hasMany(DB.models.Question, {
   as: 'questions',
   constraints: false,
   scope: {
-    row_type: 'test'
+    table_name: 'tests'
   }
 });
 
@@ -55,7 +55,7 @@ DB.models.Group.hasMany(DB.models.Question, {
   as: 'questions',
   constraints: false,
   scope: {
-    row_type: 'group'
+    table_name: 'groups'
   }
 });
 

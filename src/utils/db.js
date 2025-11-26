@@ -24,7 +24,6 @@ const dbConfig = {
 };
 
 const connect = new Sequelize(dbName, dbUsername, dbPassword, dbConfig);
-
 connect
     .authenticate()
     .then(() => {

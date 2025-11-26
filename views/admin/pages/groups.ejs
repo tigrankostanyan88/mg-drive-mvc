@@ -32,7 +32,7 @@
                         <i class="bi bi-collection"></i>
                     </div>
                     <div class="label">Ընդհանուր խմբեր</div>
-                    <div class="number" id="totalGroupsCount">0</div>
+                    <div class="number" id="totalGroupsCount"><%- groups ? groups.length : 0 %></div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -40,8 +40,8 @@
                     <div class="icon success">
                         <i class="bi bi-check-circle"></i>
                     </div>
-                    <div class="label">Ակտիվ խմբեր</div>
-                    <div class="number" id="activeGroupsCount">0</div>
+                    <div class="label">խմբերի բոլոր հարցերը</div>
+                    <div class="number" id="activeGroupsCount"><%- groupQuestions ? groupQuestions.length : 0 %></div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -49,8 +49,8 @@
                     <div class="icon info">
                         <i class="bi bi-flag"></i>
                     </div>
-                    <div class="label">Ավարտված խմբեր</div>
-                    <div class="number" id="completedGroupsCount">0</div>
+                    <div class="label">Միջին հարցերի քանակ</div>
+                    <div class="number" id="completedGroupsCount"><%- avgGroupQuestions ? avgGroupQuestions : 0 %></div>
                 </div>
             </div>
         </div>
@@ -73,32 +73,42 @@
                             <tr>
                                 <th>Խմբի անվանում</th>
                                 <th>Ինստրուկտոր</th>
-                                <th>Ուսանողների քանակ</th>
                                 <th>Սկիզբ</th>
                                 <th>Ավարտ</th>
-                                <th>Կարգավիճակ</th>
-                                <th>Գործողություններ</th>
+                                <th class="d-flex justify-content-end">Գործողություններ</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                            <!-- content -->
+                            <tbody class="pagination-container">
+                                <% groups.forEach(g => { %>
+                                    <tr class="group-row">
+                                        <td><%- g.id %></td>
+                                        <td><%- g.title %>-<%-g.number %></td>
+                                        <td><%- helpers.getDate(g.createdAt) %></td>
+                                        <td><%- helpers.getDate(g.updatedAt) %></td>
+                                        <td class="d-flex justify-content-end">
+                                            <div class="action-icons">
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-outline-warning edit-btn" 
+                                                    title="Խմբագրել"
+                                                    data-bs-toggle="modal"
+                                                    data-json='<%- JSON.stringify(g) %>'
+                                                    data-bs-target="#editTestModal"
+                                                >
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                                <form action="/api/v1/groups/<%- g.id %>" method="delete">
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="card-footer bg-white">
-                <div class="status-legend">
-                    <div class="legend-item">
-                        <span class="legend-dot bg-success"></span>
-                        <span>Ակտիվ</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-dot bg-primary"></span>
-                        <span>Ընթանում է</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-dot bg-secondary"></span>
-                        <span>Ավարտված</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -153,7 +163,6 @@
             </div>
         </div>
     </div>
-
 
     <%- include('../parts/scripts.ejs') %>
 </body>

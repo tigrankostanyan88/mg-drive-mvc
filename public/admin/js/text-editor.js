@@ -49,9 +49,6 @@ function initWysiwyg(container) {
   const editor = container.querySelector('.editor-area');
   const hiddenField = container.querySelector('textarea[name]');
 
-  if (!editor || !hiddenField) {
-    return console.error('❌ Не найдены элементы .editor-area или textarea[name] внутри контейнера.', container);
-  }
 
   // создаём toolbar
   const toolbar = document.createElement('div');
@@ -78,7 +75,6 @@ function initWysiwyg(container) {
       editor.focus();
       if (item.cmd === 'createLink') {
         const url = prompt('Введите URL ссылки:', 'https://');
-        // Проверяем, что пользователь не отменил ввод
         if (url) document.execCommand('createLink', false, url);
       } else {
         document.execCommand(item.cmd, false, null);
@@ -131,6 +127,3 @@ document.addEventListener('DOMContentLoaded', () => {
     initWysiwyg(item);
   });
 });
-
-
-console.log('wdwedew')

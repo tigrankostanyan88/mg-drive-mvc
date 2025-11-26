@@ -5,6 +5,7 @@ export default class FilterManager {
         this.selector = selector;
         this.onFilter = onFilter || function(){};
 
+        if(!this.testSelect) return;
         this.testSelect.addEventListener("change", () => this._filter());
         this.groupSelect.addEventListener("change", () => this._filter());
 
@@ -19,12 +20,9 @@ export default class FilterManager {
         const allCards = [...document.querySelectorAll(this.selector)];
 
         const filtered = allCards.filter(card => {
-            // console.log(card)
             const table = card.dataset.table;
             const rowId = card.dataset.rowid;
 
-            console.log(table)
-            console.log(rowId)
             // Test filter
             if (testId && !(table === "tests" && rowId === testId)) {
                 return false;

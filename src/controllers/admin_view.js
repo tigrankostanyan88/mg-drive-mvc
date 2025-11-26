@@ -3,9 +3,10 @@ const DB = require('../models');
 const { Test, Group, Question, File, User, Registration } = DB.models;
 
 const cache = require("../utils/cache");
+const helpers = require("../utils/helpers");
 
 // ---------- COMMON DB QUERIES ---------- //
-async function getCached(key, fetchFn, ttl = 120) {
+async function getCached(key, fetchFn, ttl = 5, force = false) {
     const cached = await cache.get(key);
     if (cached) return cached;
 
@@ -16,19 +17,34 @@ async function getCached(key, fetchFn, ttl = 120) {
 
 // Fast centralized getters
 async function getAllTests() {
-    return getCached("tests_all", () => Test.findAll({ raw: true }));
+    return getCached("tests_all", () => 
+        Test.findAll({
+            order: [["number", "ASC"]],
+            include: [
+                {
+                    model: Question,
+                    as: "questions",
+                }
+            ]
+        }), 
+    5);
 }
-
 async function getAllGroups() {
-    return getCached("groups_all", () => Group.findAll({ raw: true }));
+    return getCached("groups_all", () => Group.findAll({
+        order: [["number", "ASC"]],
+        include: [
+            {
+                model: Question,
+                as: "questions",
+            }
+        ]
+    }));
 }
-
 async function getAllStudents() {
     return getCached("students_all", () =>
         User.findAll({ where: { role: "student" }, raw: true })
     );
 }
-
 async function getAllQuestions() {
     return getCached("questions_all", () =>
         Question.findAll({
@@ -41,8 +57,24 @@ async function getAllQuestions() {
         })
     );
 }
+async function getAllTestsQuestions() {
+    return getCached("questions_all", () =>
+        Question.findAll({
+            where: {table_name: 'tests'},
+            attributes: ["id", "table_name"],
+        })
+    );
+}
+async function getGroupQuestions() {
+    return getCached("questions_all", () =>
+        Question.findAll({
+            where: {table_name: 'groups'},
+            attributes: ["id", "table_name"],
+        })
+    );
+}
 
-// -------------- CONTROLLERS --------------- //
+// CONTROLLERS
 exports.getDashboard = async (req, res) => {
     try {
         const [groups, tests, students] = await Promise.all([
@@ -69,10 +101,17 @@ exports.getDashboard = async (req, res) => {
 exports.getTests = async (req, res) => {
     try {
         const tests = await getAllTests();
+        const testsAllQuestions = await getAllTestsQuestions();
+        const totalTests = tests.length;
+        const totalQuestions = tests.reduce((acc, t) => acc + t.questions.length, 0);
+        const averageQuestions = totalTests > 0 ? (totalQuestions / totalTests).toFixed(1) : 0;
 
         res.render("admin/pages/tests", {
             title: "Թեստեր",
             nav_active: "tests",
+            testsAllQuestions,
+            averageQuestions,
+            helpers,
             getTests: tests
         });
 
@@ -83,11 +122,26 @@ exports.getTests = async (req, res) => {
 };
 
 exports.getGroups = async (req, res) => {
-    res.render("admin/pages/groups", {
-        title: "Խմբեր",
-        nav_active: "groups",
-        page: req.url
-    });
+    try {
+        const groups = await getAllGroups();
+        const groupQuestions = await getGroupQuestions();
+        const groupCount = groups.length;
+        const questionCount = groups.reduce((sum, g) => sum + g.questions.length, 0);
+        const avgGroupQuestions = groupCount > 0 ? (questionCount / groupCount).toFixed(1) : 0;
+
+
+        res.render("admin/pages/groups", {
+            title: "Խմբեր",
+            nav_active: "groups",
+            groups,
+            groupQuestions,
+            avgGroupQuestions,
+            helpers
+        });
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Server error");
+    }
 };
 
 exports.getQuestions = async (req, res) => {
@@ -108,11 +162,15 @@ exports.getQuestions = async (req, res) => {
                 id: q.id,
                 question: q.question,
                 options: options,
+                row_id: q.row_id,
+                table_name: q.table_name,
                 files: q.files,
                 correctAnswerIndex: q.correctAnswerIndex,
                 owner
             };
         });
+
+        // console.log(normalized[0])
 
         res.render("admin/pages/questions", {
             title: "Հարցեր",

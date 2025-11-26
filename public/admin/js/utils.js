@@ -1,4 +1,54 @@
 // Utils JavaScript - Universal utilities for the admin panel
+class Confirm {
+    constructor() {
+        this.modalEl = document.getElementById("confirmModal");
+        this.modal = new bootstrap.Modal(this.modalEl);
+
+        this.titleEl = document.getElementById("confirmModalTitle");
+        this.bodyEl  = document.getElementById("confirmModalBody");
+        this.okBtn   = document.getElementById("confirmOkBtn");
+        this.cancelBtn = document.getElementById("confirmCancelBtn");
+
+        this.resolver = null;
+
+        // Bind events
+        this.okBtn.addEventListener("click", () => this._resolve(true));
+        this.cancelBtn.addEventListener("click", () => this._resolve(false));
+
+        this.modalEl.addEventListener("hidden.bs.modal", () => {
+            this.resolver = null;
+        });
+    }
+
+    _resolve(value) {
+        this.modal.hide();
+        if (this.resolver) this.resolver(value);
+    }
+
+    open({
+        title = "Հաստատում",
+        message = "Համոզվա՞ծ եք։",
+        okText = "Այո",
+        cancelText = "Չեղարկել",
+        okClass = "btn-danger"
+    } = {}) {
+
+        this.titleEl.textContent = title;
+        this.bodyEl.innerHTML = message;
+
+        this.okBtn.textContent = okText;
+        this.cancelBtn.textContent = cancelText;
+
+        this.okBtn.className = `btn ${okClass}`;
+
+        this.modal.show();
+
+        return new Promise(resolve => {
+            this.resolver = resolve;
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     function initializeUniversalFeatures() {
         // Initialize file cropping for elements with file-crop class
@@ -60,13 +110,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Initialize cropper after modal is shown
         setTimeout(() => {
             let aspectRatio;
-            // console.log('Initializing cropper for page:', currentCropperPage); // Debug log
             if (currentCropperPage === 'catalogs' || currentCropperPage === 'products') {
                 aspectRatio = 1; // Square for catalogs and products
             } else {
                 aspectRatio = NaN; // Free aspect ratio for sections
             }
-            // console.log('Aspect ratio set to:', aspectRatio); // Debug log
 
             cropper = new Cropper(cropImage, {
                 aspectRatio: aspectRatio,
@@ -89,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const cropSaveBtn = document.getElementById('cropSaveBtn');
         if (cropSaveBtn) {
             cropSaveBtn.addEventListener('click', function () {
-                console.log('Save crop button clicked'); 
                 if (cropper) {
                     const originalImage = document.getElementById('cropImage');
                     const canvas = cropper.getCroppedCanvas({
@@ -166,16 +213,16 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.disabled = isLoading;
     }
     function validateForm(form) {
-        const inputs = form.querySelectorAll('input, select[name="row_id"]');
+        const inputs = form.querySelectorAll('input, select.validate');
         let hasEmptyField = false;
         let notified = false;
+        console.log(inputs)
 
         inputs.forEach(input => {
             if (input.type === 'file' && input.value === '') return;
-
+            console.log(input)
             if (input.value.trim() === '') {
                 if (!notified) {
-                    console.log(input)
                     showNotification(`<b class="text-danger">«${input.getAttribute('placeholder') || "բոլոր "}»</b> մուտքագրման դաշտը պետք է լրացվի.`, 'warning');
                     notified = true;
                 }
@@ -206,9 +253,6 @@ document.addEventListener('DOMContentLoaded', function () {
             dataToSend[key] = value;
         });
         
-        // document.querySelectorAll('select[name="row_id"]').forEach(el => {
-        //     console.log(el);
-        // })
 
         // Extract options[] explicitly
         const optionInputs = form.querySelectorAll('[name="answer_item"]');
@@ -224,10 +268,19 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/';
             return;
         }
-
-        // Delete confirmation
-        if (METHOD === 'delete' && !confirm("Վստա՞հ եք, որ ուզում եք ջնջել։")) {
-            return;
+        const confirm = new Confirm();
+        if (METHOD === 'delete') {
+            const yes = await confirm.open({
+                title: "Ջնջե՞լ հարցը",
+                message: "Այս գործողությունը հետ չես բերի։<br><b>Շարունակե՞լ</b>",
+                okText: "Ջնջել",
+                cancelText: "Չեղարկել",
+                okClass: "btn-danger"
+            });
+            if (!yes) return;
+            setTimeout(() => {
+                
+            }, 2000);
         }
 
         button.disabled = true;
@@ -235,11 +288,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             const config = await doAxios(URL, METHOD, dataToSend);
-
             if (!config || config.status >= 400 || config.error) {
                 showNotification(config?.message || 'Խնդիր առաջացավ, խնդրում ենք կրկին փորձել։', 'error');
             } else {
-
                 // Reset logic
                 if (METHOD === 'post') {
                     form.querySelectorAll('.validate').forEach(i => (i.value = ''));
@@ -250,9 +301,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputs.forEach(el => (el.value = ''));
                 }
                 showNotification("Հաջողությամբ ստացվել է", 'success');
-                 setTimeout(() => {
+                
+                if(config.status) {
+                    setTimeout(() => {
                     window.location.reload(true);
-                }, 800);
+
+                    }, 1000);
+                }
             }
 
         } catch (error) {

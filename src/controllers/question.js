@@ -1,61 +1,83 @@
 const DB = require('../models');
-const {
-    Question,
-    File,
-    Test,
-    Group
-} = DB.models;
-const AppError = require('./../utils/appError');
 const Files = require("./File");
+const dbCon = require('../utils/db');
+const AppError = require('./../utils/appError');
+
+const { Question, File, Test, Group } = DB.models;
+const sequelize = dbCon.con;
 
 module.exports = {
     addQuestion: async (req, res, next) => {
+
+        const t = await sequelize.transaction(); 
+
         try {
             const questionData = req.body;
+            const options = JSON.parse(req.body.options);
 
-            if (req.body.row_id === '') {
-                return next(new AppError("Պարտադիր ընտրեք <b>թեստ</b> կամ <b>խումբ</b>, որի մեջ հարցը եք ավելացնում։",403));
+            // ---------- VALIDATION ----------
+            if (!req.body.row_id) {
+                throw new AppError("Պարտադիր ընտրեք <b>թեստ</b> կամ <b>խումբ</b>, որի մեջ հարցը եք ավելացնում։", 403);
+            }
+            if (!req.body.question) {
+                throw new AppError("Հարցի դաշտը չի կարող դատարկ լինել", 403);
+            }
+            if (!options.length) {
+                throw new AppError("Պարտադիր է ավելացնել պատասխաններ", 403);
+            }
+            if (!req.body.correctAnswerIndex) {
+                throw new AppError("Ընտրեք ճիշտ պատասխանը", 403);
             }
 
-            const question = await Question.create(questionData);
+            // CREATE QUESTION
+            const question = await Question.create(questionData, { transaction: t });
 
-            const addedQuestion = await Question.findByPk(question.id, {
-                include: 'files'
+            // IMAGE UPLOA
+            if (req.files?.question_img) {
+
+                // OPTIONAL: reload with files 
+                await question.reload({ include: "files", transaction: t });
+
+                const image = await new Files(question, req.files.question_img)
+                    .replace("question_img");
+
+                if (image.status !== "success") {
+                    await t.rollback();
+                    return next(new AppError(Object.values(image.message).join(" "), 400));
+                }
+
+                // CREATE FILE ROW (polymorphic)
+                await question.createFile(
+                    { ...image.table, row_id: question.id },
+                    { transaction: t }
+                );
+            }
+
+            // ---------- COMMIT ----------
+            await t.commit();
+
+            // Reload full question WITH files AFTER commit
+            const fullQuestion = await Question.findByPk(question.id, {
+                include: "files"
             });
 
-            if (req.files && req.files.question_img) {
-
-                const image = await new Files(addedQuestion, req.files.question_img).replace("question_img");
-                console.log(image.status, '⚠️')
-
-                if (image.status === "success") {
-                    await addedQuestion.createFile({
-                        ...image.table,
-                        row_id: question.id,
-                    });
-                } else {
-                    await question.destroy();
-                    return next(new AppError(
-                        Object.values(image.message).join(" "),
-                        400
-                    ));
-                }
-            } else {
-                console.log('No image uploaded');
-            }
-
-            res.status(201).json({
-                status: 'success',
+            return res.status(201).json({
+                status: "success",
                 time: `${Date.now() - req.time} ms`,
-                question
+                question: fullQuestion
             });
 
         } catch (error) {
-            console.error('Error adding question:', error);
-            res.status(500).json({
-                message: 'Internal server error!',
-                error: error.message
-            });
+
+            if (t) await t.rollback();
+
+            console.error("❌ Error adding question:", error);
+
+            return next(
+                error instanceof AppError
+                    ? error
+                    : new AppError("Internal server error", 500)
+            );
         }
     },
     getQuestions: async (req, res) => {

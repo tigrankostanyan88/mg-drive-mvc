@@ -1,4 +1,4 @@
-export default class QuestionsUIManager {
+export default class UIManager {
     constructor({ cards, paginator }) {
         this.cards = cards;
         this.paginator = paginator;
@@ -22,5 +22,4 @@ export default class QuestionsUIManager {
         this.paginator.setTotal(visibleCards.length);
         this.paginator.render();
     }
-
 }

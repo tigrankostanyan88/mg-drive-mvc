@@ -1,13 +1,11 @@
 export default class SearchEngine {
     constructor({ input, selector, onSearch, urlParam = "q" }) {
         this.input = document.querySelector(input);
-        if (!this.input) throw new Error("SearchEngine: input not found");
+        if (!this.input) return;
 
         this.selector = selector;
         this.onSearch = onSearch || function() {};
         this.urlParam = urlParam;
-
-        console.log("SearchEngine initialized OK");
 
         // INITIAL: read from URL
         const params = new URLSearchParams(location.search);
