@@ -1,6 +1,6 @@
 // Models
 const DB = require('../models');
-const { Test, Group, Question, File, User, Registration } = DB.models;
+const { Test, Group, Question, File, User, Contact } = DB.models;
 
 const cache = require("../utils/cache");
 const helpers = require("../utils/helpers");
@@ -63,6 +63,11 @@ async function getAllTestsQuestions() {
             where: {table_name: 'tests'},
             attributes: ["id", "table_name"],
         })
+    );
+}
+async function getContact() {
+    return getCached("contact_all", () =>
+        Contact.findOne({raw: true})
     );
 }
 async function getGroupQuestions() {
@@ -243,12 +248,28 @@ exports.getFaqs = (req, res) => {
 
 exports.getContacts = async (req, res) => {
     try {
-        const questions = await getAllQuestions();
+        const contact = await getContact() || [];
+        
+        if (contact && contact.workingHours) {
+            let raw = contact.workingHours;
+
+            try {
+                raw = JSON.parse(raw);
+            } catch (e1) {
+                try {
+                    raw = JSON.parse(JSON.parse(raw));
+                } catch (e2) {
+                    raw = [];
+                }
+            }
+
+            contact.workingHours = JSON.parse(raw);
+        }
 
         res.render("admin/pages/contacts", {
             title: "Կոնտակտներ",
             nav_active: "contacts",
-            questions,
+            contact,
             url: req.url
         });
 

@@ -80,6 +80,7 @@
                                     <th>Հարցերի քանակ</th>
                                     <th>Ավելացվել է</th>
                                     <th>Թարմացվել է</th>
+                                    <th>Նկարագրություն</th>
                                     <th class="d-flex justify-content-end">Գործողություններ</th>
                                 </tr>
                             </thead>
@@ -92,13 +93,33 @@
                                             <td><%- g.questions.length ? g.questions.length : 0 %></td>
                                             <td><%- helpers.getDate(g.createdAt) %></td>
                                             <td><%- helpers.getDate(g.updatedAt) %></td>
-                                            <td class="d-flex justify-content-end">
-                                                <div class="action-icons">
+                                            <td>
+                                                <% if(g.text) { %>
+                                                    <div class="description-container" data-group-id="<%- g.id %>">
+                                                        <span class="description-text" data-full-text="<%- g.text %>">
+                                                            <%- g.text.length > 50 ? g.text.substring(0, 50) + '...' : g.text %>
+                                                        </span>
+
+                                                        <% if (g.text.length > 50) { %>
+                                                            <i class="bi bi-chevron-down ms-1 description-toggle"
+                                                            data-group-id="<%- g.id %>"
+                                                            data-expanded="false"></i>
+                                                        <% } %>
+                                                    </div>
+                                                <% } else { %>
+                                                    <p class="text-secondary">Նկարագրություն չկա</p>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <div class="action-icons d-flex justify-content-end">
                                                     <button 
                                                         type="button" 
-                                                        class="btn btn-outline-warning edit-btn" 
+                                                        class="btn btn-outline-warning edit-group-btn" 
                                                         data-bs-toggle="modal"
-                                                        data-json='<%- JSON.stringify(g) %>'
+                                                        data-id='<%- g.id %>'
+                                                        data-title='<%- g.title %>'
+                                                        data-number='<%- g.number %>'
+                                                        data-text='<%- g.text %>'
                                                         data-bs-target="#editGroupModal"
                                                     >
                                                     <i class="bi bi-pencil"></i>
@@ -149,6 +170,10 @@
                             <label class="form-label">Խմբի անուն</label>
                             <input type="text" name="title" class="form-control" placeholder="Մուտքագրեք Խմբի անունը">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Խմբի նկարագրությունը</label>
+                            <textarea name="text" class="form-control" id="" placeholder="Մուտքագրեք Խմբի նկարագրություն"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button>
@@ -170,17 +195,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Վերնագիր</label>
+                            <label class="form-label">Խմբի անունը</label>
                             <input type="text" name="title" class="form-control" required>
+                        </div>
+                         <div class="mb-3">
+                            <label class="form-label">Խմբի նկարագրությունը</label>
+                            <textarea name="text" class="form-control" id="" placeholder="Մուտքագրեք Խմբի նկարագրություն"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Փակել
-                        </button>
-                        <button type="submit" class="btn btn-warning">
-                            Պահպանել
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button>
+                        <button type="submit" class="btn btn-warning">Պահպանել</button>
                     </div>
                 </form>
             </div>

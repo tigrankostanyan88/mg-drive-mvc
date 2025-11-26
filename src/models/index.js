@@ -11,6 +11,7 @@ DB.models = {
   RegisterCourse: require('./RegisterCourse')(connect, Sequelize.DataTypes),
   Review: require('./review')(connect, Sequelize.DataTypes),
   File: require('./file')(connect, Sequelize.DataTypes),
+  Contact: require('./contact')(connect, Sequelize.DataTypes),
 }
 
 // User → Files

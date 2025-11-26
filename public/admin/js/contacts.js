@@ -1,119 +1,121 @@
-const defaultData = {
-    phone: "+374 91 123456",
-    email: "info@mg-drive.am",
-    address: "Արթիկ, Հայաստան",
-    googleMaps: "https://maps.google.com/?q=Artik,Armenia",
-    workingHours: {
-        monday: "09:00 - 18:00",
-        tuesday: "09:00 - 18:00",
-        wednesday: "09:00 - 18:00",
-        thursday: "09:00 - 18:00",
-        friday: "09:00 - 18:00",
-        saturday: "09:00 - 14:00",
-        sunday: "Դուրս"
-    },
-    social: {
-        facebook: "",
-        instagram: "",
-        youtube: ""
-    },
-    additionalInfo: ""
-};
-
-let contactData = { ...defaultData };
-
-function safeLoad() {
-    try {
-        const saved = JSON.parse(localStorage.getItem("mgDriveContacts"));
-        if (saved) contactData = { ...contactData, ...saved };
-    } catch {
-        console.warn("Corrupted storage, using defaults");
-    }
-}
-
-function syncFormToData() {
-    const form = document.getElementById("contactsForm");
-
-    contactData = {
-        ...contactData,
-        phone: form.phone.value,
-        email: form.email.value,
-        address: form.address.value,
-        googleMaps: form.googleMaps.value,
-        additionalInfo: form.additionalInfo.value,
-        workingHours: {
-            monday: form.monday.value,
-            tuesday: form.tuesday.value,
-            wednesday: form.wednesday.value,
-            thursday: form.thursday.value,
-            friday: form.friday.value,
-            saturday: form.saturday.value,
-            sunday: form.sunday.value
-        },
-        social: {
-            facebook: form.facebook.value,
-            instagram: form.instagram.value,
-            youtube: form.youtube.value
-        }
-    };
-}
-
-function syncDataToForm() {
-    const form = document.getElementById("contactsForm");
-
-    for (let key in contactData) {
-        if (typeof contactData[key] === "object") continue;
-        if (form[key]) form[key].value = contactData[key];
-    }
-
-    Object.entries(contactData.workingHours).forEach(([k, v]) => {
-        form[k].value = v;
-    });
-
-    Object.entries(contactData.social).forEach(([k, v]) => {
-        form[k].value = v;
-    });
-}
-
-function updatePreview() {
-    document.getElementById("previewPhone").textContent = contactData.phone;
-    document.getElementById("previewEmail").textContent = contactData.email;
-    document.getElementById("previewAddress").textContent = contactData.address;
-    document.getElementById("previewWeekdays").textContent = contactData.workingHours.monday;
-    document.getElementById("previewSaturday").textContent = contactData.workingHours.saturday;
-    document.getElementById("previewSunday").textContent = contactData.workingHours.sunday;
-
-    const link = document.getElementById("previewMapsLink");
-    const block = document.getElementById("previewMaps");
-
-    if (contactData.googleMaps) {
-        link.href = contactData.googleMaps;
-        block.style.display = "flex";
-    } else {
-        block.style.display = "none";
-    }
-}
-
-function saveContactData() {
-    syncFormToData();
-    localStorage.setItem("mgDriveContacts", JSON.stringify(contactData));
-    updatePreview();
-    showSuccessMessage("Պահպանվեց հաջողությամբ");
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-    const contactSection = document.getElementById('contacts');
-    if(!contactSection) return
-    safeLoad(); 
-    syncDataToForm();
-    updatePreview();
 
-    document.querySelectorAll("#contactsForm input, #contactsForm textarea").forEach(el => {
-        el.addEventListener("input", () => {
-            syncFormToData();
-            updatePreview();
-        });
+    if(!document.getElementById("contacts")) return
+
+    // Saturday
+    const satOpen = document.getElementById("sat-open");
+    const satFrom = document.getElementById("sat-from");
+    const satTo = document.getElementById("sat-to");
+
+    satOpen.addEventListener("change", () => {
+        if (satOpen.checked) {
+            satFrom.disabled = false;
+            satTo.disabled = false;
+            if (!satFrom.value) satFrom.value = "10:00";
+            if (!satTo.value) satTo.value = "16:00";
+        } else {
+            satFrom.disabled = true;
+            satTo.disabled = true;
+            satFrom.value = "";
+            satTo.value = "";
+        }
     });
 
-    document.getElementById("saveContactsBtn").addEventListener("click", saveContactData);
+    // Sunday
+    const sunOpen = document.getElementById("sun-open");
+    const sunFrom = document.getElementById("sun-from");
+    const sunTo = document.getElementById("sun-to");
+
+    sunOpen.addEventListener("change", () => {
+        if (sunOpen.checked) {
+            sunFrom.disabled = false;
+            sunTo.disabled = false;
+            if (!sunFrom.value) sunFrom.value = "10:00";
+            if (!sunTo.value) sunTo.value = "16:00";
+        } else {
+            sunFrom.disabled = true;
+            sunTo.disabled = true;
+            sunFrom.value = "";
+            sunTo.value = "";
+        }
+    });
+
+    workingHours();
 });
+
+function workingHours() {
+    let wh = document.getElementById("contactData").dataset.workingHours;
+    try {
+        wh = JSON.parse(wh);
+    } catch (e1) {
+        try {
+            wh = JSON.parse(JSON.parse(wh));
+        } catch (e2) {
+            wh = [];
+        }
+    }
+
+    const weekdays = wh.find(x => x.days.includes("mon"));
+    const saturday = wh.find(x => x.days.includes("sat"));
+    const sunday = wh.find(x => x.days.includes("sun"));
+
+    if (weekdays && weekdays.hours !== "closed") {
+        const [start, end] = weekdays.hours.split("-");
+        document.getElementById("wd-from").value = start;
+        document.getElementById("wd-to").value = end;
+    }
+
+    const satOpen = document.getElementById("sat-open");
+    const satFrom = document.getElementById("sat-from");
+    const satTo = document.getElementById("sat-to");
+
+    if (saturday) {
+        if (saturday.hours === "closed") {
+            satOpen.checked = false;
+            satFrom.disabled = true;
+            satTo.disabled = true;
+        } else {
+            satOpen.checked = true;
+            satFrom.disabled = false;
+            satTo.disabled = false;
+            const [start, end] = saturday.hours.split("-");
+            satFrom.value = start;
+            satTo.value = end;
+        }
+    }
+
+    const sunOpen = document.getElementById("sun-open");
+    const sunFrom = document.getElementById("sun-from");
+    const sunTo = document.getElementById("sun-to");
+
+    if (sunday) {
+        if (sunday.hours === "closed") {
+            sunOpen.checked = false;
+            sunFrom.disabled = true;
+            sunTo.disabled = true;
+        } else {
+            sunOpen.checked = true;
+            sunFrom.disabled = false;
+            sunTo.disabled = false;
+            const [start, end] = sunday.hours.split("-");
+            sunFrom.value = start;
+            sunTo.value = end;
+        }
+    }
+
+    // 7) UPDATE PREVIEW
+    if (weekdays) {
+        document.getElementById("previewWeekdays").textContent =
+            weekdays.hours === "closed" ? "Closed" : weekdays.hours.replace("-", " – ");
+    }
+
+    if (saturday) {
+        document.getElementById("previewSaturday").textContent =
+            saturday.hours === "closed" ? "Closed" : saturday.hours.replace("-", " – ");
+    }
+
+    if (sunday) {
+        document.getElementById("previewSunday").textContent =
+            sunday.hours === "closed" ? "Closed" : sunday.hours.replace("-", " – ");
+    }
+}

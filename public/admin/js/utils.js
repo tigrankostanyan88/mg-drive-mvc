@@ -51,10 +51,7 @@ class Confirm {
 
 document.addEventListener('DOMContentLoaded', function () {
     function initializeUniversalFeatures() {
-        // Initialize file cropping for elements with file-crop class
         initializeFileCropping();
-
-        // Initialize other universal features here
     }
     initializeUniversalFeatures();
     let cropper = null;
@@ -99,21 +96,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
         const cropImage = document.getElementById('cropImage');
 
-        if (!cropModal || !cropImage) {
-            // console.warn('Crop modal not found. Make sure cropModal exists in the HTML.');
-            return;
-        }
+        if (!cropModal || !cropImage) return;
 
         cropImage.src = imageSrc;
         cropModal.show();
 
-        // Initialize cropper after modal is shown
         setTimeout(() => {
             let aspectRatio;
             if (currentCropperPage === 'catalogs' || currentCropperPage === 'products') {
-                aspectRatio = 1; // Square for catalogs and products
+                aspectRatio = 1;
             } else {
-                aspectRatio = NaN; // Free aspect ratio for sections
+                aspectRatio = NaN; 
             }
 
             cropper = new Cropper(cropImage, {
@@ -213,7 +206,10 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.disabled = isLoading;
     }
     function validateForm(form) {
-        const inputs = form.querySelectorAll('input, select.validate');
+        const inputs = form.querySelectorAll(
+            'input[type="text"], input[type="number"], input[type="email"], select.validate'
+        );
+
         let hasEmptyField = false;
         let notified = false;
 
@@ -234,6 +230,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return !hasEmptyField;
     }
+    function buildWorkingHours() {
+
+        const contactsForm = document.getElementById("contactsForm");
+        if(!contactsForm) return;
+
+        const wdFrom = document.getElementById("wd-from").value;
+        const wdTo   = document.getElementById("wd-to").value;
+
+        const satOpen = document.getElementById("sat-open").checked;
+        const satFrom = document.getElementById("sat-from").value;
+        const satTo   = document.getElementById("sat-to").value;
+
+        const sunOpen = document.getElementById("sun-open").checked;
+        const sunFrom = document.getElementById("sun-from").value;
+        const sunTo   = document.getElementById("sun-to").value;
+
+        const result = [];
+
+        // Monday–Friday (always open)
+        result.push({
+            days: ["mon","tue","wed","thu","fri"],
+            hours: `${wdFrom}-${wdTo}`
+        });
+
+        // Saturday
+        if (satOpen) {
+            result.push({
+                days: ["sat"],
+                hours: `${satFrom}-${satTo}`
+            });
+        } else {
+            result.push({
+                days: ["sat"],
+                hours: "closed"
+            });
+        }
+
+        // Sunday
+        if (sunOpen) {
+            result.push({
+                days: ["sun"],
+                hours: `${sunFrom}-${sunTo}`
+            });
+        } else {
+            result.push({
+                days: ["sun"],
+                hours: "closed"
+            });
+        }
+
+        return JSON.stringify(result);
+    }
     async function handlerSubmit(e) {
         e.preventDefault();
 
@@ -249,20 +297,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // Prepare data object
         const dataToSend = {};
 
-        // Extract simple inputs automatically
+        // Extract
         const formData = new FormData(form);
-        formData.forEach((value, key) => {
-            dataToSend[key] = value;
-        });
+        formData.forEach((value, key) => dataToSend[key] = value);
         
-
         // Extract options[] explicitly
         const optionInputs = form.querySelectorAll('[name="answer_item"]');
-        let optionsToJson = Array.from(optionInputs)
-            .map(i => i.value.trim())
-            .filter(Boolean);
-        dataToSend.options = JSON.stringify(optionsToJson)
+        let optionsToJson = Array.from(optionInputs).map(i => i.value.trim()).filter(Boolean);
 
+        dataToSend.options = JSON.stringify(optionsToJson);
+        dataToSend.workingHours = buildWorkingHours();
         const URL = form.getAttribute('action');
         const METHOD = form.getAttribute('method')?.toLowerCase();
 
@@ -280,9 +324,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 okClass: "btn-danger"
             });
             if (!yes) return;
-            setTimeout(() => {
-                
-            }, 2000);
         }
 
         button.disabled = true;
@@ -303,25 +344,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputs.forEach(el => (el.value = ''));
                 }
                 showNotification("Հաջողությամբ ստացվել է", 'success');
-                
                 if(config.status) {
                     setTimeout(() => {
                     window.location.reload(true);
-
                     }, 1000);
                 }
             }
-
         } catch (error) {
             showNotification(error?.message || 'Server error', 'error');
-
         } finally {
             setFormLoading(form, false);
             button.disabled = false;
         }   
     }
     Array.from(document.querySelectorAll('form')).forEach(form => {
-        // submit event
         form.addEventListener('submit', handlerSubmit);
     });
     function trima() {
@@ -332,3 +368,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     trima();
 });
+
+

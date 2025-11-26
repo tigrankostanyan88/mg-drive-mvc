@@ -5,6 +5,7 @@ module.exports = routes = {
     question: require('./question'),
     registration: require('./registration'),
     image: require('./image'),
+    contact: require('./contact'),
     review: require('./review'),
     // View routes
     view: require('./view'),

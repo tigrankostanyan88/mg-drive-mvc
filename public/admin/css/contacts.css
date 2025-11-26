@@ -6,6 +6,23 @@
     gap: 1.5rem;
 }
 
+#contacts  .schedule-input input[type="time"] {
+    min-width: 110px;
+}
+
+#contacts  .schedule-input {
+    transition: all 0.15s ease;
+}
+
+#contacts  .form-check-input {
+    cursor: pointer;
+}
+
+#contacts  .card-header h5 i {
+    opacity: 0.8;
+}
+
+
 #contacts .preview-item {
     display: flex;
     align-items: flex-start;

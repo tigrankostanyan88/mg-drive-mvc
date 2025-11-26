@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const selectImageBtn = document.querySelectorAll('#selectImageBtn');
+    if(!document.querySelector('.img-cropper-container')) return;
+    
     const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+    const selectImageBtn = document.querySelectorAll('#selectImageBtn');
     const imageToCrop = document.getElementById('imageToCrop');
     const cropButton = document.getElementById('cropButton');
     const croppedFileInput = document.getElementById('croppedFileInput');

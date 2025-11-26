@@ -8,9 +8,9 @@ const router = Router();
 
 
 // Data access
-router.use(ctrls.auth.isLoggedIn);
-router.use(ctrls.auth.protect);
-router.use(ctrls.auth.restrictTo('admin'));
+// router.use(ctrls.auth.isLoggedIn);
+// router.use(ctrls.auth.protect);
+// router.use(ctrls.auth.restrictTo('admin'));
 
 // Admin routes
 router.get('/', ctrls.admin_view.getDashboard);

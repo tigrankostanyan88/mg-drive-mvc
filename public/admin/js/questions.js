@@ -4,9 +4,9 @@ import UIManager from "./ui/UIManager.js";
 
 function initQuestionModal() {
     let answerCounter = 0;
-    
+
     const question = document.querySelector('#questions');
-    if(!question) return;
+    if (!question) return;
     const tableNameInput = document.querySelector('#table_name');
     const testSelect = document.getElementById('modalFilterTest');
     const groupSelect = document.getElementById('modalFilterGroup');
@@ -15,40 +15,38 @@ function initQuestionModal() {
     const correctAnswerInput = document.getElementById('correctAnswerIndex');
 
     // (INTERNAL FUNCTION)
-   function updateRowIdNames() {
-    if (testSelect.value) {
+    function updateRowIdNames() {
+        if (testSelect.value) {
 
-        // TEST becomes active
-        testSelect.setAttribute("name", "row_id");
-        testSelect.classList.add("validate");
+            // TEST becomes active
+            testSelect.setAttribute("name", "row_id");
+            testSelect.classList.add("validate");
 
-        // GROUP becomes inactive
-        groupSelect.removeAttribute("name");
-        groupSelect.classList.remove("validate");
-    } 
-    else if (groupSelect.value) {
+            // GROUP becomes inactive
+            groupSelect.removeAttribute("name");
+            groupSelect.classList.remove("validate");
+        } else if (groupSelect.value) {
 
-        // GROUP becomes active
-        groupSelect.setAttribute("name", "row_id");
-        groupSelect.classList.add("validate");
+            // GROUP becomes active
+            groupSelect.setAttribute("name", "row_id");
+            groupSelect.classList.add("validate");
 
-        // TEST becomes inactive
-        testSelect.removeAttribute("name");
-        testSelect.classList.remove("validate");
-    } 
-}
-
+            // TEST becomes inactive
+            testSelect.removeAttribute("name");
+            testSelect.classList.remove("validate");
+        }
+    }
 
     // 1) SelectReset Logic
     testSelect.addEventListener('change', () => {
         if (testSelect.value) groupSelect.value = "";
         updateRowIdNames();
-        updateTableName();  
+        updateTableName();
     });
 
     groupSelect.addEventListener('change', () => {
         if (groupSelect.value) testSelect.value = "";
-        updateRowIdNames(); 
+        updateRowIdNames();
         updateTableName();
     });
 
@@ -87,7 +85,7 @@ function initQuestionModal() {
                 if (chk !== e.target) chk.checked = false;
             });
 
-            correctAnswerInput.value = e.target.dataset.index;
+            e.target.value = e.target.dataset.index;
         }
     });
 
@@ -120,11 +118,11 @@ function initQuestionModal() {
 
     // Initial call
     updateRowIdNames();
+
     function updateTableName() {
         if (testSelect.value) {
             tableNameInput.value = "tests";
-        } 
-        else if (groupSelect.value) {
+        } else if (groupSelect.value) {
             tableNameInput.value = "groups";
         }
     }
@@ -142,7 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
         itemsPerPage: 4
     });
 
-    const ui = new UIManager({ cards, paginator});
+    const ui = new UIManager({
+        cards,
+        paginator
+    });
     ui.refresh(visible);
 
     // Correct SearchEngine usage
@@ -163,13 +164,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 const removeImageBtn = document.getElementById('removeImageBtn');
-if(removeImageBtn) {
+if (removeImageBtn) {
     removeImageBtn.addEventListener('click', () => {
         // Reset preview
         let imagCrop = document.querySelector('.img-cropper-container');
         let img = imagCrop.querySelector('img')
         let input = imagCrop.querySelector('input[type="file"]');
-    
+
         input.remove();
         img.remove();
     });

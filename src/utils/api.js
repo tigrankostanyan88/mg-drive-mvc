@@ -9,6 +9,7 @@ module.exports = api = (app) => {
     app.use('/api/v1/registration', routes.registration);
     app.use('/api/v1/image', routes.image);
     app.use('/api/v1/review', routes.review);
+    app.use('/api/v1/contact', routes.contact);
     
     // VIEW RUOTES
     app.use('/', routes.view);
