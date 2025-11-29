@@ -2,7 +2,7 @@
 
 #images .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
 }
 
@@ -13,6 +13,8 @@
     overflow: hidden;
     position: relative;
     height: 300px;
+    max-width: 450px;
+    width: 100%;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
 }

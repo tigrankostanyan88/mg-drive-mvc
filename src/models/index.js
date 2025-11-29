@@ -9,6 +9,7 @@ DB.models = {
   Group: require('./Group')(connect, Sequelize.DataTypes),
   Question: require('./question')(connect, Sequelize.DataTypes),
   Registration: require('./Registration')(connect, Sequelize.DataTypes),
+  Gallery: require('./Gallery')(connect, Sequelize.DataTypes),
   Review: require('./review')(connect, Sequelize.DataTypes),
   File: require('./file')(connect, Sequelize.DataTypes),
   Contact: require('./contact')(connect, Sequelize.DataTypes),
@@ -75,6 +76,28 @@ DB.models.File.belongsTo(DB.models.Question, {
   foreignKey: 'row_id',
   as: 'question',
   constraints: false
+});
+
+// Gallery → Files
+DB.models.Gallery.hasMany(DB.models.File, {
+  foreignKey: 'row_id',
+  sourceKey: 'id',
+  as: 'files',
+  constraints: false,
+  scope: {
+    table_name: 'gallery'
+  }
+});
+
+// File → Gallery
+DB.models.File.belongsTo(DB.models.Gallery, {
+  foreignKey: 'row_id',
+  targetKey: 'id',
+  as: 'gallery',
+  constraints: false,
+  scope: {
+    table_name: 'gallery'
+  }
 });
 
 module.exports = DB;

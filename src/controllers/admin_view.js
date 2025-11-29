@@ -192,12 +192,16 @@ exports.getQuestions = async (req, res) => {
 
 exports.getGallery = async (req, res) => {
     try {
-        const questions = await getAllQuestions();
+        const items = await DB.models.Gallery.findAll({
+            include: 'files',
+            order: [["id", "DESC"]]
+        });
 
         res.render("admin/pages/gallery", {
             title: "Նկարներ",
             nav_active: "gallery",
-            questions,
+            gallery: items,
+            helpers,
             url: req.url
         });
 

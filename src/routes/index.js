@@ -3,6 +3,7 @@ module.exports = routes = {
     test: require('./test'),
     group: require('./group'),
     question: require('./question'),
+    gallery: require('./gallery'),
     registration: require('./registration'),
     image: require('./image'),
     contact: require('./contact'),

@@ -6,6 +6,7 @@ module.exports = api = (app) => {
     app.use('/api/v1/tests', routes.test);
     app.use('/api/v1/groups', routes.group);
     app.use('/api/v1/question', routes.question);
+    app.use('/api/v1/gallery', routes.gallery);
     app.use('/api/v1/registration', routes.registration);
     app.use('/api/v1/image', routes.image);
     app.use('/api/v1/review', routes.review);
