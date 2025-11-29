@@ -1,15 +1,15 @@
 const DB = require('../models');
 
-const { RegisterCourse } = DB.models;
+const { Registration } = DB.models;
 
 const Email = require('../utils/Email');
 
 module.exports = {
     createRegistration: async (req, res) => {
     try {
-        const registerCourse = await RegisterCourse.create(req.body);
+        const registerCourse = await Registration.create(req.body);
             const URL = `${req.protocol}://${req.get('host')}/admin`;
-            await new Email({}, URL, registerCourse).sendRegisterCourse();
+            await new Email({}, URL, Registration).sendRegisterCourse();
         res.status(201).json({
             status: 'success',
             registerCourse,
@@ -27,23 +27,12 @@ module.exports = {
         try {
             const registrations = await Registration.findAll();
 
-            const googleSheets = await getSheetsClient();
-            const getRows = await googleSheets.spreadsheets.values.get({
-                spreadsheetId: SPREADSHEET_ID,
-                range: 'Sheet1'
-            });
-
             if (!registrations) {
                 return res.status(404).json({ message: 'Registration not found!' });
             }
-
-            let getSheetRows = getRows.data.values;
-
-
             res.status(200).json({
                 status: 'success',
                 time: `${Date.now() - req.time} ms`,
-                getSheetRows,
                 registrations
             });
 
@@ -85,9 +74,7 @@ module.exports = {
             if (!registration) {
                 return res.status(404).json({ message: 'Registration not found!' });
             }
-
             await registration.destroy();
-
             res.status(200).json({
                 message: 'Registration deleted successfully!'
             });

@@ -1,6 +1,6 @@
 // models/registrations.js
 module.exports = (con, DataTypes) => {
-    const RegisterCourse = con.define('registrations', {
+    const Registration = con.define('registrations', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -38,5 +38,5 @@ module.exports = (con, DataTypes) => {
         }
     });
 
-    return RegisterCourse;
+    return Registration;
 }

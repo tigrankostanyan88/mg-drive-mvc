@@ -131,6 +131,7 @@ function initQuestionModal() {
 // Edit Modal
 function editModal() {
     const editModalEl = document.getElementById("questionEditModal");
+    if(!editModalEl) return;
     const editForm = document.getElementById("questionEditForm");
     const editTestSelect = document.getElementById("editTestSelect");
     const editGroupSelect = document.getElementById("editGroupSelect");

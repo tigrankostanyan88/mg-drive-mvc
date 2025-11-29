@@ -1,6 +1,6 @@
 // Models
 const DB = require('../models');
-const { Test, Group, Question, File, User, Contact } = DB.models;
+const { Test, Group, Question, File, User, Contact, Registration } = DB.models;
 
 const cache = require("../utils/cache");
 const helpers = require("../utils/helpers");
@@ -247,9 +247,13 @@ exports.getFaqs = (req, res) => {
 
 exports.getContacts = async (req, res) => {
     try {
-        const contact = await getContact() || [];
-        contact.workingHours = JSON.parse(contact.workingHours)
-        console.log(contact.workingHours)
+        const contact = (await getContact()) || {};
+        let wh = contact.workingHours;
+        if (typeof wh === "string") {
+            try { wh = JSON.parse(wh); } catch { wh = []; }
+        }
+        if (!Array.isArray(wh)) wh = [];
+        contact.workingHours = wh;
         res.render("admin/pages/contacts", {
             title: "Կոնտակտներ",
             nav_active: "contacts",
@@ -258,6 +262,26 @@ exports.getContacts = async (req, res) => {
         });
 
     } catch (e) {
+        res.status(500).send("Server error");
+    }
+};
+
+exports.getRegistrations = async (req, res) => {
+    try {
+        const registrations = await Registration.findAll({
+            order: [["id", "DESC"]]
+        });
+
+        res.render("admin/pages/registrations", {
+            title: "Գրանցումներ",
+            nav_active: "registrations",
+            registrations,
+            helpers,
+            url: req.url
+        });
+
+    } catch (e) {
+        console.error(e);
         res.status(500).send("Server error");
     }
 };

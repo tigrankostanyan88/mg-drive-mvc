@@ -7,6 +7,7 @@
     const active_groups = active === 'groups' ? 'active' : '';
     const active_gallery = active === 'gallery' ? 'active' : '';
     const active_users = active === 'users' ? 'active' : '';
+    const active_registrations = active === 'registrations' ? 'active' : '';
     const active_analytics = active === 'analytics' ? 'active' : '';
     const active_contacts = active === 'contacts' ? 'active' : '';
     const active_faq = active === 'faq' ? 'active' : '';
@@ -53,6 +54,12 @@
             <a class="nav-link <%= active_users %>" href="/admin/users">
                 <i class="bi bi-person-badge"></i>
                 <span>Օգտվողներ / Ուսանողներ</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <%= active_registrations %>" href="/admin/registrations">
+                <i class="bi bi-person-plus"></i>
+                <span>Գրանցումներ</span>
             </a>
         </li>
         <li class="nav-item">

@@ -9,5 +9,8 @@ router
     .post(ctrls.registration.createRegistration)
     .get(ctrls.registration.getRegistration);
 
+router
+    .route('/:id')
+    .delete(ctrls.registration.deleteRegistration);
 
 module.exports = router;
