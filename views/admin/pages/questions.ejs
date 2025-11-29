@@ -23,7 +23,6 @@
                 </nav>
                 <h1 class="page-title">Հարցերի կառավարում</h1>
             </div>
-
             <button class="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#questionModal"
@@ -69,7 +68,6 @@
                     const img = q.files?.find(f => f.table_name === "questions");
                     const correctIndex = Number(q.correctAnswerIndex);
                 %>
-
                 <div class="col-xl-4 col-lg-6 col-sm-12 mb-4 question-col-card"
                     data-id="<%= q.id %>"
                     data-table="<%= q.table_name %>"
@@ -92,10 +90,8 @@
                                 </div>
                             <% } %>
                         </div>
-
                         <div class="question-body">
                             <div class="question-title"><%- q.question.slice(0, 100) %></div>
-
                             <%
                                 const isTest = q.owner.type === 'test';
                                 const badgeClass = isTest ? 'bg-primary' : 'bg-warning';
@@ -103,7 +99,6 @@
                             %>
 
                             <span class="badge <%= badgeClass %>"><%= label %></span>
-
                             <% if (q.options?.length) { %>
                                 <div class="question-answers mb-3">
                                     <div class="small text-muted mb-2">Պատասխաններ:</div>
@@ -118,7 +113,7 @@
                                 <button class="btn btn-sm btn-outline-primary btn-edit"
                                     class="btn btn-sm btn-outline-primary btn-edit"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#questionModal"
+                                    data-bs-target="#questionEditModal"
                                     data-mode="edit">
                                     Խմբագրել
                                 </button>
@@ -146,11 +141,10 @@
     </section>
 </main>
 
-<!-- UNIVERSAL ADD/EDIT MODAL -->
-<div class="modal fade" data-bs-backdrop="static" id="questionModal" tabindex="-1" >
+<!-- ADD MODAL -->
+<div class="modal fade" data-bs-backdrop="static" id="questionModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title" id="questionModalTitle">Ավելացնել հարց</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -191,15 +185,11 @@
                     <!-- choose image -->
                     <div class="form-group mb-4">
                         <label class="form-label fw-bold">Ավելացնել նկար հարցի համար</label>
-                        <%- include('../parts/cropImg', {filename: 'question_img'}) %>
+                         <%- include('../parts/cropImg', { filename: 'question_img',  cropId: 'addCrop' }) %>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="removeImageBtn"> Ջնջել նկարը </button>
                     </div>
 
-                    <button type="button" class="btn btn-outline-danger mt-2" id="removeImageBtn">
-                        Ջնջել նկարը
-                    </button>
-
                     <div class="mb-3">
-                      
                         <label class="form-label">Հարցի տեքստը</label>
                         <div class="form_editor editor-container">
                             <div id="editor-container">
@@ -210,7 +200,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label mb-0">Պատասխաններ</label>
@@ -220,16 +209,92 @@
                         </div>
                         <div id="answersContainer"></div>
                     </div>
-
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
                     <button type="submit" class="btn btn-primary" id="questionModalSubmitBtn">ՈՒղարկել</button>
                 </div>
-
             </form>
+        </div>
+    </div>
+</div>
 
+<!-- EDIT MODAL -->
+<div class="modal fade" data-bs-backdrop="true" data-bs-keyboard="false" id="questionEditModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Խմբագրել հարցը</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="questionEditForm" action="/api/v1/question/" method="patch" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <input type="hidden" name="table_name" id="editTableName">
+                <input type="hidden" name="correctAnswerIndex" id="editCorrectAnswerIndex">
+                <div class="modal-body">
+                    <!-- TEST / GROUP -->
+                    <div class="row mb-3">
+                        <!-- Select Test -->
+                        <div class="col-md-6">
+                            <label class="form-label">Թեստ</label>
+                            <select class="form-select" id="editTestSelect">
+                                <option value="">Ընտրել թեստ</option>
+                                <% tests.forEach(t => { %>
+                                    <option value="<%= t.id %>"><%= t.title %>-<%= t.number %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        
+                        <!-- Select group -->
+                        <div class="col-md-6">
+                            <label class="form-label">Խումբ</label>
+                            <select class="form-select" id="editGroupSelect">
+                                <option value="">Ընտրել խումբ</option>
+                                <% groups.forEach(g => { %>
+                                    <option value="<%= g.id %>"><%= g.title %>-<%= g.number %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold">Նկար</label>
+                        <div id="editImagePreview"></div>
+                    </div>
+
+
+                      <!-- CROP IMAGE (INSERTED HERE) -->
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold">Փոխել նկարը</label>
+                        <%- include('../parts/cropImg', { filename: 'question_img',  cropId: 'editCrop' }) %>
+                    </div>
+
+                    <!-- TEXT -->
+                    <div class="mb-3">
+                        <label class="form-label">Թարմացնել տեքստը</label>
+                        <div class="form_editor editor-container">
+                            <div id="editor-container">
+                                <textarea name="question" id="editQuestionTextarea" class="validate" hidden></textarea>
+                                <div class="editor-area text-dark validate" contenteditable="true" id="editQuestionText"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ANSWERS -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label mb-0">Պատասխաններ</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="editAddAnswerBtn">
+                                Ավելացնել պատասխան
+                            </button>
+                        </div>
+                        <div id="editAnswersContainer"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button>
+                    <button type="submit" class="btn btn-primary">Պահպանել</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

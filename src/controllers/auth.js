@@ -15,11 +15,6 @@ const {
 const createSendToken = (user, statusCode, req, res, target = false) => {
     // Determine JWT expiry based on whether user selected 'remember me' option
     const jwtExpire = req.body.remember == 'on' ? 60 : 1;
-
-    // console.log(req.body.remember, '❤️');
-    // console.log(req.body);
-    // console.log(req.body.remember);
-    // Create JWT containing user ID using JWT_SECRET from environment variables
     const token = jwt.sign({
         id: user.id
     }, process.env.JWT_SECRET, {

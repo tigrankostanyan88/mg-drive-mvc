@@ -1,29 +1,31 @@
 const DB = require('../models');
-const { Test, Group, User, Review } = DB.models;
+const { Test, Group, User, Review, Contact } = DB.models;
 const { buildSEO } = require('../services/seo');
 const { SitemapStream, streamToPromise } = require('sitemap');
 const { Readable } = require('stream');
 
 module.exports = {
     getHome: async (req, res) => {
-        const users = await User.findAll({
+        const contact = await Contact.findOne();
+        const reviews = await Review.findAll();
+
+        const teamMembers = await User.findAll({
             where: { role: 'team-member' },
             include: 'files'
         });
 
-        const reviews = await Review.findAll();
-
         res.render('client/index', {
             ...buildSEO(req),
-            users,
+            teamMembers,
             reviews,
+            contact,
             nav_active: 'home'
         });
     },
 
     getTests: async (req, res) => {
         const test = await Test.findAll();
-
+        const contact = await Contact.findOne();
         res.render('client/pages/test', {
             ...buildSEO(req, {
                 title: 'Թեստեր - Ավտոդպրոց Արթիկ',
@@ -31,6 +33,7 @@ module.exports = {
             }),
             nav_active: 'tests',
             page: req.path,
+            contact,
             test
         });
     },
@@ -61,13 +64,15 @@ module.exports = {
     },
 
     getProfile: async (req, res) => {
+        const contact = await Contact.findOne();
         res.render('client/pages/user-profile', {
             ...buildSEO(req, {
                 title: 'Անձնական Պրոֆիլ',
                 description: 'Ձեր հաշվապահական տվյալները, պատմությունը և կարգավորումները։'
             }),
             nav_active: 'profile',
-            page: req.path
+            page: req.path,
+            contact
         });
     },
 

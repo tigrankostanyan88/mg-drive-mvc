@@ -9,7 +9,7 @@
   <!-- logo -->
   <div class="logo">
     <a href="/">
-      <img src="../client/images/logo.png" alt="">
+      <img src="../images/logo.png" alt="">
     </a>
   </div>
   <!-- nav menu -->
@@ -60,17 +60,17 @@
   <!-- social media icons -->
   <div class="user_actions d-flex gap-3 align-items-center">
     <!-- facebook -->
-    <a href="#" target="_blank" class="Btn fw-bold" data-bs-toggle="tooltip">(+374)-98-39-40-33</a>
+    <a href="tel:<%- contact?.phone || '' %>" target="_blank" class="Btn fw-bold fs-6" data-bs-toggle="tooltip"><%- contact?.phone || '' %></a>
 
       <% if (user) { %>
         <%
-          let image = { img: "../client/images/no-image-profile.jpg" };
+          let image = { img: "../images/no-image-profile.jpg" };
 
           if (user.files) {
             let foundImage = user.files.find(file => file.name_used === "user_img");
             
             if (foundImage) {
-              image.img = `../client/images/users/large/${foundImage.name}.${foundImage.ext}`;
+              image.img = `../images/users/large/${foundImage.name}.${foundImage.ext}`;
             }
           }
         %>

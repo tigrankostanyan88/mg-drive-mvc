@@ -58,3 +58,5 @@ const notifications = new NotificationManager();
 function showNotification(message, type = 'info', duration = 3000) {
     notifications.show(message, type, duration);
 }
+
+// export default showNotification;

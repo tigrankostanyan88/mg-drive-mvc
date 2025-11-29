@@ -110,19 +110,6 @@ if(backToTop) {
     });
 }
 
-// let questions = document.querySelectorAll('#lightgallery');
-// if(questions) {
-//     questions.forEach(question => {
-//         if (question) {
-//             lightGallery(question, {
-//                 licenseKey: 'your_license_key',
-//                 speed: 500,
-//                 download: false
-//             });
-//         }
-//     });
-// }
-
 // account profile check gender fields
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('gender')) {
@@ -142,7 +129,7 @@ document.addEventListener('click', (e) => {
 });
 
 // ❌ Prohibit right-click/save image
-document.addEventListener('contextmenu', event => event.preventDefault());
+// document.addEventListener('contextmenu', event => event.preventDefault());
 
 handleNavbar();
 inputField();

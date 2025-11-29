@@ -234,7 +234,7 @@
             img {
                 width: 50px;
                 height: 50px;
-                border-radius: 50%;
+                border-radius: 15px;
                 object-fit: cover;
             }
         }
@@ -425,7 +425,7 @@
                         margin-bottom: 15px;
                         cursor: pointer;
                         padding: 20px;
-                        border-radius: 10px;
+                        border-radius: 15px;
                         position: relative;
                         outline: 1px solid var(--text-color);
 
@@ -482,7 +482,7 @@
             width: 100%;
             background: #fff;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 15px;
             border: 1px solid #ddd;
             margin: 30px auto;
 
@@ -518,7 +518,7 @@
         position: relative;
         top: 100px;
         margin-bottom: 150px;
-        border-radius: 20px;
+        border-radius:  15px;
         gap: 20px;
 
         .col {
@@ -529,18 +529,15 @@
 
         .user_info {
             padding: 5px;
-
             .name {
                 margin-bottom: 30px;
                 text-align: center;
             }
-
             .row {
                 .title {
                     margin-bottom: 15px;
                     color: #111;
                 }
-
                 .list_items {
                     li {
                         display: flex;
@@ -551,15 +548,13 @@
                     }
                 }
             }
-
             img {
                 height: 300px;
-                border-radius: 10px;
+                border-radius: 15px;
                 display: block;
                 margin: 0 auto;
                 object-fit: cover;
             }
-
             .content_body {
                 padding: 15px;
             }
@@ -567,12 +562,10 @@
 
         .content_body {
             padding: 30px;
-
             .gender {
                 margin-bottom: 30px;
                 display: flex;
                 gap: 30px;
-
                 @media(max-width: 768px) {
                     flex-direction: column;
                 }
@@ -584,25 +577,21 @@
                     padding: 15px 30px;
                     width: 100%;
                     position: relative;
-
                     input {
                         opacity: 0;
                         position: absolute;
                     }
                 }
             }
-
             .title {
                 margin-bottom: 30px;
             }
-
             form {
                 .input_field {
                     border: 1px solid #ddd;
                     position: relative;
                     margin-bottom: 35px;
                     z-index: 1;
-
                     span,
                     input {
                         font-size: 16px;
@@ -621,9 +610,7 @@
             .row {
                 margin-bottom: 30px;
             }
-
             padding: 30px;
-
             .title {
                 margin-bottom: 15px;
             }
@@ -646,7 +633,6 @@
                 }
 
                 cursor: pointer;
-
                 &:hover {
                     transform: scale(1.03);
 
@@ -654,7 +640,6 @@
                         width: 100%;
                     }
                 }
-
                 &.active {
                     &::after {
                         width: 100%;
@@ -693,17 +678,14 @@
             left: 0;
             opacity: 0;
         }
-
     }
-
     .card-icon {
         width: 50px;
         height: 50px;
-        border-radius: 10px;
+        border-radius: 15px;
         display: grid;
         place-content: center;
     }
-
     .history {
         max-height: 500px;
         overflow: scroll;

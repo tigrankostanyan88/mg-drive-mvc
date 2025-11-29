@@ -45,25 +45,26 @@
 
 <div class="card rounded rounded-4 p-3">
     <div class="comment-box text-center">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold text-start">Թողնել մեկնաբանություն</h4>
-            <div class="rating text-start">
-                <input type="radio" name="rating" value="5" id="5">
-                <label for="5">☆</label>
-                <input type="radio" name="rating" value="4" id="4">
-                <label for="4">☆</label>
-                <input type="radio" name="rating" value="3" id="3">
-                <label for="3">☆</label>
-                <input type="radio" name="rating" value="2" id="2">
-                <label for="2">☆</label>
-                <input type="radio" name="rating" value="1" id="1">
-                <label for="1">☆</label>
+        <form action="/api/v1/review" method="post">
+            <input type="hidden" name="user_id" value="<%- user.id %>">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold text-start">Թողնել մեկնաբանություն</h4>
+                <div class="rating text-start">
+                    <input type="radio" name="rating" value="5" id="5">
+                    <label for="5">☆</label>
+                    <input type="radio" name="rating" value="4" id="4">
+                    <label for="4">☆</label>
+                    <input type="radio" name="rating" value="3" id="3">
+                    <label for="3">☆</label>
+                    <input type="radio" name="rating" value="2" id="2">
+                    <label for="2">☆</label>
+                    <input type="radio" name="rating" value="1" id="1">
+                    <label for="1">☆</label>
+                </div>
             </div>
-        </div>
-
-        <textarea class="form-control border-0 mb-3" placeholder="Գրեք Ձեր մեկնաբանությունը այստեղ․․․"
-            rows="4"></textarea>
-
-        <button class="btn btn-success text-white d-flex align-items-center gap-2">Ուղարկել</button>
+            <textarea class="form-control border-0 mb-3" name="comment" placeholder="Գրեք Ձեր մեկնաբանությունը այստեղ․․․"
+                rows="4"></textarea>
+            <button type="submit" class="btn text-white d-flex align-items-center gap-2">Թողնել կարծիք</button>
+        </form>
     </div>
 </div>

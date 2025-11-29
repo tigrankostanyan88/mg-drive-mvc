@@ -3,7 +3,8 @@
     <div class="row">
         <!-- Brand Section -->
         <div class="col-lg-4 mb-4 scroll_animate">
-            <h3 class="fw-bold scroll_animate"><span class="text-primary">MG</span>-Drive</h3>
+            <% const spam = contact?.companyName?.split(" ")[0]; %>
+            <h3 class="fw-bold scroll_animate"><span class="text-primary"><%- spam %></span>-<%- contact?.companyName?.split(" ")[1] %></h3>
             <p class="text-white-50 small">Պրոֆեսիոնալ վարորդական դպրոց</p>
             <p class="text-white-50 mb-3 w-50 fs-6">
                 Սովորեք վարել անվտանգ և վստահորեն մեր վկայակոչված ուսուցիչների հետ։
@@ -13,7 +14,7 @@
         <div class="col-lg-3 mb-4 scroll_animate">
             <h5 class="fw-semibold mb-3">Հղումներ</h5>
             <ul class="list-unstyled">
-                <li class="mb-2"><a href="#home" class="text-white-50 text-decoration-none">Գլխավոր</a></li>
+                <li class="mb-2"><a href="#header" class="text-white-50 text-decoration-none">Գլխավոր</a></li>
                 <li class="mb-2"><a href="#courses" class="text-white-50 text-decoration-none">Դասընթացներ</a></li>
                 <li class="mb-2"><a href="#about" class="text-white-50 text-decoration-none">Մեր Մասին</a></li>
                 <li class="mb-2"><a href="#contact" class="text-white-50 text-decoration-none">Կապ</a></li>
@@ -66,7 +67,7 @@
     <!-- Bottom Copyright Bar -->
     <div class="border-top border-white-25 py-3">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-white-50">
-            <p class="mb-2 mb-md-0">&copy; 2024 Ավտոդպրոց MG Drive. Բոլոր իրավունքները պաշտպանված են։</p>
+            <p class="mb-2 mb-md-0">&copy; 2025 Ավտոդպրոց MG Drive. Բոլոր իրավունքները պաշտպանված են։</p>
             <div>
                 <a href="#" class="text-white-50 text-decoration-none me-3">Գաղտնիության Ներմաներ</a>
                 <a href="#" class="text-white-50 text-decoration-none me-3">Օգտագործման Տերմիններ</a>

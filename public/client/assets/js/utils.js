@@ -61,7 +61,7 @@ async function doAxios(url, method = 'GET', data = {}) {
             method,
             data,
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
             }
         });
 
@@ -192,7 +192,6 @@ function initPasswordToggle() {
     });
 }
 
-
 function changeProfileImage() {
     let fileInput = document.querySelector("input[type=file]");
     if(fileInput) {
@@ -229,3 +228,12 @@ setupNavLinks();
 
 const accordionCollapseElementList = document.querySelectorAll('#headingThree .collapse')
 const accordionCollapseList = [...accordionCollapseElementList].map(accordionCollapseEl => new bootstrap.Collapse(accordionCollapseEl))
+
+    function getCookie(name) {
+        return document.cookie
+            .split("; ")
+            .find(row => row.startsWith(name + "="))
+            ?.split("=")[1];
+    }
+    const token = getCookie("jwt");
+    console.log(token);

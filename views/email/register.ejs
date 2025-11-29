@@ -1,86 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hy">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%- subject %></title>
+    <title>Գրանցման հաստատում</title>
+
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            transition: all 0.4s ease-in-out;
-            scrollbar-width: thin;
-            scrollbar-color: var(--highlight-color);
+            background-color: #eef1f5;
+            font-family: Arial, sans-serif;
         }
 
-        .emil_card {
-            max-width: 400px;
+        .email-wrapper {
+            padding: 40px 0;
             width: 100%;
-            border-radius: 15px;
+        }
+
+        .email-outer {
+            width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
 
-        .emil_card img {
-            height: 200px;
-            width: 100%;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-        .title {
-            margin-bottom: 15px;
-            font-size: 25px;
-        }
-        ul {
-            padding: 0;
-        }
-        ul li {
-            list-style: none;
-            margin-bottom: 10px;
+        .email-header {
+            background: #ffa811;
+            padding: 35px 20px;
+            text-align: center;
         }
 
-        .card_body {
-            padding: 15px;
+        .email-header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        a {
+        .email-body {
+            padding: 40px 40px 30px 40px;
+        }
+
+        .email-body p {
+            margin: 0 0 18px 0;
+            line-height: 1.5;
+        }
+
+        .main-text {
+            font-size: 16px;
+            color: #444444;
+        }
+
+        .hello {
+            font-size: 17px;
+            color: #2d2d2d;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #777777;
+            margin-bottom: 25px;
+        }
+
+        .email-sign {
+            font-size: 14px;
+            color: #555555;
+            margin-top: 30px;
+            line-height: 1.5;
+        }
+
+        .confirm-btn {
+            margin: 35px auto;
+            background: #ffa811;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 15px 32px;
+            font-size: 18px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .brand-link {
+            color: #ffa811;
             text-decoration: none;
         }
 
-        .btn {
-            padding: 10px 30px;
-            background: blue;
-            color: #fff !important;
-            border-radius: 5px;
-            display: block;
-            width: max-content;
-            margin: 30px 0 0 0;
+        .email-footer {
+            background: #f3f4f6;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
         }
 
-        .btn:active {
-            transform: scale(0.9);
-        }
+        @media screen and (max-width: 640px) {
+            .email-outer {
+                width: 100% !important;
+                border-radius: 0;
+            }
 
-        .icon {
-            font-size: 20px;
+            .email-body {
+                padding: 24px 20px;
+            }
         }
     </style>
 </head>
 
-<body>  
-    <div class="emil_card">
-        <img src="https://scontent.fevn15-1.fna.fbcdn.net/v/t39.30808-6/343004294_793663625511971_6967250300473449438_n.png?_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=T1w6y-7yNkMQ7kNvwFXwVbZ&_nc_oc=AdmMb9m1F7FFIT_3L3OUEkPutfAWLE4Uxm7pSVFicVXTfNZ0zDcHdyboVfqr5xyE6LY&_nc_zt=23&_nc_ht=scontent.fevn15-1.fna&_nc_gid=2GEhJi5nb0IL2pjiA4a1AQ&oh=00_AfM2UoCNrYw5uvnxcJNT1eGwYpc9GE0b1ZHAemNz8_uAEQ&oe=6860B552" alt="">
-        <div class="card_body">
-            <h3 class="title"><%- subject %></h3>
-            <ul>
-                <li> Անուն | <b><%- name %></b></li>
-                <li> Էլ․ փոստ | <b><%- email %></b></b></li>
-                <li> հեռախոս | <b><%- phone %></b></b></li>
-                <a href="tel:<%- phone %>" class="btn">Զանգահարել</a>
-            </ul>
-        </div>
-    </div>
-</body>
+<body>
 
+<table class="email-wrapper" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="center">
+
+            <table class="email-outer" cellspacing="0" cellpadding="0">
+
+                <!-- HEADER -->
+                <tr>
+                    <td class="email-header">
+                        <h1>Գրանցումը հաջողությամբ կատարվել է</h1>
+                    </td>
+                </tr>
+
+                <!-- BODY -->
+                <tr>
+                    <td class="email-body">
+
+                        <p class="hello">Բարև Ձեզ,</p>
+
+                        <p class="main-text">
+                            Շնորհակալություն գրանցման համար։  
+                            Ձեր հաշիվը հաջողությամբ ստեղծվել է մեր համակարգում։
+                        </p>
+
+                        <p class="main-text" style="margin-bottom: 28px;">
+                            Խնդրում ենք հաստատել Ձեր գրանցումը՝ սեղմելով ստորև գտնվող կոճակը.
+                        </p>
+
+                        <div style="text-align:center;">
+                            <a class="confirm-btn"
+                               href="<%- confirmURL %>"
+                               target="_blank">
+                                Հաստատել գրանցումը
+                            </a>
+                        </div>
+
+                        <p class="small-text">
+                            Եթե Դուք չեք կատարել գրանցումը, կարող եք անտեսել այս նամակը։
+                        </p>
+
+                        <p class="email-sign">
+                            Հարգանքով,<br>
+                            <strong>
+                                <a class="brand-link" href="http://silaprokata.ru/admin" target="_blank">
+                                    silaprokata
+                                </a>
+                            </strong> թիմ
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr>
+                    <td class="email-footer">
+                        <p>Այս նամակը ստեղծվել է ավտոմատ կերպով։</p>
+                        <p>© 2025 silaprokata. Բոլոր իրավունքները պաշտպանված են։</p>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+</body>
 </html>

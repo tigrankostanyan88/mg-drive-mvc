@@ -15,8 +15,7 @@ module.exports = (con, DataTypes) => {
         number: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 0,
-            index: true
+            defaultValue: 0
         },
 
         slug: DataTypes.STRING,
@@ -28,19 +27,24 @@ module.exports = (con, DataTypes) => {
         ]
     });
 
-    Test.beforeCreate((test) => {
+    const extractNumber = (test) => {
+        // find first number
         const match = test.title.match(/\d+/);
-        test.number = match ? parseInt(match[0]) : 0;
-        test.title = test.title.replace(/\d+/g, '').trim();
-        test.slug = test.title.toLowerCase().replace(/\s+/g, '-');
-    });
+        const num = match ? parseInt(match[0]) : 0;
 
-    Test.beforeUpdate((test) => {
-        const match = test.title.match(/\d+/);
-        test.number = match ? parseInt(match[0]) : 0;
-        test.title = test.title.replace(/\d+/g, '').trim();
+        test.number = num;
+
+        // remove JUST THAT number from text
+        if (match) {
+            test.title = test.title.replace(match[0], '').trim();
+        }
+
+        // generate slug
         test.slug = test.title.toLowerCase().replace(/\s+/g, '-');
-    });
+    };
+
+    Test.beforeCreate(extractNumber);
+    Test.beforeUpdate(extractNumber);
 
     return Test;
 };

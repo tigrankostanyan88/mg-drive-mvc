@@ -24,6 +24,10 @@ header {
             display: grid;
         }
 
+        .address {
+            width: max-content;
+        }
+
         .header_content {
             display: grid;
             align-content: center;
@@ -36,7 +40,7 @@ header {
             .place {
                 background: var(--color-primary);
                 padding: 5px 20px;
-                border-radius: 30px;
+                border-radius: 15px;
                 width: max-content;
                 margin-bottom: 10px;
                 font-size: clamp(14px, 2vw, 18px);
@@ -55,11 +59,11 @@ header {
 
         .register_form {
             margin-top: 140px;
-            background: var(--bacground-gradient);
+            background: #444df7ee;
             backdrop-filter: blur(4px);
             opacity: 0.9;
             padding: 30px;
-            border-radius: 25px;
+            border-radius: 15px;
             box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.10);
             max-width: 500px;
             margin-left: auto;

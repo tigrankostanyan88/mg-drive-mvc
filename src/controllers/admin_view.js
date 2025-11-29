@@ -67,7 +67,7 @@ async function getAllTestsQuestions() {
 }
 async function getContact() {
     return getCached("contact_all", () =>
-        Contact.findOne({raw: true})
+        Contact.findOne()
     );
 }
 async function getGroupQuestions() {
@@ -162,7 +162,6 @@ exports.getQuestions = async (req, res) => {
 
             let options = q.options;
             options = JSON.parse(options);
-            options = JSON.parse(options);
             return {
                 id: q.id,
                 question: q.question,
@@ -249,23 +248,8 @@ exports.getFaqs = (req, res) => {
 exports.getContacts = async (req, res) => {
     try {
         const contact = await getContact() || [];
-        
-        if (contact && contact.workingHours) {
-            let raw = contact.workingHours;
-
-            try {
-                raw = JSON.parse(raw);
-            } catch (e1) {
-                try {
-                    raw = JSON.parse(JSON.parse(raw));
-                } catch (e2) {
-                    raw = [];
-                }
-            }
-
-            contact.workingHours = JSON.parse(raw);
-        }
-
+        contact.workingHours = JSON.parse(contact.workingHours)
+        console.log(contact.workingHours)
         res.render("admin/pages/contacts", {
             title: "Կոնտակտներ",
             nav_active: "contacts",

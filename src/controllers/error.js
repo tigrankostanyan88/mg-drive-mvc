@@ -6,10 +6,6 @@ const handleCastErrorDB = err => {
     return new AppError(message, 400);
 }
 
-/* This function handles casting errors in the database,
-creating and returning a custom error with a message that
-includes the invalid path and value. */
-
 const handleDuplicateFieldsDB = err => {
     const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
     console.log(value);
@@ -51,10 +47,6 @@ const sendErrorDev = (err, req, res) => {
         //     nav_active: 'error',
         // });
         res.redirect('/')
-
-        // setTimeout(() => {
-        //     res.redirect('/');
-        // }, 2000);
     }
 }
 
@@ -78,7 +70,6 @@ const sendErrorProd = (err, req, res, next) => {
     }
 
     // B) RENDERED WEBSITE
-    // A) Operational, trusted error: send message to client
     if (err.isOperational) {
         console.log(err);
         if(process.env.NODE_ENV = "development") {

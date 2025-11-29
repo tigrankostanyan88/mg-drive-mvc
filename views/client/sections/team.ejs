@@ -1,3 +1,4 @@
+<% if(teamMembers.length) { %>
 <section id="team" class="team py-5" style="background-color: rgba(248,249,250,0.3);">
   <div class="container">
 
@@ -18,7 +19,7 @@
     <!-- Instructors Grid -->
     <div class="row g-4 mb-5">
       <!-- Instructor 1 -->
-      <% users.forEach(user => { %>
+      <% teamMembers.forEach(user => { %>
          <%
             let image = { img: "../client/images/no-image-profile.jpg" };
             if(user) {
@@ -94,11 +95,11 @@
 
     <!-- Call to Action -->
     <div class="text-center mt-5">
-      <p class="text-muted mb-3">Պատրա՞ստ եք սովորել մեր փորձառու մարզիչներից։</p>
-      <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-        <button class="btn fancy-button btn-primary px-4 py-2 text-white">Պլանավորեք հանդիպում</button>
-        <button class="btn btn-outline-primary px-4 py-2 text-white">Իմացեք մեր մեթոդների մասինs</button>
+      <p class="text-muted mb-4">Պատրա՞ստ եք սովորել մեր փորձառու մարզիչներից։</p>
+      <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-3">
+        <button class="flash-btn outline">Պլանավորեք հանդիպում</button>
       </div>
     </div>
   </div>
 </section>
+<% } %>

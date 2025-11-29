@@ -2,11 +2,15 @@ export default class UIManager {
     constructor({ cards, paginator }) {
         this.cards = cards;
         this.paginator = paginator;
+        this.visibleCards = cards; // 👈 պահում ենք state-ը
 
         this.paginator.onPageChange = () => this.refresh();
     }
 
-    refresh(visibleCards) {
+    refresh(visibleCards = this.visibleCards) {
+        // 👆 եթե չի փոխանցվել, օգտագործի մնացածը
+        this.visibleCards = visibleCards;
+
         const page = this.paginator.currentPage;
         const per = this.paginator.itemsPerPage;
 

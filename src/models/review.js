@@ -33,18 +33,5 @@ module.exports = (con, DataTypes) => {
             allowNull: false
         }
     });
-
-    // // Associations (User ↔ Review, Device ↔ Review)
-    // Reviews.associate = (models) => {
-    //     Reviews.belongsTo(models.User, {
-    //         foreignKey: "userId",
-    //         as: "user"
-    //     });
-    //     Reviews.belongsTo(models.Device, {
-    //         foreignKey: "deviceId",
-    //         as: "device"
-    //     });
-    // };
-
     return Reviews;
 };

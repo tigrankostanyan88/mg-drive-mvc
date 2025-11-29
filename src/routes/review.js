@@ -6,8 +6,8 @@ const ctrls = require('../controllers');
 
 // router.use(ctrls.autreviewh.isLoggedIn)
 // router.use(ctrls.review.protect)
-router.use(ctrls.auth.isLoggedIn);
-router.use(ctrls.auth.protect);
+// router.use(ctrls.auth.isLoggedIn);
+// router.use(ctrls.auth.protect);
 
 router.post('/', ctrls.review.addReview);
 

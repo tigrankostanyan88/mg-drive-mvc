@@ -56,7 +56,7 @@
                                     <i class="bi bi-envelope me-2"></i>Էլ. փոստ
                                 </label>
                                 <input type="email" placeholder="example2025@mail.ru" class="form-control" name="email"
-                                    value="<%- contact.email || '' %>">
+                                    value="<%- contact?.email || '' %>">
                             </div>
                             <!-- address -->
                             <div class="col-md-6">
@@ -64,7 +64,7 @@
                                     <i class="bi bi-geo-alt me-2"></i>Հասցե
                                 </label>
                                 <input type="text" placeholder="Ազատության պողոտա 14" class="form-control" name="address"
-                                    value="<%- contact.address || '' %>">
+                                    value="<%- contact?.address || '' %>">
                             </div>
                              <!-- Google Maps Link -->
                             <div class="col-md-12">
@@ -72,7 +72,7 @@
                                     <i class="bi bi-map me-2"></i>Google Maps Link
                                 </label>
                                 <textarea name="mapsAddress" rows="4" placeholder="<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m1..."
-                                    class="form-control"><%- contact.mapsAddress || '' %></textarea>
+                                    class="form-control"><%- contact?.mapsAddress || '' %></textarea>
                             </div>
                         </div>
                     </div>
@@ -143,11 +143,11 @@
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="form-label small fw-semibold">Facebook</label>
-                                <input type="url" class="form-control" name="facebook" value="<%- contact.facebook || '' %>">
+                                <input type="url" class="form-control" name="facebook" value="<%- contact?.facebook || '' %>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-semibold">Instagram</label>
-                                <input type="url" class="form-control" name="instagram" value="<%- contact.instagram || '' %>">
+                                <input type="url" class="form-control" name="instagram" value="<%- contact?.instagram || '' %>">
                             </div>
                         </div>
                     </div>
@@ -162,15 +162,15 @@
                         <div class="contact-preview">
                             <div class="preview-item d-flex align-items-center mb-2">
                                 <i class="fa-solid fa-warehouse"></i>
-                                <span><%- contact.companyName || '' %></span>
+                                <span><%- contact?.companyName || '' %></span>
                             </div>
                             <div class="preview-item d-flex align-items-center mb-2">
                                 <i class="bi bi-telephone me-2"></i>
-                                <span><%- contact.phone || '' %></span>
+                                <span><%- contact?.phone || '' %></span>
                             </div>
                             <div class="preview-item d-flex align-items-center mb-2">
                                 <i class="bi bi-envelope me-2"></i>
-                                <span><%- contact.email || '' %></span>
+                                <span><%- contact?.email || '' %></span>
                             </div>
                             <div class="preview-item d-flex align-items-center mb-3">
                                 <i class="bi bi-geo-alt me-2"></i>
@@ -187,7 +187,7 @@
                             <% if (contact.mapsAddress) { %>
                             <div class="preview-item d-flex align-items-center">
                                 <i class="bi bi-map me-2"></i>
-                                <a href="<%- contact.mapsAddress %>" target="_blank">Դիտել Google Maps-ում</a>
+                                <a href="<%- contact?.mapsAddress || '' %>" target="_blank">Դիտել Google Maps-ում</a>
                             </div>
                             <% } %>
                         </div>

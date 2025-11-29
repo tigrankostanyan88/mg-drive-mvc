@@ -1,54 +1,28 @@
 const DB = require('../models');
-const { google } = require('googleapis');
 
-const Registration = DB.models.Registration;
+const { RegisterCourse } = DB.models;
+
 const Email = require('../utils/Email');
 
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-
-async function getSheetsClient() {
-    const auth = new google.auth.GoogleAuth({
-        // check file name
-        keyFile: 'credentials.json',
-        scopes: 'https://www.googleapis.com/auth/spreadsheets'
-    });
-
-    const client = await auth.getClient();
-    return google.sheets({ version: 'v4', auth: client });
-}
-
 module.exports = {
-    addRegistration: async (req, res) => {
-        try {
-            const registration = await Registration.create(req.body);
+    createRegistration: async (req, res) => {
+    try {
+        const registerCourse = await RegisterCourse.create(req.body);
+            const URL = `${req.protocol}://${req.get('host')}/admin`;
+            await new Email({}, URL, registerCourse).sendRegisterCourse();
+        res.status(201).json({
+            status: 'success',
+            registerCourse,
+            time: `${Date.now() - req.time} ms`
+        });
 
-            const googleSheets = await getSheetsClient();
-            const rows = Object.entries(req.body);
-            const values = Object.values(req.body); 
-
-            const appendResponse = await googleSheets.spreadsheets.values.append({
-                spreadsheetId: SPREADSHEET_ID,
-                range: 'Sheet1!A:Z',
-                valueInputOption: 'USER_ENTERED',
-                resource: { values: [values] }
-            });
-
-            // await new Email(registration, `${req.protocol}://${req.get('host')}`).sendRegister();
-            res.status(201).json({
-                status: 'success',
-                result: appendResponse.data,
-                time: `${Date.now() - req.time} ms`,
-                rows
-            });
-
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({
-                message: 'Internal server error!'
-            });
-        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            message: 'Internal server error!'
+        });
+    }
     },
-
     getRegistration: async (req, res) => {
         try {
             const registrations = await Registration.findAll();
@@ -80,7 +54,6 @@ module.exports = {
             });
         }
     },
-
     updateRegistration: async (req, res) => {
         try {
             const registration = await Registration.findByPk(req.params.id);
@@ -106,7 +79,6 @@ module.exports = {
             });
         }
     },
-
     deleteRegistration: async (req, res) => {
         try {
             const registration = await Registration.findByPk(req.params.id);

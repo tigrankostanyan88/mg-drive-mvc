@@ -2,32 +2,34 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
 const { htmlToText } = require('html-to-text');
+const { user } = require('../controllers');
 
 const templatesPath = path.join(__dirname, '../../views/email');
 
 class Email {
-    constructor(user, url) {
+    constructor(user, url, data) {
         this.to = process.env.EMAIL_FROM_EMAIL;
-        this.name = user.name.split(' ')[0];
         this.url = url;
-        this.phone = user.phone,
-        this.email = user.email,
-        this.client = user.register,
+        this.password = data.password;
+        this.contact = data.data;
+        this.phone = user.phone;
+        this.email = user.email;
+        this.client = user.register;
+        this.checkout = data || null;
         this.from = `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`;
     }
 
     newTransport() {
-        if (process.env.NODE_ENV === 'production') {
-            // nodemailer-sendgrid - ?
-             return nodemailer.createTransport({
-                host: process.env.SENDPULSE_HOST,
-                port: process.env.SENDPULSE_PORT,
-                auth: {
-                    user: process.env.SENDPULSE_USERNAME,
-                    pass: process.env.SENDPULSE_PASSWORD
-                }
-            });
-        }
+        // nodemailer-sendgrid - ?
+         return nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            service: 'gmail',
+            auth: {
+                user: user.email,
+                pass: "vnsb ggdm itfr llhs"
+            }
+        });
 
         // mailtrap
          return nodemailer.createTransport({
@@ -45,8 +47,11 @@ class Email {
         const data = {
             name: this.name,
             email: this.email,
+            password: this.password,
             phone: this.phone,
             url: this.url,
+            checkout: this.checkout,
+            contact: this.contact,
             subject,
             template
         }
@@ -68,10 +73,17 @@ class Email {
         }); 
     }
 
-    async sendRegister() {
-        console.log(this.to);
-        
+    async sendRegisterCourse() {
         await this.send('register', 'Նոր գրանցում')
+    }
+    async sendPasswordReset() {
+        await this.send('sendRegister', 'Հաղորդագրություն՝ գաղտնաբառի վերականգնում');
+    }
+    async sendCheckout() {
+        await this.send('checkout', 'Նոր պատվեր (checkout)');
+    }
+    async sendContact() {
+        await this.send('contact', 'Հետադարձ կապ');
     }
 
 }

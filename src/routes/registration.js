@@ -6,7 +6,7 @@ const ctrls = require('../controllers');
 
 router
     .route('/')
-    .post(ctrls.registration.addRegistration)
+    .post(ctrls.registration.createRegistration)
     .get(ctrls.registration.getRegistration);
 
 

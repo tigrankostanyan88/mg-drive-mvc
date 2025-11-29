@@ -153,7 +153,7 @@ ul li {
   height: 30px;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 50%;
+  border-radius: 15px;
 }
 
 section {
@@ -205,7 +205,7 @@ section {
   padding: 10px 20px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -305,7 +305,7 @@ nav .user_actions .btn {
   padding: 10px 20px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -439,7 +439,7 @@ header .container .header_content .text {
 header .container .header_content .place {
   background: var(--color-primary);
   padding: 5px 20px;
-  border-radius: 30px;
+  border-radius: 15px;
   width: -moz-max-content;
   width: max-content;
   margin-bottom: 10px;
@@ -459,7 +459,7 @@ header .container .header_content .btn {
   padding: 15px 30px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -479,7 +479,7 @@ header .container .register_form {
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
   padding: 30px;
-  border-radius: 20px;
+  border-radius: 15px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   max-width: 500px;
   margin-left: auto;
@@ -496,7 +496,7 @@ header .container .register_form button {
   padding: 15px 40px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -753,7 +753,7 @@ header .end_line {
   display: grid;
   place-content: center;
   font-size: 23px;
-  border-radius: 50%;
+  border-radius: 15px;
   margin-bottom: 10px;
 }
 .chooseus .card:hover, .chooseus .card.active {
@@ -823,7 +823,7 @@ header .end_line {
   padding: 10px 20px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -880,7 +880,7 @@ header .end_line {
 .user_reviews .user_review .head img {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  border-radius: 15px;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -935,7 +935,7 @@ header .end_line {
   position: absolute;
   width: 900px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 15px;
   filter: blur(50px);
   background: var(--color-primary);
   opacity: 0.4;
@@ -1019,7 +1019,7 @@ header .end_line {
 .contact .image img {
   max-width: 700px;
   max-height: 600px;
-  border-radius: 20px;
+  border-radius: 15px;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -1037,7 +1037,7 @@ header .end_line {
   margin-bottom: 50px;
 }
 .contact .content_box .contact_form {
-  border-radius: 20px;
+  border-radius:  15px;
   max-width: 600px;
 }
 .contact .content_box .contact_form .input_field,
@@ -1070,7 +1070,7 @@ header .end_line {
   padding: 12px 35px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;
@@ -1096,7 +1096,7 @@ header .end_line {
 }
 .contact .content_info .col {
   padding: 30px 20px;
-  border-radius: 20px;
+  border-radius: 15px;  
   text-align: center;
 }
 .contact .content_info .col:hover .logo {
@@ -1110,7 +1110,7 @@ header .end_line {
 .contact .content_info .logo {
   width: 60px;
   height: 60px;
-  border-radius: 10px;
+  border-radius: 15px;
   display: grid;
   place-content: center;
   font-size: 23px;
@@ -1202,7 +1202,7 @@ header .end_line {
   margin-bottom: 15px;
   cursor: pointer;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 15px;
   position: relative;
   outline: 1px solid var(--text-color);
 }
@@ -1244,7 +1244,7 @@ header .end_line {
   width: 100%;
   background: #fff;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   border: 1px solid #ddd;
   margin: 30px auto;
 }
@@ -1276,7 +1276,7 @@ header .end_line {
   position: relative;
   top: 100px;
   margin-bottom: 150px;
-  border-radius: 20px;
+  border-radius: 15px;
   gap: 20px;
 }
 .account_page .container .col {
@@ -1304,7 +1304,7 @@ header .end_line {
 }
 .account_page .container .user_info img {
   height: 300px;
-  border-radius: 10px;
+  border-radius: 15px;
   display: block;
   margin: 0 auto;
   -o-object-fit: cover;
@@ -1358,7 +1358,7 @@ header .end_line {
   padding: 12px 35px;
   background-size: 200% auto;
   color: var(--light-background);
-  border-radius: 10px;
+  border-radius: 15px;
   display: inline-block;
   transition: all 0.3s ease-in-out;
   width: -moz-max-content;

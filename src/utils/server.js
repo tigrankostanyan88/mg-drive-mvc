@@ -5,7 +5,7 @@ module.exports = function server(app) {
         // .sync({ alter: true })
         .sync({ alter: false })
         .then((res) => {
-            const port = process.env.POST || 3400;
+            const port = process.env.POST || 3300;
 
             const server = app.listen(port, () => console.log(`App running on port ${port}...`));
 
