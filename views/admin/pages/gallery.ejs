@@ -15,7 +15,7 @@
                 <div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                            <li class="breadcrumb-item"><a href="/admin">Վահանակ</a></li>
                             <li class="breadcrumb-item active">Նկարների կառավարում</li>
                         </ol>
                     </nav>
@@ -58,7 +58,11 @@
                         }
                     }
                 %>
-                <div class="image-card">
+                <div class="image-card" 
+                     data-id="<%= item.id %>"
+                     data-title="<%- item.title %>"
+                     data-text="<%- item.text || '' %>"
+                     data-image="<%- image %>">
                     <div class="image-container">
                         <img src="<%- image %>"
                             alt="Մեքենա 1"
@@ -74,10 +78,10 @@
                                 <span class="badge bg-success overlay-badge">Ակտիվ</span>
                             </div>
                             <div class="overlay-actions">
-                                <button class="btn btn-sm btn-outline-primary">
+                                <button class="btn btn-sm btn-outline-primary btn-edit">
                                     <i class="bi bi-pencil me-1"></i>Խմբագրել
                                 </button>
-                                <form action="/api/v1/gallery/<%- item.id %>" method="delete">
+                                <form action="/api/v1/gallery/<%- item.id %>" method="delete" class="gallery-delete-form">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash me-1"></i>Ջնջել
                                     </button>
@@ -140,27 +144,72 @@
         </div>
     </div>
 
+    <!-- Edit Image Modal -->
+    <div class="modal fade" id="galleryEditModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Խմբագրել նկարը</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="galleryEditForm" method="patch" action="/api/v1/gallery/" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Վերնագիր</label>
+                            <input type="text" name="title" class="form-control validate" placeholder="Մուտքագրեք վերնագիրը">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Նկարագրություն</label>
+                            <textarea name="text" class="form-control validate" rows="3" placeholder="Մուտքագրեք նկարագրությունը"></textarea>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">Ընթացիկ նկար</label>
+                            <div id="galleryEditImagePreview"></div>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label class="form-label fw-bold">Փոխել նկարը</label>
+                            <%- include('../parts/cropImg', { filename: 'gallery_img', cropId: 'editGallery' }) %>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Փակել</button>
+                        <button type="submit" class="btn btn-primary">Պահպանել</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <%- include('../parts/scripts.ejs') %>
     <script>
-        // document.getElementById('uploadGalleryBtn')?.addEventListener('click', async function() {
-        //     const form = document.getElementById('galleryUploadForm');
-        //     const data = new FormData(form);
-        //     try {
-        //         await axios.post('/api/v1/gallery', data, { headers: { 'Content-Type': 'multipart/form-data' } });
-        //         location.reload();
-        //     } catch (e) { alert('Չհաջողվեց վերբեռնել'); }
-        // });
-        // document.querySelectorAll('form[action^="/api/v1/gallery/"][method="delete"]').forEach(function(f){
-        //     const btn = f.querySelector('button[type="submit"]');
-        //     btn?.addEventListener('click', async function(e){
-        //         e.preventDefault();
-        //         const id = f.action.split('/').pop();
-        //         if (!confirm('Ջնջե՞լ')) return;
-        //         try { await axios.delete('/api/v1/gallery/' + id); location.reload(); }
-        //         catch(e){ alert('Չհաջողվեց ջնջել'); }
-        //     });
-        // });
+        document.querySelectorAll('.image-card .btn-edit').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const card = btn.closest('.image-card');
+                const id = card?.dataset.id;
+                const title = card?.dataset.title || '';
+                const text = card?.dataset.text || '';
+                const image = card?.dataset.image || '';
+
+                const form = document.getElementById('galleryEditForm');
+                form.action = '/api/v1/gallery/' + id;
+
+                const titleInput = form.querySelector('input[name="title"]');
+                const textArea = form.querySelector('textarea[name="text"]');
+                const preview = document.getElementById('galleryEditImagePreview');
+
+                if (titleInput) titleInput.value = title;
+                if (textArea) textArea.value = text;
+                if (preview) {
+                    preview.innerHTML = image 
+                        ? `<img src="${image}" class="img-fluid rounded mb-2" style="max-height:250px;">` 
+                        : '';
+                }
+
+                new bootstrap.Modal(document.getElementById('galleryEditModal')).show();
+            });
+        });
     </script>
 </body>
-
 </html>

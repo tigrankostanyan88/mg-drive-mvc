@@ -6,7 +6,10 @@ const ctrls = require('../controllers');
 // Routes
 const router = Router();
 if (typeof ctrls.auth?.isLoggedIn === 'function') {
-    router.use(ctrls.auth.isLoggedIn);
+    router.use((req, res, next) => {
+        if (req.originalUrl.startsWith('/api')) return next();
+        return ctrls.auth.isLoggedIn(req, res, next);
+    });
 } else {
     console.error('[Routes:view] isLoggedIn middleware is undefined');
 }
@@ -17,7 +20,10 @@ router.get('/groups', ctrls.view.getGroups);
 
 router.get('/sitemap.xml', ctrls.view.generateSitemap);
 if (typeof ctrls.auth?.protect === 'function') {
-    router.use(ctrls.auth.protect);
+    router.use((req, res, next) => {
+        if (req.originalUrl.startsWith('/api')) return next();
+        return ctrls.auth.protect(req, res, next);
+    });
 } else {
     console.error('[Routes:view] protect middleware is undefined');
 }

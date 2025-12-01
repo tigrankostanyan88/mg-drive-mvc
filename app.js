@@ -64,12 +64,7 @@ app.use((req, res, next) => {
 });
 // Global ERROR handler
 app.use((err, req, res, next) => {
-    console.error('ERROR 💥', err);
-    res.status(err.statusCode || 500).json({
-        status: err.status || 'error',
-        message: err.message || 'Something went wrong',
-    });
-    next();
+    next(err);
 });
 // // API
 Api(app);

@@ -2,11 +2,10 @@
 <html lang="en">
 <head><%- include('../parts/head.ejs') %></head>
 <body>
-    <!-- Navbar -->
     <%- include('../parts/navbar.ejs') %>
-    
-    <!-- Sidebar -->
     <%- include('../parts/sidebar.ejs') %>
+    <%- include('../parts/alert') %>
+    <%- include('../parts/confirm') %>
     <!-- Main Content -->
     <main class="main-content">
         <section id="faq">
@@ -14,7 +13,7 @@
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Վահանակ</a></li>
+                        <li class="breadcrumb-item"><a href="/admin">Վահանակ</a></li>
                         <li class="breadcrumb-item active">Հաճախ տրվող հարցեր</li>
                     </ol>
                 </nav>
@@ -27,7 +26,26 @@
 
         <!-- FAQ List -->
         <div id="faqList" class="faq-list">
-            <!-- FAQ items will be rendered here -->
+            <% if (Array.isArray(faqs)) { %>
+                <% faqs.forEach(function(f){ %>
+                    <div class="faq-item" data-id="<%= f.id %>">
+                        <div class="faq-question">
+                            <p><%= f.question %></p>
+                            <div class="faq-actions">
+                                <button class="btn btn-sm btn-outline-primary" data-act="edit" data-id="<%= f.id %>" data-question="<%= f.question %>" data-answer="<%= f.answer %>">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form action="/api/v1/faq/<%- f.id %>" method="delete">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" data-act="del" data-id="<%= f.id %>">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="faq-answer"><%= f.answer %></div>
+                    </div>
+                <% }) %>
+            <% } %>
         </div>
         </section>
     </main>
@@ -36,26 +54,26 @@
     <div class="modal fade" id="addFaqModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ավելացնել նոր հարց</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="faqForm">
+                <form action="/api/v1/faq" method="POST" id="faqForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ավելացնել նոր հարց</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Հարց</label>
-                            <input type="text" class="form-control" id="faqQuestion" placeholder="Մուտքագրեք հարցը" required>
+                            <input type="text" name="title" class="form-control" id="faqQuestion" placeholder="Մուտքագրեք հարցը" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Պատասխան</label>
-                            <textarea class="form-control" id="faqAnswer" rows="5" placeholder="Մուտքագրեք պատասխանը" required></textarea>
+                            <textarea class="form-control" name="text" id="faqAnswer" rows="5" placeholder="Մուտքագրեք պատասխանը" required></textarea>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
-                    <button type="button" class="btn btn-primary" id="saveFaqBtn">Պահպանել</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Չեղարկել</button>
+                        <button type="submit" class="btn btn-primary" id="saveFaqBtn">Ավելացնել</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -90,5 +108,66 @@
     </div>
 
     <%- include('../parts/scripts.ejs') %>
+    <script>
+        (function(){
+            const list = document.getElementById('faqList');
+            const editModalEl = document.getElementById('editFaqModal');
+            const editIdEl = document.getElementById('editFaqId');
+            const editQEl = document.getElementById('editFaqQuestion');
+            const editAEl = document.getElementById('editFaqAnswer');
+            const updateBtn = document.getElementById('updateFaqBtn');
+
+            list?.addEventListener('click', function(e){
+                const btn = e.target.closest('button[data-act]');
+                if (!btn) return;
+                const act = btn.getAttribute('data-act');
+                const id = btn.getAttribute('data-id');
+                if (act === 'edit') {
+                    const q = btn.getAttribute('data-question') || '';
+                    const a = btn.getAttribute('data-answer') || '';
+                    if (editIdEl) editIdEl.value = id;
+                    if (editQEl) editQEl.value = q;
+                    if (editAEl) editAEl.value = a;
+                    new bootstrap.Modal(editModalEl).show();
+                }
+            });
+
+            updateBtn?.addEventListener('click', async function(){
+                const id = editIdEl?.value;
+                const title = editQEl?.value?.trim() || '';
+                const text = editAEl?.value?.trim() || '';
+                if (!id || !title || !text) {
+                    try { showNotification('Լրացրեք բոլոր դաշտերը', 'error', 2500); } catch {}
+                    return;
+                }
+                try {
+                    const resp = await fetch('/api/v1/faq/' + id, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, text })
+                    });
+                    if (!resp.ok) throw new Error('Update failed');
+                    const data = await resp.json();
+                    const item = document.querySelector('.faq-item[data-id="' + id + '"]');
+                    if (item) {
+                        const qEl = item.querySelector('.faq-question p');
+                        const aEl = item.querySelector('.faq-answer');
+                        const editBtn = item.querySelector('button[data-act="edit"]');
+                        if (qEl) qEl.textContent = title;
+                        if (aEl) aEl.textContent = text;
+                        if (editBtn) {
+                            editBtn.setAttribute('data-question', title);
+                            editBtn.setAttribute('data-answer', text);
+                        }
+                    }
+                    try { showNotification('Հաջողությամբ թարմացվեց', 'success', 2000); } catch {}
+                    bootstrap.Modal.getInstance(editModalEl)?.hide();
+                } catch (err) {
+                    try { showNotification('Թարմացումը չհաջողվեց', 'error', 2500); } catch {}
+                }
+            });
+        })();
+    </script>
 </body>
+
 </html>

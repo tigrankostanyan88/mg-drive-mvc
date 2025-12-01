@@ -13,6 +13,7 @@ DB.models = {
   File: require('./file')(connect, Sequelize.DataTypes),
   Contact: require('./contact')(connect, Sequelize.DataTypes),
   Gallery: require('./Gallery')(connect, Sequelize.DataTypes),
+  Faq: require('./faq')(connect, Sequelize.DataTypes),
 }
 
 // User → Files

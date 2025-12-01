@@ -5,6 +5,8 @@ const { Test, Group, Question, File, User, Contact, Registration } = DB.models;
 const cache = require("../utils/cache");
 const helpers = require("../utils/helpers");
 
+const { Op } = DB.Sequelize;
+
 // ---------- COMMON DB QUERIES ---------- //
 async function getCached(key, fetchFn, ttl = 5, force = false) {
     const cached = await cache.get(key);
@@ -17,28 +19,12 @@ async function getCached(key, fetchFn, ttl = 5, force = false) {
 
 // Fast centralized getters
 async function getAllTests() {
-    return getCached("tests_all", () => 
-        Test.findAll({
-            order: [["number", "ASC"]],
-            include: [
-                {
-                    model: Question,
-                    as: "questions",
-                }
-            ]
-        }), 
-    5);
+    const testService = require('../services/test.service');
+    return await testService.listAdmin();
 }
 async function getAllGroups() {
-    return getCached("groups_all", () => Group.findAll({
-        order: [["number", "ASC"]],
-        include: [
-            {
-                model: Question,
-                as: "questions",
-            }
-        ]
-    }));
+    const groupService = require('../services/group.service');
+    return await groupService.listAdmin();
 }
 async function getAllStudents() {
     return getCached("students_all", () =>
@@ -46,16 +32,9 @@ async function getAllStudents() {
     );
 }
 async function getAllQuestions() {
-    return getCached("questions_all", () =>
-        Question.findAll({
-            attributes: ["id", "question", "row_id", "options", "correctAnswerIndex", "table_name"],
-            include: [
-                { model: File, as: "files", attributes: ["table_name", "row_id", "ext", 'name'] },
-                { model: Test, as: "test", attributes: ["id", "title", "number"] },
-                { model: Group, as: "group", attributes: ["id", "title", "number"] }
-            ]
-        })
-    );
+    const questionService = require('../services/question.service');
+    const { questions } = await questionService.listNormalized();
+    return questions;
 }
 async function getAllTestsQuestions() {
     return getCached("questions_all", () =>
@@ -108,7 +87,7 @@ exports.getTests = async (req, res) => {
         const tests = await getAllTests();
         const testsAllQuestions = await getAllTestsQuestions();
         const totalTests = tests.length;
-        const totalQuestions = tests.reduce((acc, t) => acc + t.questions.length, 0);
+        const totalQuestions = tests.reduce((acc, t) => acc + (t.questions?.length || 0), 0);
         const averageQuestions = totalTests > 0 ? (totalQuestions / totalTests).toFixed(1) : 0;
 
         res.render("admin/pages/tests", {
@@ -154,32 +133,10 @@ exports.getQuestions = async (req, res) => {
         const questions = await getAllQuestions();
         const tests = await getAllTests();
         const groups = await getAllGroups();
-        
-        const normalized = questions.map(q => {
-            let owner = null;
-            if (q.table_name === "tests") owner = { type: "test", data: q.test };
-            if (q.table_name === "groups") owner = { type: "group", data: q.group };
-
-            let options = q.options;
-            options = JSON.parse(options);
-            return {
-                id: q.id,
-                question: q.question,
-                options: options,
-                row_id: q.row_id,
-                table_name: q.table_name,
-                files: q.files,
-                correctAnswerIndex: q.correctAnswerIndex,
-                owner
-            };
-        });
-
-        // console.log(normalized[0])
-
         res.render("admin/pages/questions", {
             title: "Հարցեր",
             nav_active: "questions",
-            questions: normalized,
+            questions,
             tests,
             groups,
             url: req.url
@@ -192,10 +149,8 @@ exports.getQuestions = async (req, res) => {
 
 exports.getGallery = async (req, res) => {
     try {
-        const items = await DB.models.Gallery.findAll({
-            include: 'files',
-            order: [["id", "DESC"]]
-        });
+        const galleryService = require('../services/gallery.service');
+        const { items } = await galleryService.getAll();
 
         res.render("admin/pages/gallery", {
             title: "Նկարներ",
@@ -212,19 +167,14 @@ exports.getGallery = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     try {
-        const users = await getCached(
-            "users_instructors",
-            () => User.findAll({
-                where: { role: { [DB.Sequelize.Op.notIn]: ["admin", "student"] }},
-                include: "files"
-            }),
-            120
-        );
+        const userService = require('../services/user.service');
+        const { users } = await userService.getAll({ excludeRoles: ['admin','student'] });
 
         res.render("admin/pages/users", {
             title: "Օգտատերեր",
             nav_active: "users",
-            users
+            users,
+            url: req.url
         });
 
     } catch (e) {
@@ -241,17 +191,25 @@ exports.getAnalytics = (req, res) => {
     });
 };
 
-exports.getFaqs = (req, res) => {
-    res.render("admin/pages/faqs", {
-        title: "ՀՏՀ",
-        nav_active: "faqs",
-        page: req.url
-    });
+exports.getFaqs = async (req, res) => {
+    try {
+        const faqService = require('../services/faq.service');
+        const { faqs } = await faqService.getAll();
+        res.render("admin/pages/faqs", {
+            title: "ՀՏՀ",
+            nav_active: "faq",
+            page: req.url,
+            faqs
+        });
+    } catch (e) {
+        res.status(500).send("Server error");
+    }
 };
 
 exports.getContacts = async (req, res) => {
     try {
-        const contact = (await getContact()) || {};
+        const contactService = require('../services/contact.service');
+        const { contact } = await contactService.get();
         let wh = contact.workingHours;
         if (typeof wh === "string") {
             try { wh = JSON.parse(wh); } catch { wh = []; }

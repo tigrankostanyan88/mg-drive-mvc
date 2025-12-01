@@ -1,90 +1,15 @@
-// Mock Data - Users Array
-const users = [
-    {
-        id: 1,
-        name: "Արման Հովհաննիսյան",
-        role: "Ուսանող",
-        roleBadge: "bg-primary",
-        phone: "+374 91 123456",
-        email: "arman@example.com",
-        city: "Երևան",
-        registrationDate: "2024-01-10",
-        status: "Ակտիվ",
-        statusBadge: "bg-success",
-        avatar: "https://i.pravatar.cc/150?img=1",
-        initials: "ԱՀ"
-    },
-    {
-        id: 2,
-        name: "Մարիա Սարգսյան",
-        role: "Ինստրուկտոր",
-        roleBadge: "bg-warning text-dark",
-        phone: "+374 93 234567",
-        email: "maria@example.com",
-        city: "Գյումրի",
-        registrationDate: "2023-12-15",
-        status: "Ակտիվ",
-        statusBadge: "bg-success",
-        avatar: "https://i.pravatar.cc/150?img=5",
-        initials: "ՄՍ"
-    },
-    {
-        id: 3,
-        name: "Հովհաննես Պետրոսյան",
-        role: "Ադմին",
-        roleBadge: "bg-danger",
-        phone: "+374 94 345678",
-        email: "hovhannes@example.com",
-        city: "Երևան",
-        registrationDate: "2023-11-01",
-        status: "Ակտիվ",
-        statusBadge: "bg-success",
-        avatar: "https://i.pravatar.cc/150?img=12",
-        initials: "ՀՊ"
-    },
-    {
-        id: 4,
-        name: "Աննա Մկրտչյան",
-        role: "Ուսանող",
-        roleBadge: "bg-primary",
-        phone: "+374 95 456789",
-        email: "anna@example.com",
-        city: "Վանաձոր",
-        registrationDate: "2024-01-05",
-        status: "Սպասման մեջ",
-        statusBadge: "bg-warning text-dark",
-        avatar: "https://i.pravatar.cc/150?img=9",
-        initials: "ԱՄ"
-    },
-    {
-        id: 5,
-        name: "Դավիթ Ավետիսյան",
-        role: "Ուսանող",
-        roleBadge: "bg-primary",
-        phone: "+374 96 567890",
-        email: "davit@example.com",
-        city: "Երևան",
-        registrationDate: "2024-01-20",
-        status: "Դադարեցված",
-        statusBadge: "bg-secondary",
-        avatar: "https://i.pravatar.cc/150?img=15",
-        initials: "ԴԱ"
-    },
-    {
-        id: 6,
-        name: "Սոնա Գրիգորյան",
-        role: "Ուսանող",
-        roleBadge: "bg-primary",
-        phone: "+374 97 678901",
-        email: "sona@example.com",
-        city: "Գյումրի",
-        registrationDate: "2024-01-15",
-        status: "Ակտիվ",
-        statusBadge: "bg-success",
-        avatar: "https://i.pravatar.cc/150?img=20",
-        initials: "ՍԳ"
+// Data from server
+const users = Array.isArray(window.__USERS__) ? window.__USERS__ : [];
+
+function mapRoleToHy(role) {
+    switch (role) {
+        case 'student': return 'Ուսանող';
+        case 'teacher': return 'Ինստրուկտոր';
+        case 'admin': return 'Ադմին';
+        case 'team-member': return 'Թիմի անդամ';
+        default: return 'Օգտվող';
     }
-];
+}
 
 // Get role badge class
 function getRoleBadgeClass(role) {
@@ -107,21 +32,26 @@ function renderUsers(filteredUsers = users) {
     }
 
     filteredUsers.forEach(user => {
-        const roleBadge = getRoleBadgeClass(user.role);
+        const roleHy = mapRoleToHy(user.role);
+        const roleBadge = getRoleBadgeClass(roleHy);
+        const file = (user.files || []).find(f => f.name_used === 'user_img');
+        const avatar = file ? `/images/users/large/${file.name}.${file.ext}` : '';
+        const initials = (user.name || '').split(' ').map(p => p[0]).slice(0,2).join('');
+        const created = user.createdAt || user.date;
         const row = `
             <tr>
                 <td>
                     <div class="user-name-cell">
-                        <img src="${user.avatar}" alt="${user.name}" class="user-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="user-avatar-placeholder" style="display: none;">${user.initials}</div>
+                        <img src="${avatar}" alt="${user.name}" class="user-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="user-avatar-placeholder" style="display: none;">${initials}</div>
                         <span>${user.name}</span>
                     </div>
                 </td>
-                <td><span class="badge ${roleBadge}">${user.role}</span></td>
+                <td><span class="badge ${roleBadge}">${roleHy}</span></td>
                 <td>${user.phone}</td>
                 <td>${user.email}</td>
-                <td>${user.city}</td>
-                <td>${user.registrationDate}</td>
+                <td>${user.address || ''}</td>
+                <td>${created ? new Date(created).toLocaleDateString('hy-AM') : ''}</td>
                 <td><span class="badge ${user.statusBadge}">${user.status}</span></td>
                 <td>
                     <div class="action-icons">
@@ -154,7 +84,15 @@ function openEditUserRoleModal(userId) {
 
     document.getElementById('editUserId').value = user.id;
     document.getElementById('editUserName').value = user.name;
-    document.getElementById('editUserRole').value = user.role;
+    const roleSelect = document.getElementById('editUserRole');
+    const roleWrapper = roleSelect ? roleSelect.closest('.mb-3') : null;
+    if (roleSelect) roleSelect.value = user.role;
+
+    if (user.role === 'Ադմին') {
+        if (roleWrapper) roleWrapper.style.display = 'none';
+    } else {
+        if (roleWrapper) roleWrapper.style.display = '';
+    }
 
     const modal = new bootstrap.Modal(document.getElementById('editUserRoleModal'));
     modal.show();
@@ -173,6 +111,11 @@ function saveUserRole() {
     const user = users.find(u => u.id === userId);
     if (!user) {
         alert('Օգտվողը չի գտնվել');
+        return;
+    }
+
+    if (user.role === 'Ադմին') {
+        alert('Ադմին օգտվողի կարգավիճակը չի կարելի փոխել');
         return;
     }
 

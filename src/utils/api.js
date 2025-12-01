@@ -9,6 +9,7 @@ module.exports = api = (app) => {
             ['/api/v1/groups', routes.group, 'group'],
             ['/api/v1/question', routes.question, 'question'],
             ['/api/v1/gallery', routes.gallery, 'gallery'],
+            ['/api/v1/faq', routes.faq, 'faq'],
             ['/api/v1/registration', routes.registration, 'registration'],
             ['/api/v1/image', routes.image, 'image'],
             ['/api/v1/review', routes.review, 'review'],
