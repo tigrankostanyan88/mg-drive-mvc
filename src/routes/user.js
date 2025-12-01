@@ -2,7 +2,11 @@ const router = require('express').Router();
 
 const ctrls = require('../controllers');
 
-router.use(ctrls.auth.isLoggedIn)
+if (typeof ctrls.auth?.isLoggedIn === 'function') {
+    router.use(ctrls.auth.isLoggedIn);
+} else {
+    console.error('[Routes:user] isLoggedIn middleware is undefined');
+}
 
 
 router.post('/signUp', ctrls.auth.protectUser, ctrls.auth.signUp);

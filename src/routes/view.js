@@ -5,14 +5,22 @@ const { Router } = require('express');
 const ctrls = require('../controllers');
 // Routes
 const router = Router();
-router.use(ctrls.auth.isLoggedIn)
+if (typeof ctrls.auth?.isLoggedIn === 'function') {
+    router.use(ctrls.auth.isLoggedIn);
+} else {
+    console.error('[Routes:view] isLoggedIn middleware is undefined');
+}
 
 router.get('/', ctrls.view.getHome);
 router.get('/tests', ctrls.view.getTests);
 router.get('/groups', ctrls.view.getGroups);
 
 router.get('/sitemap.xml', ctrls.view.generateSitemap);
-router.use(ctrls.auth.protect)
+if (typeof ctrls.auth?.protect === 'function') {
+    router.use(ctrls.auth.protect);
+} else {
+    console.error('[Routes:view] protect middleware is undefined');
+}
 
 router.get('/profile', ctrls.view.getProfile);
 router.get('/profile/options', ctrls.view.getProfileOptions);

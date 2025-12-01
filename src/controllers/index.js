@@ -8,7 +8,6 @@ module.exports = controllers = {
     question: require('./question'),
     registration: require('./registration'),
     image: require('./image'),
-    gallery: require('./gallery'),
     user: require('./user'),
     contact: require('./contact'),
     view: require('./view'),

@@ -291,17 +291,6 @@ module.exports = class File {
                     },
                 }],
             },
-            {
-                table: "gallery",
-                files: [{
-                    name: "gallery_img",
-                    count: 10,
-                    types: ["jpeg", "png", "gif", "webp", "svg"],
-                    dimensions: {
-                        large: [1080, 1080]
-                    },
-                }],
-            },
         ];
 
         // check table name

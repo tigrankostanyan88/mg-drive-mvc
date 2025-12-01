@@ -4,13 +4,12 @@ const dbCon = require('../utils/db');
 const AppError = require('./../utils/appError');
 
 const { Question, File, Test, Group } = DB.models;
+const redis = require('../utils/redis');
 const sequelize = dbCon.con;
 
 module.exports = {
     addQuestion: async (req, res, next) => {
-
         const t = await sequelize.transaction(); 
-
         try {
             const questionData = req.body;
             const options = JSON.parse(req.body.options);
@@ -85,7 +84,6 @@ module.exports = {
             const questions = await Question.findAll({
                 attributes: ["id", "question", "row_id", "table_name", "options", "correctAnswerIndex"],
             });
-
             // Preload tests + groups
             const tests = await Test.findAll({
                 attributes: ["id", "title", "number"]
@@ -188,6 +186,9 @@ module.exports = {
 
         else await question.destroy();
         if (file) await file.destroy();
+        try {
+            await redis.del('questions_all');
+        } catch {}
 
         res.status(203).json({
             message: 'Հաջողությամբ ջնջվեց!',

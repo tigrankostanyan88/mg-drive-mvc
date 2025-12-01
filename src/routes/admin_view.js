@@ -22,6 +22,5 @@ router.get('/users', ctrls.admin_view.getUsers);
 router.get('/analytics', ctrls.admin_view.getAnalytics);
 router.get('/faqs', ctrls.admin_view.getFaqs);
 router.get('/contacts', ctrls.admin_view.getContacts);
-router.get('/registrations', ctrls.admin_view.getRegistrations);
 
 module.exports = router;
